@@ -1,9 +1,5 @@
-.calendar{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #535050;
-    color: #000000;
-}
+.calendar {
+    padding: 1rem;
+    background-color: #f8f9fa;
+  }
+  
