@@ -1,0 +1,115 @@
+/* Header.module.css */
+.header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #06fffb;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.nav {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 1rem;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.menuButton {
+    display: none;
+    /* hide on desktop */
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    .nav {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .open {
+        display: flex;
+    }
+
+    .menuButton {
+        display: block;
+        margin-top: 0.5rem;
+    }
+}
+
+
+/* Sidebar toggle button on the left */
+.sidebarButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Sidebar styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 999;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.closeSidebar {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .nav {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .open {
+        display: flex;
+    }
+
+    .menuButton {
+        display: block;
+    }
+}
