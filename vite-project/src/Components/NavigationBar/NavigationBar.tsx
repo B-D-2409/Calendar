@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 
-import style from "./SideBar.module.css";
+import style from "./NavigationBar.module.css";
 import { NavLink } from "react-router-dom";
 
-function SideBar() {
+function NavigationBar() {
     const [sideBarOpen, setSideBarOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
 
@@ -19,10 +19,29 @@ function SideBar() {
                     ☰
                 </button>
 
-                <nav className={`${style.nav}`}>
-                    <NavLink to="/" className={({ isActive }) => isActive ? `${style.navLink} ${style.active}` : style.navLink}
-                    >Home</NavLink>
-                </nav>
+                <div className={style.navContainer}>
+                    <nav className={style.nav}>
+                        <NavLink
+                            to="/homepage"
+                            className={({ isActive }) =>
+                                isActive ? `${style.navLink} ${style.active}` : style.navLink
+                            }
+                        >
+                            Home
+                        </NavLink>
+                    </nav>
+                    <nav className={style.calendar}>
+                        <NavLink
+                            to="/"
+                            className={({ isActive }) =>
+                                isActive ? `${style.navLink} ${style.active}` : style.navLink
+                            }
+                        >
+                            Calendar
+                        </NavLink>
+                    </nav>
+                </div>
+
 
                 <header>
                     <button className={style.mode} onClick={toggleTheme}>
@@ -46,4 +65,4 @@ function SideBar() {
     );
 };
 
-export default SideBar;
+export default NavigationBar;
