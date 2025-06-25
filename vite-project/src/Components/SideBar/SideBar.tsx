@@ -1,14 +1,13 @@
 import { useState } from "react";
+import { useTheme } from "../ThemeProvider/ThemeProvider";
+
 import style from "./SideBar.module.css";
 import { NavLink } from "react-router-dom";
 
 function SideBar() {
-    const [isOpen, setIsOpen] = useState(false);
     const [sideBarOpen, setSideBarOpen] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
-    const toggleMenu = () => {
-        setIsOpen(!isOpen);
-    };
 
     const toggleSideBar = () => {
         setSideBarOpen(!sideBarOpen);
@@ -20,13 +19,15 @@ function SideBar() {
                     ☰
                 </button>
 
-                <nav className={`${style.nav} ${isOpen ? style.open : ""}`}>
+                <nav className={`${style.nav}`}>
                     <NavLink to="/">Home</NavLink>
                 </nav>
 
-                <button className={style.menuButton} onClick={toggleMenu}>
-                    {isOpen ? "Close" : "Menu"}
+                <header>
+                <button className={style.mode} onClick={toggleTheme}>
+                    {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
                 </button>
+            </header>
             </div>
 
             {sideBarOpen && (
