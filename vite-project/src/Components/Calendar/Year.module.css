@@ -7,11 +7,11 @@
 }
 
 .month {
-    border: 1px solid #ddd;
+    border: 1px solid #dddddd;
     border-radius: 6px;
     padding: 6px;
     width: 100%;
-    background-color: #fff;
+    background-color: #b9b9b9;
     font-family: Arial, sans-serif;
     font-size: 12px;
     box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);

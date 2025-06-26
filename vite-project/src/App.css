@@ -10,19 +10,19 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--bg-color); /* ✅ Use CSS variable */
+  background-color: var(--bg-color); 
   color: var(--text-color);
   transition: background 0.3s, color 0.3s;
 }
 
-/* Make text scale nicely on zoom */
+
 * {
   box-sizing: inherit;
   max-width: 100%;
   word-break: break-word;
 }
 
-/* Responsive media queries (optional starter) */
+
 @media (max-width: 768px) {
   html {
     font-size: 90%;

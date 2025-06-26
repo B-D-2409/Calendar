@@ -46,8 +46,6 @@ function Calendar() {
 
     return (
         <div className={style.calendar}>
-            <h1>Calendar</h1>
-
             <div style={{ marginBottom: 12, display: 'flex', gap: 8, justifyContent: 'center' }}>
                 {isYearView ? (
                     <>
