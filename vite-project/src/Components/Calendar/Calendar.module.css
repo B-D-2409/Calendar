@@ -1,5 +1,9 @@
 .calendar {
     padding: 1rem;
     background-color: #f8f9fa;
-  }
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
   
+
