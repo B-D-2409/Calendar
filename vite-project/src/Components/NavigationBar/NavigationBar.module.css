@@ -2,14 +2,12 @@
     position: sticky;
     top: 0;
     width: 100%;
-    background: linear-gradient(
-        to bottom,
-        white 0%,        
-        white 20%,       
-        green 40%,       
-        red 90%       
-      );
-      
+    background: linear-gradient(to bottom,
+            white 0%,
+            white 20%,
+            green 40%,
+            red 90%);
+
     z-index: 1000;
     padding: 0.5rem 1rem;
     box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
