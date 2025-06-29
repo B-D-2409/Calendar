@@ -2,11 +2,11 @@
     position: sticky;
     top: 0;
     width: 100%;
-    background: linear-gradient(to bottom,
+    background: linear-gradient(to right,
             white 0%,
             white 20%,
-            green 40%,
-            red 90%);
+            green 50%,
+            red 80%);
 
     z-index: 1000;
     padding: 0.5rem 1rem;
