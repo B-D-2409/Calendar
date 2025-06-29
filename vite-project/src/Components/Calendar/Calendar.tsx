@@ -16,8 +16,10 @@ interface Event {
     end: Date;
 }
 
+const allViews: View[] = ['month', 'week', 'work_week', 'day', 'agenda'];
+
 function Calendar() {
-    const [events, setEvents] = useState<Event[]>([
+    const [events] = useState<Event[]>([
         { title: 'Team Meeting', start: new Date(2025, 5, 26, 10, 0), end: new Date(2025, 5, 26, 11, 0) },
         { title: 'Deadline', start: new Date(2025, 5, 28), end: new Date(2025, 5, 28) },
     ]);
@@ -46,47 +48,71 @@ function Calendar() {
 
     return (
         <div className={style.calendar}>
-            <div style={{ marginBottom: 12, display: 'flex', gap: 8, justifyContent: 'center' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 12,
+                    padding: '0 16px',
+                }}
+            >
+                <div style={{ display: 'flex', gap: 8 }}>
+                    {isYearView &&
+                        allViews.map(v => (
+                            <button
+                            className={style.viewButtons}
+                                key={v}
+                                onClick={() => changeView(v)}
+                                style={{ fontWeight: calendarView === v ? 'bold' : 'normal' }}
+                            >
+                                {v.charAt(0).toUpperCase() + v.slice(1).replace('_', ' ')}
+                            </button>
+                        ))}
+                </div>
+
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <button
+                        className={`${style.yearButton} ${isYearView ? style.yearButtonYearView : ''}`}
+                        onClick={() => changeView('year')}
+                        style={{ fontWeight: isYearView ? 'bold' : 'normal' }}
+                    >
+                        Year
+                    </button>
+
+
+
+                    {isYearView && (
+                        <>
+                            <button className={style.prevYear} onClick={handlePrevYear}>←</button>
+                            <h2 className={style.year} style={{ margin: 0 }}>{currentYear}</h2>
+                            <button className={style.nextYear} onClick={handleNextYear}>→</button>
+                        </>
+                    )}
+                </div>
+            </div>
+            <div style={{ height: '75vh' }}>
                 {isYearView ? (
-                    <>
-                        <button onClick={() => changeView('year')} style={{ fontWeight: isYearView ? 'bold' : 'normal' }}>Year</button>
-                        <button onClick={() => changeView('month')} style={{ fontWeight: calendarView === 'month' ? 'bold' : 'normal' }}>Month</button>
-                        <button onClick={() => changeView('week')} style={{ fontWeight: calendarView === 'week' ? 'bold' : 'normal' }}>Week</button>
-                        <button onClick={() => changeView('work_week')} style={{ fontWeight: calendarView === 'work_week' ? 'bold' : 'normal' }}>WorkWeek</button>
-                        <button onClick={() => changeView('day')} style={{ fontWeight: calendarView === 'day' ? 'bold' : 'normal' }}>Day</button>
-                        <button onClick={() => changeView('agenda')} style={{ fontWeight: calendarView === 'agenda' ? 'bold' : 'normal' }}>Agenda</button>
-                    </>
+                    <YearCalendar year={currentYear} />
                 ) : (
-                    <button onClick={() => changeView('year')} style={{ fontWeight: isYearView ? 'bold' : 'normal' }}>Year</button>
+                    <BigCalendar
+                        localizer={localizer}
+                        events={events}
+                        startAccessor="start"
+                        endAccessor="end"
+                        views={allViews}
+                        view={calendarView}
+                        date={currentDate}
+                        onNavigate={handleNavigate}
+                        onView={(view: View) => setCalendarView(view)}
+                        style={{ height: '100%' }}
+                    />
                 )}
             </div>
-
-            {isYearView && (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 12 }}>
-                    <button onClick={handlePrevYear} style={{ marginRight: 10 }}>←</button>
-                    <h2>{currentYear}</h2>
-                    <button onClick={handleNextYear} style={{ marginLeft: 10 }}>→</button>
-                </div>
-            )}
-
-            {isYearView ? (
-                <YearCalendar year={currentYear} />
-            ) : (
-                <BigCalendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    views={['month', 'week', 'work_week', 'day', 'agenda']}
-                    view={calendarView}
-                    date={currentDate}
-                    onNavigate={handleNavigate} 
-                    onView={(view: View) => setCalendarView(view)}
-                    style={{ height: '75vh' }}
-                />
-            )}
         </div>
     );
+
 }
 
 export default Calendar;

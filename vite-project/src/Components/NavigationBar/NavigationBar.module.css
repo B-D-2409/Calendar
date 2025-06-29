@@ -2,10 +2,17 @@
     position: sticky;
     top: 0;
     width: 100%;
-    background-color: #06fffb;
+    background: linear-gradient(
+        to bottom,
+        white 0%,        
+        white 20%,       
+        green 40%,       
+        red 90%       
+      );
+      
     z-index: 1000;
     padding: 0.5rem 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
 }
 
 
@@ -15,6 +22,7 @@
     display: flex;
     justify-content: center;
     gap: 1.5rem;
+    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
 }
 
 .navContainer {
@@ -23,6 +31,7 @@
     align-items: center;
     gap: 1.5rem;
     margin-left: 800px;
+    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
 }
 
 
@@ -32,16 +41,19 @@
     padding: 0;
     margin: 0;
     gap: 1rem;
+    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
 }
 
 .nav a {
     text-decoration: none;
     color: #333;
     font-weight: bold;
+    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
 }
 
 .menuButton {
     display: none;
+    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
 }
 
 /* Mobile Navigation */
