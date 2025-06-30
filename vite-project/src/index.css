@@ -52,3 +52,23 @@ a {
   color: var(--link-color);
 }
 
+
+[data-theme='dark'] .rbc-calendar {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+[data-theme='dark'] .rbc-header {
+  background-color: #333;
+  color: white;
+}
+
+[data-theme='dark'] .rbc-event {
+  background-color: #4caf50;
+  color: white;
+}
+
+:global([data-theme='dark']) .rbc-off-range-bg {
+  background-color: #2c2c2c;
+}
+
