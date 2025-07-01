@@ -15,30 +15,30 @@
     color: white;
 }
 
-/* Навигация: фон и цвят според темата */
+
 .react-calendar__navigation {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 0.5rem;
-    background-color: inherit; /* Наследява цвета на родителя */
-    color: inherit; /* Наследява цвета на родителя */
+    background-color: inherit; 
+    color: inherit; 
     border-bottom: 1px solid #ccc;
 }
 
 .react-calendar.dark-theme .react-calendar__navigation {
-    background-color: #2a2a2a; /* тъмен фон за навигацията */
+    background-color: #2a2a2a; 
     border-bottom: 1px solid #444;
 }
 
-/* Текст месец + година */
+
 .react-calendar__navigation__label {
     color: inherit;
     font-weight: bold;
     font-size: 0.9rem;
 }
 
-/* Седмични дни */
+
 .react-calendar__month-view__weekdays {
     text-align: center;
     text-transform: uppercase;
@@ -50,16 +50,16 @@
     color: #ccc;
 }
 
-/* Дни */
+
 .react-calendar__tile {
     height: 25px;
     text-align: center;
     color: inherit;
 }
 
-/* Днес */
+
 .react-calendar__tile--now {
-    background: #1a73e8 !important;
+    background-color: #6c97f5 !important;
     color: white !important;
     border-radius: 50%;
 }
@@ -69,7 +69,7 @@
     color: white !important;
 }
 
-/* Избран ден */
+
 .react-calendar__tile--active {
     background: #185abc !important;
     color: white !important;

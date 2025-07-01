@@ -72,3 +72,56 @@ a {
   background-color: #2c2c2c;
 }
 
+[data-theme='dark'] .rbc-calendar {
+  background-color: #1e1e1e;
+  color: white;
+}
+
+[data-theme='dark'] .rbc-header {
+  background-color: #333;
+  color: white;
+}
+
+[data-theme='dark'] .rbc-event {
+  background-color: #4caf50;
+  color: white;
+}
+
+
+
+[data-theme='dark'] .rbc-off-range-bg {
+  background-color: #2c2c2c;
+}
+
+
+[data-theme='dark'] .rbc-off-range-bg,
+[data-theme='dark'] .rbc-day-bg.rbc-off-range-bg,
+[data-theme='dark'] .rbc-date-cell.rbc-off-range {
+  color: #f9f3f3; 
+}
+
+[data-theme='dark'] .rbc-date-cell.rbc-today {
+  background-color: #2a4a8d !important;
+  color: #e0e0e0 !important;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .rbc-date-cell.rbc-today {
+  background-color: #2a4a8d !important;
+  color: #e0e0e0 !important;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+[data-theme='light'] .rbc-month-view .rbc-day-bg.rbc-today,
+:root .rbc-month-view .rbc-day-bg.rbc-today {
+  background-color: #6c97f5 
+}
+
+
+[data-theme='dark'] .rbc-month-view .rbc-date-cell.rbc-now > div {
+  background-color: transparent !important;
+  color: #ffd700 !important; 
+  font-weight: bold;
+}
