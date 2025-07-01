@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTheme } from "../ThemeProvider/ThemeProvider";
-
+import SidebarCalendar from "./SideBarCalendar";
 import style from "./NavigationBar.module.css";
 import { NavLink } from "react-router-dom";
 
@@ -53,6 +53,7 @@ function NavigationBar() {
             {sideBarOpen && (
                 <aside className={style.sidebar}>
                     <button className={style.closeSidebar} onClick={toggleSideBar}>×</button>
+                    <SidebarCalendar />
                     <NavLink to="/contact" className={({ isActive }) => isActive ? `${style.navLink} ${style.active}` : style.navLink}
                     >Contact</NavLink>
                     <NavLink to='/ProfileInfo' className={({ isActive }) => isActive ? `${style.navLink} ${style.active}` : style.navLink}
@@ -61,6 +62,7 @@ function NavigationBar() {
                     >About</NavLink>
                 </aside>
             )}
+
         </>
     );
 };
