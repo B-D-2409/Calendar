@@ -125,3 +125,34 @@ a {
   color: #ffd700 !important; 
   font-weight: bold;
 }
+/* DARK theme */
+[data-theme='dark'] .rbc-time-view .rbc-current-time-indicator,
+[data-theme='dark'] .rbc-time-view .rbc-today {
+  background-color: #6c97f5 !important;
+}
+
+/* LIGHT theme */
+[data-theme='light'] .rbc-time-view .rbc-current-time-indicator,
+[data-theme='light'] .rbc-time-view .rbc-today {
+  background-color: #6c97f5  !important;
+}
+
+/* DARK theme */
+[data-theme='dark'] .rbc-agenda-view table .rbc-today {
+  background-color: #6c97f5 !important;
+}
+
+/* LIGHT theme */
+[data-theme='light'] .rbc-agenda-view table .rbc-today {
+  background-color: #6c97f5 !important;
+}
+
+/* DARK theme */
+[data-theme='dark'] .rbc-agenda-view table .rbc-today {
+  background-color: #6c97f5  !important;
+}
+
+/* LIGHT theme */
+[data-theme='light'] .rbc-agenda-view table .rbc-today {
+  background-color: #6c97f5  !important;
+}
