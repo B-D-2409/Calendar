@@ -16,10 +16,11 @@
     font-size: 12px;
     box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
 }
+
 :global([data-theme='dark']) .month {
-    background-color: #1e1e1e; 
-  }
-  
+    background-color: #1e1e1e;
+}
+
 
 .month h4 {
     margin: 0 0 6px;

@@ -10,10 +10,6 @@
 background-color: #1e1e1e; 
 }
 
-
-
-
-
 .yearButton {
 position: relative;
 padding: 6px 20px;
@@ -82,5 +78,30 @@ margin: 0;
 .viewButtons + .viewButtons {
 margin-left: -7px;
 }
+
+
+/* DARK theme for yearButton */
+[data-theme='dark'] .yearButton {
+  background-color: #212121; /* black background */
+  color: #807e7e; /* white text */
+  border: 1px solid #ffffff;
+}
+
+[data-theme='dark'] .yearButton:hover {
+  background-color: #e0e0e0;
+  color: black;
+}
+
+
+[data-theme='light'] .yearButton {
+  background-color: #ffffff; 
+  color: #000000;
+  border: 1px solid #cccccc;
+}
+
+[data-theme='light'] .yearButton:hover {
+  background-color: #dddddd;
+}
+
 
 

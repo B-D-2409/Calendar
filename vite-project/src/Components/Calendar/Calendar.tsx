@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar as BigCalendar, dateFnsLocalizer, type View, type NavigateAction } from 'react-big-calendar';
+import { Calendar as BigCalendar, dateFnsLocalizer, type View,} from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -42,8 +42,9 @@ function Calendar() {
         }
     };
 
-    const handleNavigate = (date: Date, view: View, action: NavigateAction) => {
+    const handleNavigate = (date: Date, view: View, ) => {
         setCurrentDate(date);
+        setCalendarView(view);
     };
 
     return (
