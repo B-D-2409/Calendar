@@ -8,7 +8,11 @@ import mongoose from "mongoose";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import AuthenticationRoutes from "../Routes/Authentication.routes.ts";
+import AuthenticationRoutes from "../Routes/AuthenticationRoutes";
+import verifyToken from "../views/middlewares";
+import { verifyAdmin } from "../views/middlewares";
+import Event from '../Models/Event.model';
+import EventsRoutes from "../Routes/EventsRoutes";
 
 
 
@@ -77,16 +81,22 @@ app.use();
  * Route for managing contacts.
  * @route /api/contacts
  */
-app.use('api/auth' AuthenticationRoutes);
+app.use('api/auth', AuthenticationRoutes);
+app.use('api/events', EventsRoutes)
 
 /**
  * Connects to MongoDB using the connection string from environment variables.
  * Sets up the Socket.IO server and event-related routes upon successful connection.
  */
+
+if (!process.env.mongoDB_URL) {
+  throw new Error("❌ mongoDB_URL is not defined in .env file");
+}
+
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.mongoDB_URL)
   .then(() => {
-    console.log("✅ connect with MongoDB!");
+    console.log("✅ Connected with MongoDB!");
 
     /**
      * Handles Socket.IO connections.
@@ -118,7 +128,7 @@ mongoose
     
 /**
  * @description Starts the server and listens on the specified port.
- * @param {number} [process.env.PORT=8000] - The port on which the server listens.
+ * @param {number} [process.env.PORT=5000] - The port on which the server listens.
  */
 server.listen(process.env.PORT || 5000, () => {
     console.log(`🚀 Server running on port ${process.env.PORT || 8000}`);
