@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { AuthenticatedRequest } from "../types"; // adjust path to your new types file
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
 export default function verifyToken(
-  req: Request,
+  req: AuthenticatedRequest, // use your extended request here
   res: Response,
   next: NextFunction
 ): void {
@@ -27,10 +28,8 @@ export default function verifyToken(
   });
 }
 
-
-
 export function verifyAdmin(
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): void {
