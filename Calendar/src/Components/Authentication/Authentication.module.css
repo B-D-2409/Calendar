@@ -1,0 +1,272 @@
+/* Base styles for the auth container */
+.auth-container {
+    max-width: 700px;
+    width: 100%;
+    min-width: 400px;
+    margin: 3rem auto;
+    padding: 3rem 4rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #00ffdd;
+}
+
+/* Toggle buttons for switching login/register */
+.auth-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.auth-toggle button {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 1.2rem;
+    margin: 0 0.7rem;
+    padding: 0.6rem 1.5rem;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+.auth-toggle button:disabled {
+    color: #048170;
+    border-bottom: 3px solid #04eac4;
+    font-weight: bold;
+    cursor: default;
+    background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
+}
+
+/* Form heading */
+.auth-form h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #048170;
+    font-size: 2rem;
+}
+
+/* Form fields container */
+.auth-form div {
+    margin-bottom: 1.8rem;
+    width: 100%;
+}
+
+/* Labels */
+.auth-form label {
+    display: block;
+    margin-bottom: 0.6rem;
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Inputs */
+.auth-form input {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    background: #f9f9f9;
+    color: #058f7c;
+    transition: border-color 0.3s;
+}
+
+.auth-form input:focus {
+    border-color: #f7f9fb;
+    outline: none;
+}
+
+/* Submit button */
+.auth-form button[type="submit"] {
+    width: 100%;
+    padding: 1rem 0;
+    background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
+    color: #00ffdd;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.3s;
+}
+
+.auth-form button[type="submit"]:hover {
+    background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
+}
+
+/* Error and success messages */
+.error {
+    color: red;
+    font-size: 1rem;
+    margin-top: 6px;
+}
+
+.error-summary {
+    background: #ffe5e5;
+    border: 1px solid #cc0000;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.success {
+    color: green;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .auth-container {
+    background: #1e1e1e;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-toggle button {
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-toggle button:disabled {
+    color: #00ffdd;
+    border-bottom: 3px solid #00ffd5;
+}
+
+[data-theme="dark"] .auth-form h2 {
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-form label {
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-form input {
+    background: #333;
+    color: #00ffdd;
+    border: 1.5px solid #555;
+}
+
+[data-theme="dark"] .auth-form input:focus {
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-form button[type="submit"] {
+    background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-form button[type="submit"]:hover {
+    background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
+}
+
+[data-theme="dark"] .error {
+    color: #ff6b6b;
+}
+
+[data-theme="dark"] .error-summary {
+    background: #661111;
+    border: 1px solid #cc4444;
+    color: #f8d7da;
+}
+
+[data-theme="dark"] .success {
+    color: #a3d86d;
+}
+
+/* Main authentication container (bigger version) */
+.auth-container {
+    max-width: 900px;
+    /* increased from 700px */
+    width: 90%;
+    /* ensures it covers most of the screen on small devices */
+    min-width: 500px;
+    /* increased for a larger base */
+    margin: 3rem auto;
+    padding: 4rem 5rem;
+    /* increased padding for spacious layout */
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    color: #00ffdd;
+}
+
+/* Logged-in welcome box (also bigger) */
+.auth-logged-in {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 3rem;
+    /* increased padding for a bigger feel */
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-logged-in h2 {
+    font-size: 1.8rem;
+    /* slightly larger */
+    margin-bottom: 2rem;
+    /* more spacing below heading */
+    color: #048170;
+    text-align: center;
+}
+
+.auth-logged-in button {
+    width: 100%;
+    padding: 1rem 0;
+    /* bigger button */
+    background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
+    color: #00ffdd;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.auth-logged-in button:hover {
+    background: linear-gradient(to right, rgba(174, 254, 24, 1), rgba(255, 80, 17, 1));
+}
+
+/* Dark mode support */
+[data-theme="dark"] .auth-container {
+    background: #1e1e1e;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-logged-in {
+    background: #1e1e1e;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-logged-in h2 {
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-logged-in button {
+    background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
+    color: #00ffdd;
+}
+
+[data-theme="dark"] .auth-logged-in button:hover {
+    background: linear-gradient(to right, rgba(174, 254, 24, 1), rgba(255, 80, 17, 1));
+}

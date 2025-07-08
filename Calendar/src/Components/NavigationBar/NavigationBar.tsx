@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 import SidebarCalendar from "./SideBarCalendar";
 import style from "./NavigationBar.module.css";
@@ -8,10 +8,10 @@ function NavigationBar() {
     const [sideBarOpen, setSideBarOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
 
-
     const toggleSideBar = () => {
         setSideBarOpen(!sideBarOpen);
-    }
+    };
+
     return (
         <>
             <div className={style.header}>
@@ -30,6 +30,7 @@ function NavigationBar() {
                             Home
                         </NavLink>
                     </nav>
+
                     <nav className={style.calendar}>
                         <NavLink
                             to="/"
@@ -42,29 +43,51 @@ function NavigationBar() {
                     </nav>
                 </div>
 
-
-                <header>
+                <header className={style.headerRight}>
                     <button className={style.mode} onClick={toggleTheme}>
                         {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
                     </button>
+                    <NavLink to="/authentication" className={style.userButton}>
+                        👤 Account
+                    </NavLink>
+
                 </header>
             </div>
 
             {sideBarOpen && (
                 <aside className={style.sidebar}>
-                    <button className={style.closeSidebar} onClick={toggleSideBar}>×</button>
+                    <button className={style.closeSidebar} onClick={toggleSideBar}>
+                        ×
+                    </button>
                     <SidebarCalendar />
-                    <NavLink to="/contact" className={({ isActive }) => isActive ? `${style.navLink} ${style.active}` : style.navLink}
-                    >Contact</NavLink>
-                    <NavLink to='/ProfileInfo' className={({ isActive }) => isActive ? `${style.navLink} ${style.active}` : style.navLink}
-                    >Profile</NavLink>
-                    <NavLink to="/about" className={({ isActive }) => isActive ? `${style.navLink} ${style.active}` : style.navLink}
-                    >About</NavLink>
+                    <NavLink
+                        to="/contact"
+                        className={({ isActive }) =>
+                            isActive ? `${style.navLink} ${style.active}` : style.navLink
+                        }
+                    >
+                        Contact
+                    </NavLink>
+                    <NavLink
+                        to="/ProfileInfo"
+                        className={({ isActive }) =>
+                            isActive ? `${style.navLink} ${style.active}` : style.navLink
+                        }
+                    >
+                        Profile
+                    </NavLink>
+                    <NavLink
+                        to="/about"
+                        className={({ isActive }) =>
+                            isActive ? `${style.navLink} ${style.active}` : style.navLink
+                        }
+                    >
+                        About
+                    </NavLink>
                 </aside>
             )}
-
         </>
     );
-};
+}
 
 export default NavigationBar;
