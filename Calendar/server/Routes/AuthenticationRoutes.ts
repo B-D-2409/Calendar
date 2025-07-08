@@ -2,7 +2,7 @@ import express, { RequestHandler, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../Models/User.model";
-
+import verifyToken from "../views/middlewares";
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
@@ -13,6 +13,11 @@ interface RegisterRequestBody {
     password: string;
     firstName: string;
     lastName: string;
+}
+
+interface LoginRequestBody {
+    email: string;
+    password: string;
 }
 
 
@@ -59,7 +64,7 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
             username,
             phoneNumber,
             email,
-            password: hashedPassword,
+            password,
             firstName,
             lastName,
             role: "user",
@@ -80,5 +85,51 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
 };
 
 router.post("/register", registerHandler);
+
+const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            res.status(400).json({ message: "Invalid email!" });
+            return;
+        }
+
+        if (user.isBlocked) {
+            res.status(403).json({
+                message: "Your account has been blocked. Please contact the administrator.",
+            });
+            return;
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            res.status(400).json({ message: "Invalid password!" });
+            return;
+        }
+
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+            },
+        });
+    } catch (err: any) {
+        console.error("Login error:", err.message);
+        res.status(500).json({ message: "Server error during login" });
+    }
+};
+
+router.post("/login", loginHandler);
 
 export default router;
