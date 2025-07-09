@@ -23,7 +23,7 @@ interface ErrorType {
     lastName?: string;
     isBlocked?: string;
     general?: string;
-  }
+}
 
 function Authentication() {
     const auth = useContext(AuthContext);
@@ -205,7 +205,7 @@ function Authentication() {
         >
             <div className={style["auth-container"]} style={{ width: "20vw" }}>
                 {isLoggedIn ? (
-                    <div className={style["auth-logged-in"]}>
+                    <div>
                         <h2>Welcome, {loggedUser?.firstName || "User"}!</h2>
                         <button onClick={logout}>Logout</button>
                     </div>

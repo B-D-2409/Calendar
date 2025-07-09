@@ -205,7 +205,7 @@
 }
 
 /* Logged-in welcome box (also bigger) */
-.auth-logged-in {
+.auth-container {
     width: 100%;
     background: #fff;
     border-radius: 10px;
@@ -218,7 +218,7 @@
     justify-content: center;
 }
 
-.auth-logged-in h2 {
+.auth-container h2 {
     font-size: 1.8rem;
     /* slightly larger */
     margin-bottom: 2rem;
@@ -227,7 +227,7 @@
     text-align: center;
 }
 
-.auth-logged-in button {
+.auth-container button {
     width: 100%;
     padding: 1rem 0;
     /* bigger button */
@@ -241,7 +241,7 @@
     transition: background 0.3s;
 }
 
-.auth-logged-in button:hover {
+.auth-container button:hover {
     background: linear-gradient(to right, rgba(174, 254, 24, 1), rgba(255, 80, 17, 1));
 }
 
@@ -252,21 +252,21 @@
     color: #00ffdd;
 }
 
-[data-theme="dark"] .auth-logged-in {
+[data-theme="dark"] .auth-container{
     background: #1e1e1e;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
     color: #00ffdd;
 }
 
-[data-theme="dark"] .auth-logged-in h2 {
+[data-theme="dark"] .auth-containern h2 {
     color: #00ffdd;
 }
 
-[data-theme="dark"] .auth-logged-in button {
+[data-theme="dark"] .auth-container button {
     background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
     color: #00ffdd;
 }
 
-[data-theme="dark"] .auth-logged-in button:hover {
+[data-theme="dark"] .auth-container button:hover {
     background: linear-gradient(to right, rgba(174, 254, 24, 1), rgba(255, 80, 17, 1));
 }
