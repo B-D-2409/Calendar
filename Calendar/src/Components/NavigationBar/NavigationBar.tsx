@@ -43,6 +43,19 @@ function NavigationBar() {
                     </nav>
                 </div>
 
+                <div className={style.admin}
+                >
+                    <NavLink
+                        to="/admin"
+                        className={({ isActive }) =>
+                            isActive ? `${style.navLink} ${style.active}` : style.navLink
+                        }
+                    >
+                        Admin
+                    </NavLink>
+
+                </div>
+
                 <header className={style.headerRight}>
                     <button className={style.mode} onClick={toggleTheme}>
                         {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}

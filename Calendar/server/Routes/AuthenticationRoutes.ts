@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../Models/User.model";
 import verifyToken from "../views/middlewares";
+
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
@@ -84,7 +85,7 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
     }
 };
 
-router.post("/register", registerHandler);
+router.post("/register", verifyToken, registerHandler);
 
 const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res) => {
     try {
@@ -130,6 +131,7 @@ const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res)
     }
 };
 
-router.post("/login", loginHandler);
+router.post("/login", verifyToken, loginHandler);
+
 
 export default router;

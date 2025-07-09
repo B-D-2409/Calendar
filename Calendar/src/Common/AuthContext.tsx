@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import axios from "axios";
 
-interface User {
+export interface User {
   id: string;
   username: string;
   email: string;
@@ -13,7 +13,7 @@ interface User {
   [key: string]: any;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<User | null>;
@@ -24,7 +24,18 @@ interface AuthContextType {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
+const defaultAuthContext: AuthContextType = {
+  user: null,
+  token: null,
+  login: async () => null,
+  register: async () => {},
+  logout: async () => {},
+  isLoggedIn: false,
+  loading: false,
+  setUser: () => {},
+};
 export const AuthContext = createContext<AuthContextType | null>(null);
+
 
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 

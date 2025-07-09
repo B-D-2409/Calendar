@@ -8,6 +8,7 @@ import AboutPage from './Pages/AboutPage/AboutPage'
 import ContactListForm from './Components/Contacts/ContactListForm'
 import Calendar from './Components/Calendar/Calendar'
 import Authentication from './Components/Authentication/Authentication';
+import Admin from './Components/Admin/Admin'
 function App() {
 
 
@@ -25,6 +26,7 @@ function App() {
             <Route path='/ProfileInfo' element={<Profile />} />
             <Route path='/homepage' element={<HomePage />} />
             <Route path='/authentication' element={<Authentication />} />
+            <Route path='/admin' element={<Admin />} />
 
           </Routes>
         </Container>
