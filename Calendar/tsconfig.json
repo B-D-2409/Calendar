@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,  
+    "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
@@ -8,5 +12,6 @@
     "jsx": "react-jsx",
     "types": ["vite/client"]
   },
-  "include": ["src", "env.d.ts"]
+  "include": ["src", "env.d.ts", "server/**/*.ts", "Mongo.ts"]
+
 }

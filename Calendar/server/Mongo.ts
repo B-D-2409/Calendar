@@ -6,12 +6,12 @@ import mongoose from "mongoose";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import AuthenticationRoutes from "./Routes/AuthenticationRoutes";
-import verifyToken from "./views/middlewares";
-import { verifyAdmin } from "./views/middlewares";
-import Event from './Models/Event.model';
-import EventsRoutes from "./Routes/EventsRoutes";
-import AdminRoutes from "./Routes/AdminRoutes";
+import AuthenticationRoutes from "./Routes/AuthenticationRoutes.ts";
+// import verifyToken from "./views/middlewares";
+// import { verifyAdmin } from "./views/middlewares";
+// import Event from './Models/Event.model';
+import EventsRoutes from "./Routes/EventsRoutes.ts";
+import AdminRoutes from "./Routes/AdminRoutes.ts";
 
 const app = express();
 
@@ -44,10 +44,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// FIXED: added missing leading slash here:
 app.use('/api/auth', AuthenticationRoutes);
+app.use('/api/admin', AdminRoutes);
+
 app.use('/api/events', EventsRoutes);
-app.use('/api/auth', AdminRoutes);
 
 if (!process.env.mongoDB_URL) {
   throw new Error("❌ mongoDB_URL is not defined in .env file");

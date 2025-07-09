@@ -1,10 +1,10 @@
 import express, { RequestHandler, Response, Request, NextFunction } from "express";
-import User from "../Models/User.model";
-import verifyToken from "../views/middlewares";
-import { verifyAdmin } from "../views/middlewares";
+import User from "../Models/User.model.ts";
+import verifyToken from "../views/middlewares.ts";
+import { verifyAdmin } from "../views/middlewares.ts";
 import { ParsedQs } from "qs";
-import DeleteRequest from "../Models/DeleteRequest.model";
-import { AuthenticatedRequest } from "../types";
+import DeleteRequest from "../Models/DeleteRequest.model.ts";
+import { AuthenticatedRequest } from "../types.ts";
 const router = express.Router();
 function getQueryParamAsString(
     param: string | ParsedQs | (string | ParsedQs)[] | undefined,
