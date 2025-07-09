@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Calendar as BigCalendar, dateFnsLocalizer, type View,} from 'react-big-calendar';
+import { Calendar as BigCalendar, dateFnsLocalizer, type View, } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -43,7 +43,7 @@ function Calendar() {
         }
     };
 
-    const handleNavigate = (date: Date, view: View, ) => {
+    const handleNavigate = (date: Date, view: View,) => {
         setCurrentDate(date);
         setCalendarView(view);
     };
@@ -63,7 +63,7 @@ function Calendar() {
                     {isYearView &&
                         allViews.map(v => (
                             <button
-                            className={style.viewButtons}
+                                className={style.viewButtons}
                                 key={v}
                                 onClick={() => changeView(v)}
                                 style={{ fontWeight: calendarView === v ? 'bold' : 'normal' }}
@@ -96,7 +96,9 @@ function Calendar() {
             </div>
             <div style={{ height: '75vh' }}>
                 {isYearView ? (
-                    <YearCalendar year={currentYear} />
+                    <div style={{ width: '100%', height: '100%', padding: '10px', boxSizing: 'border-box' }}>
+                        <YearCalendar year={currentYear} />
+                    </div>
                 ) : (
                     <BigCalendar
                         localizer={localizer}
@@ -111,6 +113,7 @@ function Calendar() {
                         style={{ height: '100%' }}
                     />
                 )}
+
             </div>
         </div>
     );
