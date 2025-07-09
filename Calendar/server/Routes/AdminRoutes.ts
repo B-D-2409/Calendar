@@ -137,5 +137,47 @@ const getDeleteRequest = async (
     }
 };
 
-router.get("/delete-requests", verifyAdmin, getDeleteRequest)
+router.get("/delete-requests", verifyAdmin, getDeleteRequest);
+
+const idRequestDeleteUser = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        // Defensive check for req.user (shouldn't happen if middleware works correctly)
+        if (!req.user || !req.user.id) {
+            res.status(401).json({ message: "Unauthorized" });
+            return
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            res.status(404).json({ message: "User not found" });
+            return
+        }
+
+        if (user.role !== "admin") {
+            res.status(403).json({ message: "Access denied" });
+            return
+        }
+
+        const request = await DeleteRequest.findById(req.params.id);
+        if (!request) {
+            res.status(404).json({ message: "Request not found" });
+            return
+        }
+
+        request.status = req.body.status || request.status;
+        await request.save();
+
+        res.json({ message: "Request updated", request });
+    } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+    }
+};
+
+router.put("/delete-requests/:id", verifyToken, idRequestDeleteUser);
+
+
 export default router;
