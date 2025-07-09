@@ -1,4 +1,4 @@
-import React from 'react';
+
 import style from './Year.module.css';
 
 type Props = {

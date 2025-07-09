@@ -1,7 +1,9 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../Common/AuthContext";
 import style from "./Authentication.module.css";
+import axios from "axios";
+
 interface User {
     username: string;
     phoneNumber: string;
@@ -83,10 +85,13 @@ function Authentication() {
             navigate(location.state?.from?.pathname ?? "/");
         } catch (err) {
             console.error("Login failed:", err);
-            const message =
-                err?.response?.data?.msg ||
-                err?.response?.data?.message ||
-                "Login failed!";
+            let message = "Login failed!";
+            if (axios.isAxiosError(err) && err.response) {
+                message =
+                    err.response.data?.msg ||
+                    err.response.data?.message ||
+                    "Login failed!";
+            }
             setError({ general: message });
             setSuccessMessage("");
         }
@@ -168,13 +173,17 @@ function Authentication() {
             setError({});
         } catch (err) {
             console.error("❌ Failed to register:", err);
-            const msg =
-                err?.response?.data?.message ||
-                err?.response?.data?.msg ||
-                "❌ Failed to register.";
+            let msg = "❌ Failed to register.";
+            if (axios.isAxiosError(err) && err.response) {
+                msg =
+                    err.response.data?.message ||
+                    err.response.data?.msg ||
+                    msg;
+            }
             setError({ general: msg });
             setSuccessMessage("");
         }
+        
     };
 
 

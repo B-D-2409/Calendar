@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 import SidebarCalendar from "./SideBarCalendar";
 import style from "./NavigationBar.module.css";
