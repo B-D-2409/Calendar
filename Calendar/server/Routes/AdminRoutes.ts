@@ -4,6 +4,7 @@ import verifyToken from "../views/middlewares";
 import { verifyAdmin } from "../views/middlewares";
 import { ParsedQs } from "qs";
 import DeleteRequest from "../Models/DeleteRequest.model";
+import { AuthenticatedRequest } from "../types";
 const router = express.Router();
 function getQueryParamAsString(
     param: string | ParsedQs | (string | ParsedQs)[] | undefined,
@@ -84,4 +85,57 @@ router.delete("/delete/:id", verifyAdmin, deleteUserHandler);
 
 
 
+const requestDeleteUser = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const existingRequest = await DeleteRequest.findOne({
+            userId: req.user!.id,
+        });
+
+        if (existingRequest) {
+            res.status(400).json({ message: "Delete request already exists" });
+            return;
+        }
+
+        const newRequest = new DeleteRequest({
+            userId: req.user!.id,
+            username: req.user!.username,
+            reason: req.body.reason || "User requested account deletion",
+        });
+
+        await newRequest.save();
+        res.status(201).json({ message: "Delete request submitted" });
+    } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+    }
+};
+
+router.post("/request-delete", verifyToken, requestDeleteUser);
+
+const getDeleteRequest = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const user = await User.findById(req.user!.id);
+        if (user?.role !== "admin") {
+            res.status(403).json({ message: "Access denied" });
+            return
+        }
+
+        const requests = await DeleteRequest.find().populate(
+            "userId",
+            "username email"
+        );
+        res.json(requests);
+    } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+    }
+};
+
+router.get("/delete-requests", verifyAdmin, getDeleteRequest)
 export default router;

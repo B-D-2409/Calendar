@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { AuthenticatedRequest } from "../types"; // adjust path to your new types file
+import { Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { AuthenticatedRequest, CustomJwtPayload } from "../types"; // import CustomJwtPayload here
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
 export default function verifyToken(
-  req: AuthenticatedRequest, // use your extended request here
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ): void {
@@ -23,7 +23,7 @@ export default function verifyToken(
       return;
     }
 
-    req.user = decoded as JwtPayload;
+    req.user = decoded as CustomJwtPayload; // <-- cast here
     next();
   });
 }
@@ -42,9 +42,9 @@ export function verifyAdmin(
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const decoded = jwt.verify(token, JWT_SECRET) as CustomJwtPayload; // <-- cast here
 
-    if (decoded && (decoded as any).role !== "admin") {
+    if (!decoded || decoded.role !== "admin") {
       res.status(403).json({ message: "Admins only" });
       return;
     }
