@@ -120,18 +120,27 @@ margin-left: -7px;
   background-color: #dddddd;
 }
 
-
-
-
-.calendarContent {
-  height: 75vh;
-  width: 100%;
+[data-theme='light'] .viewButtons {
+  background-color: #ffffff; 
+  color: #000000;
+  border: 1px solid #cccccc;
 }
-.yearCalendarContainer {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column; /* match BigCalendar vertical layout */
-  background: white; /* if BigCalendar uses white */
-  box-sizing: border-box;
+
+[data-theme='light'] .nextYear {
+  background-color: #ffffff; 
+  color: #000000;
+  border: 1px solid #cccccc;
 }
+[data-theme='light'] .prevYear {
+  background-color: #ffffff; 
+  color: #000000;
+  border: 1px solid #cccccc;
+}
+
+
+
+
+
+
+
+
