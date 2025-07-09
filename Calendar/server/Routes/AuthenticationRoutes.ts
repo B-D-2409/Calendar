@@ -131,7 +131,7 @@ const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res)
     }
 };
 
-router.post("/login", verifyToken, loginHandler);
+router.post("/login",  loginHandler);
 
 
 export default router;

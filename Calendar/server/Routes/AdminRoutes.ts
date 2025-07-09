@@ -179,5 +179,34 @@ const idRequestDeleteUser = async (
 
 router.put("/delete-requests/:id", verifyToken, idRequestDeleteUser);
 
+const searchUsers = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { query } = req.params;
+
+        const users = await User.find({
+            $or: [
+                { username: { $regex: query, $options: "i" } },
+                { phoneNumber: { $regex: query, $options: "i" } },
+                { email: { $regex: query, $options: "i" } },
+            ],
+        }).select("-password");
+
+        if (!users || users.length === 0) {
+            res.status(404).json({ error: "No users found" });
+            return
+        }
+
+        res.status(200).json({ data: users });
+    } catch (error) {
+        console.error("Error searching users:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+router.get("/users/search/:query", verifyToken, searchUsers);
 
 export default router;
