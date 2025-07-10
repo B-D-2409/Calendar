@@ -18,6 +18,8 @@
     box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
 }
 
+
+
 :global([data-theme='dark']) .month {
     background-color: #1e1e1e;
 }
@@ -53,7 +55,7 @@
 }
 
 .day:hover {
-    background-color: #e6f7ff;
+    background-color: #757575;
 }
 
 .today {
