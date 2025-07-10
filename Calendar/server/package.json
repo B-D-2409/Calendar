@@ -40,7 +40,6 @@
     "to-regex-range": "^5.0.1",
     "touch": "^3.1.1",
     "undefsafe": "^2.0.5",
-      "@types/node": "^24.0.12",
     "vite": "^7.0.3"
   },
   "scripts": {
