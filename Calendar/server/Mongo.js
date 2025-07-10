@@ -10,12 +10,12 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
-const AuthenticationRoutes_1 = __importDefault(require("./Routes/AuthenticationRoutes"));
-// import verifyToken from "./views/middlewares";
-// import { verifyAdmin } from "./views/middlewares";
-// import Event from './Models/Event.model';
-const EventsRoutes_1 = __importDefault(require("./Routes/EventsRoutes"));
-const AdminRoutes_1 = __importDefault(require("./Routes/AdminRoutes"));
+const AuthenticationRoutes_js_1 = __importDefault(require("./Routes/AuthenticationRoutes.js"));
+// import verifyToken from "./views/middlewares.js";
+// import { verifyAdmin } from "./views/middlewares.js";
+// import Event from './Models/Event.model.js';
+const EventsRoutes_js_1 = __importDefault(require("./Routes/EventsRoutes.js"));
+const AdminRoutes_js_1 = __importDefault(require("./Routes/AdminRoutes.js"));
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const FRONTEND_URL = process.env.VITE_FRONT_END_URL || "http://localhost:5173";
@@ -37,9 +37,9 @@ app.use((req, res, next) => {
     console.log(`[${req.method}] ${req.url}`);
     next();
 });
-app.use('/api/auth', AuthenticationRoutes_1.default);
-app.use('/api/admin', AdminRoutes_1.default);
-app.use('/api/events', EventsRoutes_1.default);
+app.use('/api/auth', AuthenticationRoutes_js_1.default);
+app.use('/api/admin', AdminRoutes_js_1.default);
+app.use('/api/events', EventsRoutes_js_1.default);
 if (!process.env.mongoDB_URL) {
     throw new Error("❌ mongoDB_URL is not defined in .env file");
 }

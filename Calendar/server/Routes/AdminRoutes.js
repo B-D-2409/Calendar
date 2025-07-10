@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const User_model_1 = __importDefault(require("../Models/User.model"));
-const middlewares_1 = __importDefault(require("../views/middlewares"));
-const middlewares_2 = require("../views/middlewares");
-const DeleteRequest_model_1 = __importDefault(require("../Models/DeleteRequest.model"));
+const User_model_js_1 = __importDefault(require("../Models/User.model.js"));
+const middlewares_js_1 = __importDefault(require("../views/middlewares.js"));
+const middlewares_js_2 = require("../views/middlewares.js");
+const DeleteRequest_model_js_1 = __importDefault(require("../Models/DeleteRequest.model.js"));
 const router = express_1.default.Router();
 function getQueryParamAsString(param, defaultValue) {
     if (Array.isArray(param)) {
@@ -30,18 +30,18 @@ function getQueryParamAsString(param, defaultValue) {
     return defaultValue;
 }
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
-router.get("/admin", middlewares_2.verifyAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/admin", middlewares_js_2.verifyAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json({ message: "Welcome to the admin page" });
 }));
-router.get("/users/admin", middlewares_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/users/admin", middlewares_js_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const pageStr = getQueryParamAsString(req.query.page, "1");
         const limitStr = getQueryParamAsString(req.query.limit, "5");
         const page = parseInt(pageStr, 10);
         const limit = parseInt(limitStr, 10);
         const skip = (page - 1) * limit;
-        const users = yield User_model_1.default.find().skip(skip).limit(limit);
-        const total = yield User_model_1.default.countDocuments();
+        const users = yield User_model_js_1.default.find().skip(skip).limit(limit);
+        const total = yield User_model_js_1.default.countDocuments();
         res.json({
             users,
             totalPages: Math.ceil(total / limit),
@@ -52,18 +52,18 @@ router.get("/users/admin", middlewares_1.default, (req, res) => __awaiter(void 0
         res.status(500).json({ error: err.message });
     }
 }));
-router.post("/block/:id", middlewares_2.verifyAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/block/:id", middlewares_js_2.verifyAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield User_model_1.default.findByIdAndUpdate(req.params.id, { isBlocked: true });
+        yield User_model_js_1.default.findByIdAndUpdate(req.params.id, { isBlocked: true });
         res.json({ message: "User blocked" });
     }
     catch (err) {
         res.status(500).json({ message: "Failed to block user" });
     }
 }));
-router.post("/unblock/:id", middlewares_2.verifyAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/unblock/:id", middlewares_js_2.verifyAdmin, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield User_model_1.default.findByIdAndUpdate(req.params.id, { isBlocked: false });
+        yield User_model_js_1.default.findByIdAndUpdate(req.params.id, { isBlocked: false });
         res.json({ message: "User unblocked" });
     }
     catch (err) {
@@ -72,7 +72,7 @@ router.post("/unblock/:id", middlewares_2.verifyAdmin, (req, res) => __awaiter(v
 }));
 const deleteUserHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedUser = yield User_model_1.default.findByIdAndDelete(req.params.id);
+        const deletedUser = yield User_model_js_1.default.findByIdAndDelete(req.params.id);
         if (!deletedUser) {
             res.status(404).json({ message: "User not found" });
             return; // ensure no further execution
@@ -83,17 +83,17 @@ const deleteUserHandler = (req, res) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ message: "Failed to delete user" });
     }
 });
-router.delete("/delete/:id", middlewares_2.verifyAdmin, deleteUserHandler);
+router.delete("/delete/:id", middlewares_js_2.verifyAdmin, deleteUserHandler);
 const requestDeleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const existingRequest = yield DeleteRequest_model_1.default.findOne({
+        const existingRequest = yield DeleteRequest_model_js_1.default.findOne({
             userId: req.user.id,
         });
         if (existingRequest) {
             res.status(400).json({ message: "Delete request already exists" });
             return;
         }
-        const newRequest = new DeleteRequest_model_1.default({
+        const newRequest = new DeleteRequest_model_js_1.default({
             userId: req.user.id,
             username: req.user.username,
             reason: req.body.reason || "User requested account deletion",
@@ -105,22 +105,22 @@ const requestDeleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.status(500).json({ error: err.message });
     }
 });
-router.post("/request-delete", middlewares_1.default, requestDeleteUser);
+router.post("/request-delete", middlewares_js_1.default, requestDeleteUser);
 const getDeleteRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield User_model_1.default.findById(req.user.id);
+        const user = yield User_model_js_1.default.findById(req.user.id);
         if ((user === null || user === void 0 ? void 0 : user.role) !== "admin") {
             res.status(403).json({ message: "Access denied" });
             return;
         }
-        const requests = yield DeleteRequest_model_1.default.find().populate("userId", "username email");
+        const requests = yield DeleteRequest_model_js_1.default.find().populate("userId", "username email");
         res.json(requests);
     }
     catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
-router.get("/delete-requests", middlewares_2.verifyAdmin, getDeleteRequest);
+router.get("/delete-requests", middlewares_js_2.verifyAdmin, getDeleteRequest);
 const idRequestDeleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Defensive check for req.user (shouldn't happen if middleware works correctly)
@@ -128,7 +128,7 @@ const idRequestDeleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0
             res.status(401).json({ message: "Unauthorized" });
             return;
         }
-        const user = yield User_model_1.default.findById(req.user.id);
+        const user = yield User_model_js_1.default.findById(req.user.id);
         if (!user) {
             res.status(404).json({ message: "User not found" });
             return;
@@ -137,7 +137,7 @@ const idRequestDeleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0
             res.status(403).json({ message: "Access denied" });
             return;
         }
-        const request = yield DeleteRequest_model_1.default.findById(req.params.id);
+        const request = yield DeleteRequest_model_js_1.default.findById(req.params.id);
         if (!request) {
             res.status(404).json({ message: "Request not found" });
             return;
@@ -150,11 +150,11 @@ const idRequestDeleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0
         res.status(500).json({ error: err.message });
     }
 });
-router.put("/delete-requests/:id", middlewares_1.default, idRequestDeleteUser);
+router.put("/delete-requests/:id", middlewares_js_1.default, idRequestDeleteUser);
 const searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { query } = req.params;
-        const users = yield User_model_1.default.find({
+        const users = yield User_model_js_1.default.find({
             $or: [
                 { username: { $regex: query, $options: "i" } },
                 { phoneNumber: { $regex: query, $options: "i" } },
@@ -172,5 +172,5 @@ const searchUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         res.status(500).json({ error: "Internal server error" });
     }
 });
-router.get("/users/search/:query", middlewares_1.default, searchUsers);
+router.get("/users/search/:query", middlewares_js_1.default, searchUsers);
 exports.default = router;

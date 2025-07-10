@@ -15,14 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const User_model_1 = __importDefault(require("../Models/User.model"));
-const middlewares_1 = __importDefault(require("../views/middlewares"));
+const User_model_js_1 = __importDefault(require("../Models/User.model.js"));
+const middlewares_js_1 = __importDefault(require("../views/middlewares.js"));
 const router = express_1.default.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 const registerHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, phoneNumber, email, password, firstName, lastName } = req.body;
-        const existingUser = yield User_model_1.default.findOne({ email });
+        const existingUser = yield User_model_js_1.default.findOne({ email });
         if (existingUser) {
             res.status(409).json({ msg: "User already exists" });
             return;
@@ -49,7 +49,7 @@ const registerHandler = (req, res) => __awaiter(void 0, void 0, void 0, function
             return;
         }
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        const newUser = new User_model_1.default({
+        const newUser = new User_model_js_1.default({
             username,
             phoneNumber,
             email,
@@ -70,11 +70,11 @@ const registerHandler = (req, res) => __awaiter(void 0, void 0, void 0, function
         return;
     }
 });
-router.post("/register", middlewares_1.default, registerHandler);
+router.post("/register", middlewares_js_1.default, registerHandler);
 const loginHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
-        const user = yield User_model_1.default.findOne({ email });
+        const user = yield User_model_js_1.default.findOne({ email });
         if (!user) {
             res.status(400).json({ message: "Invalid email!" });
             return;
