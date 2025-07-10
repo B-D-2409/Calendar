@@ -1,7 +1,7 @@
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./SidebarCalendar.css";
+import "./SideBarCalendar.css";
 
 const SidebarCalendar = () => {
   const { theme } = useTheme();
