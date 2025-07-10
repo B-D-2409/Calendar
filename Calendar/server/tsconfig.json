@@ -1,17 +1,17 @@
 {
-    "compilerOptions": {
-      "target": "ESNext",
-      "module": "ESNext",
-      "moduleResolution": "Node",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "allowSyntheticDefaultImports": true,
-      "useDefineForClassFields": true,
-      "allowImportingTsExtensions": true,
-      "noEmit": true,
-      "types": ["node"]
-    },
-    "include": ["server/**/*.ts", "Mongo.ts"]
-  }
-  
+  "compilerOptions": {
+    "target": "ESNext",
+    "skipLibCheck": true, 
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,  
+    "allowSyntheticDefaultImports": true,
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "react-jsx",
+    "types": ["node", "vite/client"]
+  },
+  "include": ["src", "env.d.ts", "server/**/*.ts", "Mongo.ts"]
+}
