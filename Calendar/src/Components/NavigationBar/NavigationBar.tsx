@@ -3,7 +3,7 @@ import { useTheme } from "../ThemeProvider/ThemeProvider";
 import SidebarCalendar from "./SideBarCalendar";
 import style from "./NavigationBar.module.css";
 import { NavLink } from "react-router-dom";
-
+import "./SidebarCalendar.css";
 function NavigationBar() {
     const [sideBarOpen, setSideBarOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
