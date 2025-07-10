@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "skipLibCheck": true, 
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,  
