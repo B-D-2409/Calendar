@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "allowSyntheticDefaultImports": true,
+      "useDefineForClassFields": true,
+      "allowImportingTsExtensions": true,
+      "noEmit": true,
+      "types": ["node"]
+    },
+    "include": ["server/**/*.ts", "Mongo.ts"]
+  }
+  
