@@ -6,7 +6,7 @@
     "target": "ES6",
     "module": "commonjs",
     "types": ["node"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules", "dist"]
