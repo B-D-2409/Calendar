@@ -85,7 +85,7 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
     }
 };
 
-router.post("/register", verifyToken, registerHandler);
+router.post("/register", registerHandler);
 
 const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res) => {
     try {
