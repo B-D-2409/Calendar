@@ -11,7 +11,8 @@
     "moduleResolution": "Node",
     "strict": true,
     "jsx": "react-jsx",
-    "types": ["node", "express", "cors", "bcrypt", "jsonwebtoken", "qs"]
+    "types": ["node","vite/client"]
+
     
   },
   "include": ["src", "env.d.ts", "server/**/*.ts", "Mongo.ts"]
