@@ -1,17 +1,12 @@
 {
-    "compilerOptions": {
-      "target": "ESNext",
-      "module": "ESNext",
-      "moduleResolution": "Node",
-      "strict": true,
-      "esModuleInterop": true,
-      "skipLibCheck": true,
-      "allowSyntheticDefaultImports": true,
-      "useDefineForClassFields": true,
-      "allowImportingTsExtensions": true,
-      "noEmit": true,
-      "types": ["node"]
-    },
-    "include": ["server/**/*.ts", "Mongo.ts"]
-  }
-  
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "commonjs",
+    "target": "es6",
+    "rootDir": "./",
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
