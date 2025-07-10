@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "skipLibCheck": true, 
-    "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,  
-    "allowSyntheticDefaultImports": true,
-    "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "strict": true,
     "jsx": "react-jsx",
-    "types": ["node", "vite/client"]
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "types": ["vite/client"]          // само types за Vite и браузър
   },
-  "include": ["src", "env.d.ts", "server/**/*.ts", "Mongo.ts"]
+  "include": ["src", "env.d.ts"]
 }
