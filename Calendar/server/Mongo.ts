@@ -6,12 +6,12 @@ import mongoose from "mongoose";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import AuthenticationRoutes from "./Routes/AuthenticationRoutes.ts";
+import AuthenticationRoutes from "./Routes/AuthenticationRoutes";
 // import verifyToken from "./views/middlewares";
 // import { verifyAdmin } from "./views/middlewares";
 // import Event from './Models/Event.model';
-import EventsRoutes from "./Routes/EventsRoutes.ts";
-import AdminRoutes from "./Routes/AdminRoutes.ts";
+import EventsRoutes from "./Routes/EventsRoutes";
+import AdminRoutes from "./Routes/AdminRoutes";
 
 const app = express();
 
