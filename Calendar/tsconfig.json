@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
-    "types": ["vite/client"]          // само types за Vite и браузър
+    "types": ["vite/client"]         
   },
   "include": ["src", "env.d.ts"]
 }
