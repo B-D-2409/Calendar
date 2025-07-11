@@ -73,6 +73,19 @@ function NavigationBar() {
                         ×
                     </button>
                     <SidebarCalendar />
+                    <div  className={style.myEventsButton}>
+                <NavLink
+                    to="/myeventpage"
+                    className={({ isActive }) =>
+                        isActive ? `${style.navLink} ${style.active}` : style.navLink
+                    }
+                >
+                    My Events
+                </NavLink> 
+
+
+            </div>
+
                     <NavLink
                         to="/contact"
                         className={({ isActive }) =>

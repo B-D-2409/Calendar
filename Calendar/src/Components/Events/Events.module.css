@@ -1,0 +1,141 @@
+.formContainer {
+    min-width: 350px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .fieldset {
+    max-width: 600px;
+    margin: auto;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    padding: 20px;
+    background-color: #fafafa;
+  }
+  
+  .legend {
+    color: black;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .field {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #333;
+  }
+  
+  .input,
+  .textarea,
+  .select {
+    padding: 8px 10px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+  
+  .input:focus,
+  .textarea:focus,
+  .select:focus {
+    border-color: #4caf50;
+    outline: none;
+  }
+  
+  .textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .invalid {
+    border-color: #e74c3c !important;
+  }
+  
+  .errorText {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #e74c3c;
+  }
+  
+  .successMessage {
+    color: #2ecc71;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .errorMessage {
+    color: #e74c3c;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .participantAddRow {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+  }
+  
+  .participantRow {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+  }
+  
+  .buttonOutlineSm {
+    border: 1px solid #4caf50;
+    background-color: transparent;
+    color: #4caf50;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .buttonOutlineSm:hover {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .buttonDangerSm {
+    border: 1px solid #e74c3c;
+    background-color: transparent;
+    color: #e74c3c;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .buttonDangerSm:hover {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .buttonSubmit {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 18px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  
+  .buttonSubmit:hover {
+    background-color: #45a049;
+  }
+  

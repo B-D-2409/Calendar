@@ -8,7 +8,11 @@ import AboutPage from './Pages/AboutPage/AboutPage'
 import ContactListForm from './Components/Contacts/ContactListForm'
 import Calendar from './Components/Calendar/Calendar'
 import Authentication from './Components/Authentication/Authentication';
-import Admin from './Components/Admin/Admin'
+import Admin from './Components/Admin/Admin';
+import 'react-toastify/dist/ReactToastify.css';
+import MyEventsPage from './Pages/MyEventsPage/MyEventsPage'
+import PublicPage from './Pages/PublicPage/PublicPage'
+
 function App() {
 
 
@@ -27,6 +31,8 @@ function App() {
             <Route path='/homepage' element={<HomePage />} />
             <Route path='/authentication' element={<Authentication />} />
             <Route path='/admin' element={<Admin />} />
+            <Route path='/myeventpage' element={<MyEventsPage />} />
+            <Route path='/publicpage' element={<PublicPage />} />
 
           </Routes>
         </Container>

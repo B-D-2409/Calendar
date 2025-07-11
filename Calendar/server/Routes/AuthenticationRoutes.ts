@@ -131,7 +131,17 @@ const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res)
     }
 };
 
-router.post("/login",  loginHandler);
+router.post("/login", loginHandler);
+
+
+router.get("/users", verifyToken, async (req, res) => {
+    try {
+        const users = await User.find({}, "-password");
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 export default router;

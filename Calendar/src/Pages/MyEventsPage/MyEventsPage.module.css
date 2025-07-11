@@ -1,0 +1,111 @@
+.myeventsContainerWithTabs {
+    padding: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+    transition: filter 0.3s ease;
+    position: relative;
+  }
+  
+  .blurred {
+    filter: blur(3px);
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  .myeventsTitleH1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .myeventsBoxContainerTabs {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    min-height: 850px;
+    padding: 1rem;
+  }
+  
+  .tabsRoot {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .tabsList {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    background-color: #f8f3f3;
+    padding: 0.5rem 0;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .tabTrigger {
+    font-size: 18px;
+    font-weight: 700;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s ease;
+    color: #333;
+  }
+  
+  .tabTrigger:hover {
+    color: #5565dd;
+  }
+  
+  .activeTab {
+    border-bottom-color: #5565dd;
+    color: #5565dd;
+  }
+  
+  .createEventButton {
+    font-size: 18px;
+    font-weight: 700;
+    background-color: #5565dd;
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    margin: 0 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .createEventButton:hover {
+    background-color: #4351b8;
+  }
+  
+  .tabsContent {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
+    position: relative;
+  }
+  
