@@ -43,7 +43,8 @@
   },
   "scripts": {
       "build": "tsc",
-  "start": "node dist/Mongo.js"
+  "start": "node dist/Mongo.js",
+  "dev": "nodemon mongo.js"
   },
   "keywords": [],
   "author": "",
