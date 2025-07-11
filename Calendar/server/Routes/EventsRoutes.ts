@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import User from "../Models/User.model";
 import Event from "../Models/Event.model";
 import verifyToken from "../views/middlewares";
+import { AuthenticatedRequest } from "../types";
 
 interface CreateEventRequestBody {
     title: string;
@@ -23,8 +24,15 @@ interface CreateEventRequestBody {
 
 const router = express.Router();
 
-const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (req, res) => {
+const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
+  req: AuthenticatedRequest,
+  res
+) => {
     try {
+        if (!req.user?.id) {
+          return res.status(401).json({ error: "Unauthorized" });
+        }
+
         const participantUsernames = req.body.participants || [];
 
         const participantUsers = await User.find({
@@ -41,7 +49,7 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (req,
 
         const userObjectId = new mongoose.Types.ObjectId(req.user.id);
 
-        if (!participantIds.some(id => id.equals(userObjectId))) {
+        if (!participantIds.some((id) => id.equals(userObjectId))) {
             participantIds.push(userObjectId);
         }
 
@@ -53,9 +61,9 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (req,
             endDateTime: req.body.endDateTime,
             isRecurring: req.body.isRecurring,
             isLocation: req.body.isLocation,
-            location: req.body.location,
-            recurrenceRule: req.body.recurrenceRule,
-            userId: userObjectId, // store as ObjectId
+            location: req.body.location || {},
+            recurrenceRule: req.body.recurrenceRule || null,
+            userId: userObjectId,
             participants: participantIds,
         });
 
