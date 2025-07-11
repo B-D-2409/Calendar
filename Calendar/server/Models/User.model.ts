@@ -1,7 +1,19 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-
+export interface UserDocument extends Document {
+    username: string;
+    phoneNumber: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    role: "user" | "admin";
+    avatar: string;
+    address?: string;
+    isBlocked: boolean;
+    id: string;
+  }
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     phoneNumber: { type: String, required: true, unique: true },

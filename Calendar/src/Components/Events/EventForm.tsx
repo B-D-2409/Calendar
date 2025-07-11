@@ -64,7 +64,7 @@ interface User {
     role?: string;
     isBlocked?: boolean;
     [key: string]: any;
-  }
+}
 
 
 
@@ -296,7 +296,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
         }
         
         try {
-            const res = await axios.post(`${key}/api/events`, preparedEvent, {
+            const res = await axios.post(`${key}/api/events/events`, preparedEvent, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },

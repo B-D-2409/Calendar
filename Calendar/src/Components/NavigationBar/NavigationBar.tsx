@@ -56,6 +56,8 @@ function NavigationBar() {
 
                 </div>
 
+                
+
                 <header className={style.headerRight}>
                     <button className={style.mode} onClick={toggleTheme}>
                         {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
@@ -73,7 +75,6 @@ function NavigationBar() {
                         ×
                     </button>
                     <SidebarCalendar />
-                    <div  className={style.myEventsButton}>
                 <NavLink
                     to="/myeventpage"
                     className={({ isActive }) =>
@@ -82,10 +83,6 @@ function NavigationBar() {
                 >
                     My Events
                 </NavLink> 
-
-
-            </div>
-
                     <NavLink
                         to="/contact"
                         className={({ isActive }) =>
