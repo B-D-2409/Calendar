@@ -6,7 +6,16 @@ html, body, #root {
   box-sizing: border-box;
   font-family: system-ui, sans-serif;
 }
-
+[data-theme="dark"] {
+  --background-color: #1e1e1e;
+  --text-color: #e0e0e0;
+  --border-color: #555;
+  --input-background: #2c2c2c;
+  --button-bg: #4caf50;
+  --button-hover-bg: #45a049;
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+}
 body {
   display: flex;
   flex-direction: column;

@@ -1,141 +1,174 @@
 .formContainer {
-    min-width: 350px;
-    margin: auto;
-    font-family: Arial, sans-serif;
-  }
-  
-  .fieldset {
-    max-width: 600px;
-    margin: auto;
-    border: 2px solid #ccc;
-    border-radius: 6px;
-    padding: 20px;
-    background-color: #fafafa;
-  }
-  
-  .legend {
-    color: black;
-    font-weight: bold;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .field {
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .label {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #333;
-  }
-  
-  .input,
-  .textarea,
-  .select {
-    padding: 8px 10px;
-    border: 1.5px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.2s ease;
-  }
-  
-  .input:focus,
-  .textarea:focus,
-  .select:focus {
-    border-color: #4caf50;
-    outline: none;
-  }
-  
-  .textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .invalid {
-    border-color: #e74c3c !important;
-  }
-  
-  .errorText {
-    margin-top: 4px;
-    font-size: 0.875rem;
-    color: #e74c3c;
-  }
-  
-  .successMessage {
-    color: #2ecc71;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-  
-  .errorMessage {
-    color: #e74c3c;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-  
-  .participantAddRow {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    align-items: center;
-  }
-  
-  .participantRow {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    align-items: center;
-  }
-  
-  .buttonOutlineSm {
-    border: 1px solid #4caf50;
-    background-color: transparent;
-    color: #4caf50;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .buttonOutlineSm:hover {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .buttonDangerSm {
-    border: 1px solid #e74c3c;
-    background-color: transparent;
-    color: #e74c3c;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .buttonDangerSm:hover {
-    background-color: #e74c3c;
-    color: white;
-  }
-  
-  .buttonSubmit {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 18px;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    margin-top: 1rem;
-    width: 100%;
-  }
-  
-  .buttonSubmit:hover {
-    background-color: #45a049;
-  }
-  
+  min-width: 350px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Fieldset Styles */
+.fieldset {
+  max-width: 600px;
+  margin: auto;
+  border: 2px solid var(--border-color, #ccc);
+  border-radius: 6px; /* Default radius for light mode */
+  padding: 20px;
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 🔑 Adds spacing between legend, description, fields, etc. */
+}
+
+/* Adjust border-radius for dark mode if needed */
+[data-theme='dark'] .fieldset {
+  border-radius: 0px;
+}
+
+/* Legend (Title) */
+.legend {
+  color: var(--text-color, black);
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Description below title (optional class for your description text) */
+.formDescription {
+  font-size: 1rem;
+  color: var(--text-color, #555);
+  margin-bottom: 1rem;
+}
+
+/* Individual field container */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* spacing between label and input */
+}
+
+/* Label */
+.label {
+  font-weight: 600;
+  color: var(--text-color, #333);
+}
+
+/* Inputs, Textareas, Selects */
+.input,
+.textarea,
+.select {
+  padding: 8px 10px;
+  border: 1.5px solid var(--border-color, #ccc);
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: var(--input-background, white);
+  color: var(--text-color, black);
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+/* Textarea specific */
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Validation feedback */
+.invalid {
+  border-color: #e74c3c !important;
+}
+
+.errorText {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  color: #e74c3c;
+}
+
+.successMessage,
+.errorMessage {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.successMessage {
+  color: #2ecc71;
+}
+
+.errorMessage {
+  color: #e74c3c;
+}
+
+/* Participants rows */
+.participantAddRow,
+.participantRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+
+/* Buttons */
+.buttonOutlineSm,
+.buttonDangerSm {
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.3s ease;
+}
+
+.buttonOutlineSm {
+  border: 1px solid #4caf50;
+  background-color: transparent;
+  color: #4caf50;
+}
+
+.buttonOutlineSm:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+.buttonDangerSm {
+  border: 1px solid #e74c3c;
+  background-color: transparent;
+  color: #e74c3c;
+}
+
+.buttonDangerSm:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.buttonSubmit {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 18px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.buttonSubmit:hover {
+  background-color: #45a049;
+}
+
+/* Light mode specific overrides */
+[data-theme='light'] .fieldset {
+  border-radius: 6px;
+}
+
+/* Dark mode form container styling */
+[data-theme="dark"] .formContainer {
+  background: #1e1e1e;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
+  color: #00ffdd;
+}
