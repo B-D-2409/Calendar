@@ -12,6 +12,7 @@ import Admin from './Components/Admin/Admin';
 import 'react-toastify/dist/ReactToastify.css';
 import MyEventsPage from './Pages/MyEventsPage/MyEventsPage'
 import PublicPage from './Pages/PublicPage/PublicPage'
+import CreateEvent from './Components/Events/Events'
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
             <Route path='/admin' element={<Admin />} />
             <Route path='/myeventpage' element={<MyEventsPage />} />
             <Route path='/publicpage' element={<PublicPage />} />
-
+            <Route path='/events' element={<CreateEvent />} />
           </Routes>
         </Container>
       </main>

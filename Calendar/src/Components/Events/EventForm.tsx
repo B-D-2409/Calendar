@@ -17,7 +17,7 @@ interface RecurrenceRule {
     endDate?: Date | string;
 }
 
-interface EventState {
+export interface EventState {
     title: string;
     description: string;
     type: string;
@@ -32,6 +32,7 @@ interface EventState {
 
 interface EventFormProps {
     onEventCreated?: (event: EventState) => void;
+    user?: User | null;
 }
 interface LocationErrors {
     address?: string;

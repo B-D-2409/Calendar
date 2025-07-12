@@ -82,45 +82,56 @@ function NavigationBar() {
             </div>
 
             {sideBarOpen && (
-                <aside className={style.sidebar}>
-                    <button className={style.closeSidebar} onClick={toggleSideBar}>
-                        ×
-                    </button>
-                    <SidebarCalendar />
-                    <NavLink
-                        to="/myeventpage"
-                        className={({ isActive }) =>
-                            isActive ? `${style.navLink} ${style.active}` : style.navLink
-                        }
-                    >
-                        My Events
-                    </NavLink>
-                    <NavLink
-                        to="/contact"
-                        className={({ isActive }) =>
-                            isActive ? `${style.navLink} ${style.active}` : style.navLink
-                        }
-                    >
-                        Contact
-                    </NavLink>
-                    <NavLink
-                        to="/ProfileInfo"
-                        className={({ isActive }) =>
-                            isActive ? `${style.navLink} ${style.active}` : style.navLink
-                        }
-                    >
-                        Profile
-                    </NavLink>
-                    <NavLink
-                        to="/about"
-                        className={({ isActive }) =>
-                            isActive ? `${style.navLink} ${style.active}` : style.navLink
-                        }
-                    >
-                        About
-                    </NavLink>
-                </aside>
-            )}
+  <aside className={style.sidebar}>
+    <button className={style.closeSidebar} onClick={toggleSideBar}>
+      ×
+    </button>
+
+    {/* +CREATE button */}
+    <NavLink
+      to="/events"
+      className={({ isActive }) =>
+        isActive ? `${style.navLink} ${style.active} ${style.createButton}` : `${style.navLink} ${style.createButton}`
+      }
+    >
+      +CREATE
+    </NavLink>
+
+    <SidebarCalendar />
+    <NavLink
+      to="/myeventpage"
+      className={({ isActive }) =>
+        isActive ? `${style.navLink} ${style.active}` : style.navLink
+      }
+    >
+      My Events
+    </NavLink>
+    <NavLink
+      to="/contact"
+      className={({ isActive }) =>
+        isActive ? `${style.navLink} ${style.active}` : style.navLink
+      }
+    >
+      Contact
+    </NavLink>
+    <NavLink
+      to="/ProfileInfo"
+      className={({ isActive }) =>
+        isActive ? `${style.navLink} ${style.active}` : style.navLink
+      }
+    >
+      Profile
+    </NavLink>
+    <NavLink
+      to="/about"
+      className={({ isActive }) =>
+        isActive ? `${style.navLink} ${style.active}` : style.navLink
+      }
+    >
+      About
+    </NavLink>
+  </aside>
+)}
         </>
     );
 }
