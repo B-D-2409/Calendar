@@ -182,7 +182,7 @@ function Admin() {
 
     const deleteEvent = async (id: string) => {
         try {
-            const res = await fetch(`${key}/api/events/admin/${id}`, {
+            const res = await fetch(`${key}/api/events/events/admin/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,

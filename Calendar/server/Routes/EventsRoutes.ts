@@ -25,12 +25,12 @@ interface CreateEventRequestBody {
 const router = express.Router();
 
 const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
-  req: AuthenticatedRequest,
-  res
+    req: AuthenticatedRequest,
+    res
 ) => {
     try {
         if (!req.user?.id) {
-          return res.status(401).json({ error: "Unauthorized" });
+            return res.status(401).json({ error: "Unauthorized" });
         }
 
         const participantUsernames = req.body.participants || [];
@@ -75,5 +75,42 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
 };
 
 router.post("/events", verifyToken, createEvent);
+
+router.get("/events/admin", verifyToken, async (req: AuthenticatedRequest, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (user?.role !== "admin") {
+            return res.status(403).json({ message: "Access denied: not admin" });
+        }
+
+        // Parse and fallback to defaults
+        const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
+        const search = req.query.search ? (req.query.search as string) : "";
+
+        const query = {
+            name: { $regex: search, $options: "i" },
+        };
+
+        const totalEvents = await Event.countDocuments(query);
+        const totalPages = Math.ceil(totalEvents / limit);
+
+        const events = await Event.find(query)
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .sort({ createdAt: -1 });
+
+        res.json({
+            events,
+            totalPages,
+            totalEvents,
+            currentPage: page,
+        });
+    } catch (err) {
+        res.status(500).json({ error: (err as Error).message });
+    }
+
+})
 
 export default router;
