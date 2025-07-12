@@ -1,16 +1,16 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 60px;
-  padding: 0.5rem 1rem;
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background: linear-gradient(to right, rgba(174, 254, 24, 0.8), rgba(255, 80, 17, 0.8));
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
-  overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 60px;
+    padding: 0.5rem 1rem;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: linear-gradient(to right, rgba(174, 254, 24, 1.5), rgba(255, 80, 17, 0.8));
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
+    overflow: hidden;
 }
 
 
@@ -29,7 +29,7 @@
     align-items: center;
     gap: 1.5rem;
     margin-left: 800px;
-    
+
 }
 
 
@@ -168,25 +168,27 @@
 
 .userButton {
 
-    position: static; /* or just remove this property */
+    position: static;
+    /* or just remove this property */
     background-color: transparent;
     border: none;
     cursor: pointer;
     font-weight: bold;
     color: #333;
-  }
+}
 
 
-  [data-theme='dark'] .sidebar {
+[data-theme='dark'] .sidebar {
     background-color: #2c2c2c;
-    color:  white !important;
-  }
-  [data-theme='light'] .sidebar {
+    color: white !important;
+}
+
+[data-theme='light'] .sidebar {
     background-color: #f8f9fa;
     color: black;
-  }
+}
 
-  .createButton {
+.createButton {
     background-color: #4CAF50;
     color: white;
     padding: 8px 12px;
@@ -197,5 +199,16 @@
     margin: 10px 0;
     width: 100%;
     text-align: center;
-  }
-  
+}
+
+[data-theme='dark'] .sidebar a {
+    color: white;
+}
+
+[data-theme='light'] .sidebar a {
+    color: #333;
+}
+
+.sidebar a {
+    transition: color 0.3s ease;
+}
