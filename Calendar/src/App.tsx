@@ -13,33 +13,97 @@ import 'react-toastify/dist/ReactToastify.css';
 import MyEventsPage from './Pages/MyEventsPage/MyEventsPage'
 import PublicPage from './Pages/PublicPage/PublicPage'
 import CreateEvent from './Components/Events/Events'
+import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes'
+import PublicOnlyRoute from './Components/Public/PublicRoutes'
 
 function App() {
-
-
-
-
   return (
     <div className="App">
       <SideBar />
       <main className="main-content">
         <Container>
           <Routes>
-            <Route path="/" element={<Calendar />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Calendar />
+                </ProtectedRoute>
+              }
+            />
+
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactListForm />} />
-            <Route path='/ProfileInfo' element={<Profile />} />
-            <Route path='/homepage' element={<HomePage />} />
-            <Route path='/authentication' element={<Authentication />} />
-            <Route path='/admin' element={<Admin />} />
-            <Route path='/myeventpage' element={<MyEventsPage />} />
-            <Route path='/publicpage' element={<PublicPage />} />
-            <Route path='/events' element={<CreateEvent />} />
+
+            <Route
+              path="/contact"
+              element={
+                <ProtectedRoute>
+                  <ContactListForm />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/ProfileInfo"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/homepage"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="/authentication" element={<Authentication />} />
+
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route path="/events"
+
+              element={<ProtectedRoute>
+                <CreateEvent />
+              </ProtectedRoute>}
+
+            >
+            </Route>
+
+            <Route
+              path="/myeventpage"
+              element={
+                <ProtectedRoute>
+                  <MyEventsPage />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/publicpage"
+              element={
+                <PublicOnlyRoute>
+                  <PublicPage />
+                </PublicOnlyRoute>
+              }
+            />
           </Routes>
         </Container>
       </main>
     </div>
-  )
+  );
 }
+
 
 export default App

@@ -15,7 +15,6 @@ const PublicOnlyRoute: React.FC<PublicOnlyRouteProps> = ({ children }) => {
   }
 
   if (isLoggedIn) {
-    // Redirect to the page user attempted to access before login or home page
     const from = location.state?.from?.pathname || "/";
     return <Navigate to={from} replace />;
   }
