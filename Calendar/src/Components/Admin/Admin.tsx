@@ -4,7 +4,7 @@ import { AuthContext } from "../../Common/AuthContext";
 import styles from "./Admin.module.css";
 import { io, Socket } from "socket.io-client";
 import { AuthContextType } from "../../Common/AuthContext";
-
+import axios from 'axios';
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
 interface User {
@@ -82,7 +82,7 @@ function Admin() {
     }, []);
 
     useEffect(() => {
-        fetch(`${key}/api/auth/delete-requests`, {
+        fetch(`${key}/api/admin/delete-requests`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -95,29 +95,26 @@ function Admin() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await fetch(
-                    `${key}/api/events/admin?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
+                const res = await axios.get(
+                    `${key}/api/admin/events?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                     }
                 );
-
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-
-                const data: { events: Event[]; totalPages: number } = await res.json();
+    
+                const data: { events: Event[]; totalPages: number } = res.data;
                 setSearchEvents(data.events || []);
                 setTotalPagesEvents(data.totalPages || 1);
             } catch (err) {
                 console.error("Error loading admin events", err);
             }
         };
-
+    
         fetchEvents();
     }, [currentPageEvents, findEvents]);
+    
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -126,7 +123,7 @@ function Admin() {
             return;
         }
 
-        fetch(`${key}/api/auth/users/admin?page=${currentPageUsers}&limit=10`, {
+        fetch(`${key}/api/admin/users/admin?page=${currentPageUsers}&limit=10`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

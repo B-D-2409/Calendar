@@ -5,6 +5,7 @@ import { verifyAdmin } from "../views/middlewares";
 import { ParsedQs } from "qs";
 import DeleteRequest from "../Models/DeleteRequest.model";
 import { AuthenticatedRequest } from "../types";
+import Event from "../Models/Event.model.js";
 const router = express.Router();
 function getQueryParamAsString(
     param: string | ParsedQs | (string | ParsedQs)[] | undefined,
@@ -29,7 +30,7 @@ router.get("/admin", verifyAdmin, async (req, res) => {
     res.json({ message: "Welcome to the admin page" });
 });
 
-router.get("/users/admin", verifyToken, async (req, res) => {
+const getUsersAdmin: RequestHandler = async (req, res) => {
     try {
         const pageStr = getQueryParamAsString(req.query.page, "1");
         const limitStr = getQueryParamAsString(req.query.limit, "5");
@@ -49,7 +50,52 @@ router.get("/users/admin", verifyToken, async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: (err as Error).message });
     }
-});
+};
+
+router.get("/users", verifyToken, getUsersAdmin);
+
+
+const getEventsAdmin: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user || user.role !== "admin") {
+            return res.status(403).json({ message: "Access denied: not admin" });
+        }
+
+        const { page = "1", limit = "5", search = "" } = req.query;
+
+        const pageNumber = Math.max(1, Number(page) || 1);
+        const limitNumber = Math.max(1, Number(limit) || 5);
+
+    
+        const query = {
+            name: { $regex: search, $options: "i" },
+        };
+
+
+        const totalEvents = await Event.countDocuments(query);
+        const totalPages = Math.ceil(totalEvents / limitNumber);
+
+        const events = await Event.find(query)
+            .skip((pageNumber - 1) * limitNumber)
+            .limit(limitNumber)
+            .sort({ createdAt: -1 });
+
+        res.json({
+            events,
+            totalPages,
+            totalEvents,
+            currentPage: pageNumber,
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+}
+
+router.get("/events", verifyAdmin, getEventsAdmin);
 
 router.post("/block/:id", verifyAdmin, async (req, res) => {
     try {
