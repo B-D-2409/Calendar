@@ -3,14 +3,12 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "noEmit": true,
-    "types": ["vite/client"]         
+    "noEmit": true
   },
   "include": ["src", "env.d.ts"]
 }

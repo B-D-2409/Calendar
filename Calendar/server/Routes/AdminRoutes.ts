@@ -24,7 +24,6 @@ function getQueryParamAsString(
 
 
 
-const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
 router.get("/admin", verifyAdmin, async (req, res) => {
     res.json({ message: "Welcome to the admin page" });
@@ -48,7 +47,10 @@ const getUsersAdmin: RequestHandler = async (req, res) => {
             currentPage: page,
         });
     } catch (err) {
-        res.status(500).json({ error: (err as Error).message });
+        console.error(err);
+        res.status(500).json({
+            error: err instanceof Error ? err.message : "Unknown error",
+        });
     }
 };
 
@@ -91,7 +93,9 @@ const getEventsAdmin: RequestHandler = async (req: AuthenticatedRequest, res) =>
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({
+            error: err instanceof Error ? err.message : "Unknown error",
+        });
     }
 }
 

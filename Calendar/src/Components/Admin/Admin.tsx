@@ -96,7 +96,7 @@ function Admin() {
         const fetchEvents = async () => {
             try {
                 const res = await axios.get(
-                    `${key}/api/admin/events?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
+                    `${key}/api/admin/events/admin?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -148,7 +148,7 @@ function Admin() {
     );
 
     const toggleBlock = async (id: string, block: boolean) => {
-        const endpoint = `${key}/api/auth/${block ? "block" : "unblock"}/${id}`;
+        const endpoint = `${key}/api/admin/${block ? "block" : "unblock"}/${id}`;
         const res = await fetch(endpoint, {
             method: "POST",
             headers: {
@@ -163,7 +163,7 @@ function Admin() {
     };
 
     const deleteUser = async (id: string) => {
-        const res = await fetch(`${key}/api/auth/delete/${id}`, {
+        const res = await fetch(`${key}/api/admin/delete/${id}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -179,7 +179,7 @@ function Admin() {
 
     const deleteEvent = async (id: string) => {
         try {
-            const res = await fetch(`${key}/api/events/events/admin/${id}`, {
+            const res = await fetch(`${key}/api/admin/events/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
