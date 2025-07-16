@@ -1,0 +1,18 @@
+.custom-spinner {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    border: 5px solid rgba(85, 101, 221, 0.2); /* light blue background */
+    border-top-color: #5565DD; /* blue highlight */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto; /* center if block-level */
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
