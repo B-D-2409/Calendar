@@ -96,7 +96,7 @@ function Admin() {
         const fetchEvents = async () => {
             try {
                 const res = await axios.get(
-                    `${key}/api/admin/events/admin?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
+                    `${key}/api/events/admin?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,

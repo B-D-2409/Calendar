@@ -7,14 +7,10 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import AuthenticationRoutes from "./Routes/AuthenticationRoutes";
-// import verifyToken from "./views/middlewares.js";
-// import { verifyAdmin } from "./views/middlewares.js";
-// import Event from './Models/Event.model.js';
 import EventsRoutes from "./Routes/EventsRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
 
 const app = express();
-
 const server = http.createServer(app);
 
 const FRONTEND_URL = process.env.VITE_FRONT_END_URL || "http://localhost:5173";
@@ -35,20 +31,24 @@ app.use(
   })
 );
 
-
-app.set("io", io);
-
 app.use(express.json());
 
+// Лог за всеки входящ request
 app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`);
   next();
 });
 
+// Тестов лог за проверка на рутерите
+console.log("Mounting routers...");
+
+// Монтиране на рутери
 app.use('/api/auth', AuthenticationRoutes);
 app.use('/api/admin', AdminRoutes);
-
+console.log("Routers mounted successfully!", EventsRoutes);
 app.use('/api/events', EventsRoutes);
+
+
 
 if (!process.env.mongoDB_URL) {
   throw new Error("❌ mongoDB_URL is not defined in .env file");

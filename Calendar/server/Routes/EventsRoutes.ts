@@ -74,9 +74,9 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
     }
 };
 
-router.post("/events", verifyToken, createEvent);
+router.post("/", verifyToken, createEvent);
 
-router.get("/events", verifyToken, async (req: AuthenticatedRequest, res) => {
+router.get("/ ", verifyToken, async (req: AuthenticatedRequest, res) => {
     try {
         const user = await User.findById(req.user.id);
 
