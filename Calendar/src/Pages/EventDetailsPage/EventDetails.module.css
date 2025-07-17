@@ -1,0 +1,180 @@
+.eventDetailsContainer {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  .eventBox {
+    background: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  }
+  
+  .badge {
+    display: inline-block;
+    background-color: #4f46e5; /* Indigo-600 */
+    color: white;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    user-select: none;
+  }
+  
+  .heading {
+    font-size: 2.6rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #1e293b; /* Slate-800 */
+    border-bottom: 2px solid #4f46e5;
+    padding-bottom: 8px;
+  }
+  
+  .imageContainer {
+    width: 100%;
+    max-height: 360px;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+  }
+  
+  .image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  
+  .image:hover {
+    transform: scale(1.05);
+  }
+  
+  .stack {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .label {
+    font-weight: 600;
+    width: 120px;
+    color: #4b5563; /* Gray-700 */
+    flex-shrink: 0;
+  }
+  
+  .participantList {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  .participantItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f3f4f6; /* Gray-100 */
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+    transition: background-color 0.2s ease;
+  }
+  
+  .participantItem:hover {
+    background-color: #e0e7ff; /* Indigo-100 */
+  }
+  
+  .participantName {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #1f2937; /* Gray-800 */
+  }
+  
+  .icon {
+    color: #4f46e5; /* Indigo-600 */
+    font-size: 1.3rem;
+  }
+  
+  .removeButton,
+  .leaveButton {
+    background-color: transparent;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    user-select: none;
+  }
+  
+  .removeButton {
+    color: #e53e3e; /* Red-600 */
+    border-color: #e53e3e;
+  }
+  
+  .removeButton:hover {
+    background-color: #e53e3e;
+    color: white;
+  }
+  
+  .leaveButton {
+    color: #dd6b20; /* Orange-600 */
+    border-color: #dd6b20;
+  }
+  
+  .leaveButton:hover {
+    background-color: #dd6b20;
+    color: white;
+  }
+  
+  .disabledButton {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  /* Responsive adjustments */
+  
+  @media (max-width: 640px) {
+    .eventDetailsContainer {
+      padding: 15px;
+    }
+  
+    .eventBox {
+      padding: 20px 25px;
+    }
+  
+    .label {
+      width: 100px;
+    }
+  
+    .participantItem {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  
+    .removeButton,
+    .leaveButton {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  

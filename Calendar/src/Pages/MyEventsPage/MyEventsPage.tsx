@@ -59,7 +59,7 @@ function MyEventsPage() {
                 setMyEvents(myData);
 
                 const participatingResponse = await fetch(
-                    `${key}/api/events/participating`,
+                    `${key}/api/events/participants`,
                     {
                         method: "GET",
                         headers: {

@@ -76,41 +76,32 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
 
 router.post("/", verifyToken, createEvent);
 
-router.get("/ ", verifyToken, async (req: AuthenticatedRequest, res) => {
+
+const getMyEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const events = await Event.find({
+            userId: req.user.id,
+        }).populate("participants", "username");
 
-        if (user?.role !== "admin") {
-            return res.status(403).json({ message: "Access denied: not admin" });
-        }
-
-        // Parse and fallback to defaults
-        const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
-        const limit = req.query.limit ? parseInt(req.query.limit as string, 10) : 5;
-        const search = req.query.search ? (req.query.search as string) : "";
-
-        const query = {
-            name: { $regex: search, $options: "i" },
-        };
-
-        const totalEvents = await Event.countDocuments(query);
-        const totalPages = Math.ceil(totalEvents / limit);
-
-        const events = await Event.find(query)
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .sort({ createdAt: -1 });
-
-        res.json({
-            events,
-            totalPages,
-            totalEvents,
-            currentPage: page,
-        });
+        res.json(events);
     } catch (err) {
-        res.status(500).json({ error: (err as Error).message });
+        res.status(500).json({ error: err.message });
     }
 
-})
+};
+router.get("/mine", verifyToken, getMyEvents);
+const getMyEventsParticipants: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const events = await Event.find({ participants: req.user.id }).populate(
+            "participants",
+            "username"
+        );
+        res.json(events);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+
+};
+router.get("/participants", verifyToken, getMyEventsParticipants);
 
 export default router;
