@@ -39,10 +39,8 @@ app.use((req, res, next) => {
   next();
 });
 
-console.log("Mounting routers...");
 
 app.use('/api/auth', AuthenticationRoutes);
-console.log("Routers mounted successfully!", AdminRoutes);
 app.use('/api/admin', AdminRoutes);
 app.use('/api/events', EventsRoutes);
 

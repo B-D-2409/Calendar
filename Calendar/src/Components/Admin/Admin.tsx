@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState, ChangeEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../Common/AuthContext";
-import styles from "./Admin.module.css";
+import styles from './Admin.module.css';
+
 import { io, Socket } from "socket.io-client";
 import { AuthContextType } from "../../Common/AuthContext";
 import axios from 'axios';
@@ -96,7 +97,7 @@ function Admin() {
         const fetchEvents = async () => {
             try {
                 const res = await axios.get(
-                    `${key}/api/events/admin?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
+                    `${key}/api/admin/events?page=${currentPageEvents}&limit=5&search=${encodeURIComponent(findEvents)}`,
                     {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
