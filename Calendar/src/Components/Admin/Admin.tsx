@@ -103,7 +103,7 @@ function Admin() {
                         },
                     }
                 );
-    
+
                 const data: { events: Event[]; totalPages: number } = res.data;
                 setSearchEvents(data.events || []);
                 setTotalPagesEvents(data.totalPages || 1);
@@ -111,10 +111,10 @@ function Admin() {
                 console.error("Error loading admin events", err);
             }
         };
-    
+
         fetchEvents();
     }, [currentPageEvents, findEvents]);
-    
+
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -123,22 +123,26 @@ function Admin() {
             return;
         }
 
-        fetch(`${key}/api/admin/users/admin?page=${currentPageUsers}&limit=10`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then((data: { users: User[]; totalPages: number }) => {
+        const fetchUsers = async () => {
+            try {
+                const res = await axios.get(
+                    `${key}/api/admin/users?page=${currentPageUsers}&limit=5&search=${encodeURIComponent(search)}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const data: { users: User[]; totalPages: number } = res.data;
                 setAllUsers(data.users || []);
                 setTotalPagesUsers(data.totalPages || 1);
-            })
-            .catch((err) => console.error("Failed to fetch users", err));
+            } catch (err) {
+                console.error("Error loading admin users", err);
+            }
+        }
+
+        fetchUsers();
     }, [currentPageUsers]);
 
     const filteredUsers = allUsers.filter((u) =>
@@ -392,7 +396,7 @@ function Admin() {
                 <section className={styles.panel}>
                     <h3 className={styles.panelTitle}>Delete Requests</h3>
                     <ul className={styles.deleteRequestsList}>
-                        {deleteRequests.map((req) => (
+                        {Array.isArray(deleteRequests) && deleteRequests.map((req) => (
                             <li key={req._id} className={styles.deleteRequestItem}>
                                 <span>
                                     User: {req.userId?.username} ({req.userId?.email})

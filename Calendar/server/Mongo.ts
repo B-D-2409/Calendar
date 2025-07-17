@@ -33,19 +33,17 @@ app.use(
 
 app.use(express.json());
 
-// Лог за всеки входящ request
+
 app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`);
   next();
 });
 
-// Тестов лог за проверка на рутерите
 console.log("Mounting routers...");
 
-// Монтиране на рутери
 app.use('/api/auth', AuthenticationRoutes);
+console.log("Routers mounted successfully!", AdminRoutes);
 app.use('/api/admin', AdminRoutes);
-console.log("Routers mounted successfully!", EventsRoutes);
 app.use('/api/events', EventsRoutes);
 
 

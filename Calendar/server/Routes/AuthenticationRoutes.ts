@@ -75,7 +75,12 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
         await newUser.save();
 
         const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
-        const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign(
+            { id: newUser._id, role: newUser.role }, // include role here
+            JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+
 
         res.status(201).json({ user: newUser, token });
         return;
