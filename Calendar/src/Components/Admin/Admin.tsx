@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState, ChangeEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../Common/AuthContext";
-import styles from './Admin.module.css';
+import style from './Admin.module.css';
 
 import { io, Socket } from "socket.io-client";
 import { AuthContextType } from "../../Common/AuthContext";
@@ -255,36 +255,36 @@ function Admin() {
     };
 
     return (
-        <div className={styles.adminContainer}>
-            <h2 className={styles.adminTitle}>Administration Hub</h2>
+        <div className={style.adminContainer}>
+            <h2 className={style.adminTitle}>Administration Hub</h2>
 
-            <div className={styles.sectionsContainer}>
-                <section className={styles.panel}>
-                    <h3 className={styles.panelTitle}>Users</h3>
+            <div className={style.sectionsContainer}>
+                <section className={style.panel}>
+                    <h3 className={style.panelTitle}>Users</h3>
                     <input
                         type="text"
                         placeholder="Search users"
                         value={search}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
-                        className={styles.searchInput}
+                        className={style.searchInput}
                     />
-                    <ul className={styles.userList}>
+                    <ul className={style.userList}>
                         {filteredUsers.map((u) => (
-                            <li key={u._id} className={styles.userListItem}>
-                                <div className={styles.userInfo}>
-                                    <span className={styles.userName}>{u.firstName}</span>
-                                    <span className={styles.userEmail}>({u.email})</span>
+                            <li key={u._id} className={style.userListItem}>
+                                <div className={style.userInfo}>
+                                    <span className={style.userName}>{u.firstName}</span>
+                                    <span className={style.userEmail}>({u.email})</span>
                                 </div>
-                                <div className={styles.userAction}>
+                                <div className={style.userAction}>
                                     <button
-                                        className={u.isBlocked ? styles.btnUnblock : styles.btnBlock}
+                                        className={u.isBlocked ? style.btnUnblock : style.btnBlock}
                                         onClick={() => toggleBlock(u._id, !u.isBlocked)}
                                     >
                                         {u.isBlocked ? "Unblock" : "Block"}
                                     </button>
                                     <button
                                         onClick={() => deleteUser(u._id)}
-                                        className={styles.deleteButton}
+                                        className={style.deleteButton}
                                     >
                                         Delete
                                     </button>
@@ -293,40 +293,40 @@ function Admin() {
                         ))}
                     </ul>
 
-                    <div className={styles.paginationControls}>
+                    <div className={style.paginationControls}>
                         <button
                             onClick={() => setCurrentPageUsers((p) => Math.max(p - 1, 1))}
                             disabled={currentPageUsers === 1}
-                            className={styles.pageButton}
+                            className={style.pageButton}
                         >
                             Prev
                         </button>
-                        <span className={styles.pageInfo}>
+                        <span className={style.pageInfo}>
                             Page {currentPageUsers} of {totalPagesUsers}
                         </span>
                         <button
                             onClick={() => setCurrentPageUsers((p) => Math.min(p + 1, totalPagesUsers))}
                             disabled={currentPageUsers === totalPagesUsers}
-                            className={styles.pageButton}
+                            className={style.pageButton}
                         >
                             Next
                         </button>
                     </div>
                 </section>
 
-                <section className={styles.panel}>
-                    <h3 className={styles.panelTitle}>Events</h3>
+                <section className={style.panel}>
+                    <h3 className={style.panelTitle}>Events</h3>
                     <input
                         type="text"
                         placeholder="Search events"
                         value={findEvents}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setFindEvents(e.target.value)}
-                        className={styles.searchInput}
+                        className={style.searchInput}
                     />
 
-                    <ul className={styles.eventList}>
+                    <ul className={style.eventList}>
                         {filteredEvents.map((event) => (
-                            <li key={event._id} className={styles.eventListItem}>
+                            <li key={event._id} className={style.eventListItem}>
                                 {editingEventId === event._id ? (
                                     <>
                                         <input
@@ -335,35 +335,35 @@ function Admin() {
                                             onChange={(e) =>
                                                 setEventData((prev) => ({ ...prev, title: e.target.value }))
                                             }
-                                            className={styles.editInput}
+                                            className={style.editInput}
                                         />
                                         <textarea
                                             value={eventData.description}
                                             onChange={(e) =>
                                                 setEventData((prev) => ({ ...prev, description: e.target.value }))
                                             }
-                                            className={styles.editTextarea}
+                                            className={style.editTextarea}
                                         />
-                                        <button onClick={saveEdit} className={styles.saveButton}>
+                                        <button onClick={saveEdit} className={style.saveButton}>
                                             Save
                                         </button>
-                                        <button onClick={cancelEditing} className={styles.cancelButton}>
+                                        <button onClick={cancelEditing} className={style.cancelButton}>
                                             Cancel
                                         </button>
                                     </>
                                 ) : (
                                     <>
-                                        <h4 className={styles.eventTitle}>{event.title}</h4>
-                                        <p className={styles.eventDescription}>{event.description}</p>
+                                        <h4 className={style.eventTitle}>{event.title}</h4>
+                                        <p className={style.eventDescription}>{event.description}</p>
                                         <button
                                             onClick={() => startEditingEvent(event)}
-                                            className={styles.editButton}
+                                            className={style.editButton}
                                         >
                                             Edit
                                         </button>
                                         <button
                                             onClick={() => deleteEvent(event._id)}
-                                            className={styles.deleteButton}
+                                            className={style.deleteButton}
                                         >
                                             Delete
                                         </button>
@@ -373,38 +373,38 @@ function Admin() {
                         ))}
                     </ul>
 
-                    <div className={styles.paginationControls}>
+                    <div className={style.paginationControls}>
                         <button
                             onClick={() => setCurrentPageEvents((p) => Math.max(p - 1, 1))}
                             disabled={currentPageEvents === 1}
-                            className={styles.pageButton}
+                            className={style.pageButton}
                         >
                             Prev
                         </button>
-                        <span className={styles.pageInfo}>
+                        <span className={style.pageInfo}>
                             Page {currentPageEvents} of {totalPagesEvents}
                         </span>
                         <button
                             onClick={() => setCurrentPageEvents((p) => Math.min(p + 1, totalPagesEvents))}
                             disabled={currentPageEvents === totalPagesEvents}
-                            className={styles.pageButton}
+                            className={style.pageButton}
                         >
                             Next
                         </button>
                     </div>
                 </section>
 
-                <section className={styles.panel}>
-                    <h3 className={styles.panelTitle}>Delete Requests</h3>
-                    <ul className={styles.deleteRequestsList}>
+                <section className={style.panel}>
+                    <h3 className={style.panelTitle}>Delete Requests</h3>
+                    <ul className={style.deleteRequestsList}>
                         {Array.isArray(deleteRequests) && deleteRequests.map((req) => (
-                            <li key={req._id} className={styles.deleteRequestItem}>
+                            <li key={req._id} className={style.deleteRequestItem}>
                                 <span>
                                     User: {req.userId?.username} ({req.userId?.email})
                                 </span>
                                 <button
                                     onClick={() => handleApprove(req._id)}
-                                    className={styles.approveButton}
+                                    className={style.approveButton}
                                 >
                                     Approve
                                 </button>
