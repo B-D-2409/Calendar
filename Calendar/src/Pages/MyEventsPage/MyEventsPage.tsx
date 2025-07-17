@@ -5,7 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import style from "./MyEventsPage.module.css";
 import { CustomSpinner } from "../PublicPage/PublicPage";
-
+import {Link} from "react-router-dom";
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 interface RecurrenceRule {
     frequency?: "daily" | "weekly" | "monthly";
@@ -182,40 +182,57 @@ function MyEventsPage() {
                                                 justifyContent: "center",
                                             }}
                                         >
-                                            {myEvents.map((event) => (
-                                                <div
-                                                    key={event._id || event.title + event.startDateTime}
-                                                    style={{
-                                                        border: "1px solid #ccc",
-                                                        borderRadius: "8px",
-                                                        padding: "16px",
-                                                        width: "280px",
-                                                        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                                                        display: "flex",
-                                                        flexDirection: "column",
-                                                        justifyContent: "space-between",
-                                                    }}
-                                                >
-                                                    <h2>{event.title}</h2>
-                                                    <p>{event.description}</p>
-                                                    <p>Date: {new Date(event.startDateTime).toLocaleString()}</p>
+                                          {myEvents.map((event) => (
+  <div
+    key={event._id || event.title + event.startDateTime}
+    style={{
+      border: "1px solid #ccc",
+      borderRadius: "8px",
+      padding: "16px",
+      width: "280px",
+      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    }}
+  >
+    <h2>{event.title}</h2>
+    <p>{event.description}</p>
+    <p>Date: {new Date(event.startDateTime).toLocaleString()}</p>
 
-                                                    <button
-                                                        onClick={() => handleDeleteEvent(event._id)}
-                                                        style={{
-                                                            marginTop: "auto",
-                                                            padding: "8px",
-                                                            borderRadius: "4px",
-                                                            border: "none",
-                                                            backgroundColor: "#e74c3c",
-                                                            color: "white",
-                                                            cursor: "pointer",
-                                                        }}
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            ))}
+    {/* 🔵 New Link to event details */}
+    <Link
+      to={`/eventdetailspage/${event._id}`}
+      style={{
+        marginTop: "8px",
+        textAlign: "center",
+        padding: "8px",
+        backgroundColor: "#3498db",
+        color: "white",
+        textDecoration: "none",
+        borderRadius: "4px",
+      }}
+    >
+      See Details
+    </Link>
+
+    <button
+      onClick={() => handleDeleteEvent(event._id)}
+      style={{
+        marginTop: "8px",
+        padding: "8px",
+        borderRadius: "4px",
+        border: "none",
+        backgroundColor: "#e74c3c",
+        color: "white",
+        cursor: "pointer",
+      }}
+    >
+      Delete
+    </button>
+  </div>
+))}
+
                                         </div>
                                     ) : (
                                         <p>You haven't created any events yet.</p>

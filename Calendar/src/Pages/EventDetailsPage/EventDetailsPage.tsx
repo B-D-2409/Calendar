@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { MdPerson } from 'react-icons/md';
 import { AuthContext, AuthContextType } from '../../Common/AuthContext';
 import { CustomSpinner } from '../PublicPage/PublicPage';
-import styles from './EventDetailsPage.module.css';
+import styles from './EventDetails.module.css';
 interface Participant {
     _id: string;
     username: string;
@@ -42,56 +42,41 @@ function EventDetails(): JSX.Element {
     const backendUrl = import.meta.env.VITE_BACK_END_URL || 'http://localhost:5000';
 
     useEffect(() => {
-        async function fetchEvent() {
-            try {
-                setLoading(true);
+      async function fetchEvent() {
+        try {
+          setLoading(true);
+          const token = localStorage.getItem("token");
+    
+          const url = token
+            ? `${backendUrl}/api/events/details/${id}`
+            : `${backendUrl}/api/events/public/${id}`;
+    
 
-                const token = localStorage.getItem("token");
-
-                if (token) {
-                    const response = await fetch(`${backendUrl}/api/events`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    if (!response.ok) throw new Error('Failed to fetch events');
-
-                    const events: Event[] = await response.json();
-                    const data = events.find(e => e._id === id);
-
-                    if (!data) throw new Error('Event not found');
-
-                    setEvent({
-                        ...data,
-                        start: data.startDateTime || data.startDate,
-                        end: data.endDateTime || data.endDate,
-                    });
-                } else {
-                    const response = await fetch(`${backendUrl}/api/events/public`);
-                    if (!response.ok) throw new Error('Failed to fetch public events');
-
-                    const publicEvents: Event[] = await response.json();
-                    const data = publicEvents.find(e => e._id === id);
-
-                    if (!data) throw new Error('Event not found or not public');
-
-                    setEvent({
-                        ...data,
-                        start: data.startDateTime || data.startDate,
-                        end: data.endDateTime || data.endDate,
-                    });
-                }
-            } catch (err) {
-                console.error(err);
-                setEvent(null);
-            } finally {
-                setLoading(false);
-            }
+            console.log("Fetching from:", url);
+          const response = await fetch(url, {
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+          });
+    
+          if (!response.ok) throw new Error("Failed to fetch event");
+    
+          const data: Event = await response.json();
+    
+          setEvent({
+            ...data,
+            start: data.startDateTime || data.startDate,
+            end: data.endDateTime || data.endDate,
+          });
+        } catch (err) {
+          console.error(err);
+          setEvent(null);
+        } finally {
+          setLoading(false);
         }
-
-        if (id) fetchEvent();
+      }
+    
+      if (id) fetchEvent();
     }, [id, backendUrl]);
-
+    
     useEffect(() => {
         if (event?.participants && user?._id) {
             setIsParticipant(event.participants.some(p => p._id === user._id));

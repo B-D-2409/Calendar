@@ -103,5 +103,44 @@ const getMyEventsParticipants: RequestHandler = async (req: AuthenticatedRequest
 
 };
 router.get("/participants", verifyToken, getMyEventsParticipants);
+// public event by id
+const getPublicEventById: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+
+
+
+    try {
+        const event = await Event.findOne({ _id: id, type: "public" });
+
+        if (!event) return res.status(404).json({ error: "Event not found or not public" });
+
+        res.json(event);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+router.get("/api/events/public/:id", getPublicEventById);
+
+
+
+const getEventById: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    const { id } = req.params;
+
+    try {
+        const event = await Event.findOne({
+            _id: id,
+            $or: [{ userId: req.user.id }, { type: "public" }],
+        }).populate("participants", "username");
+
+        if (!event) return res.status(404).json({ error: "Event not found" });
+
+        res.json(event);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+router.get("/details/:id", verifyToken, getEventById);
 
 export default router;

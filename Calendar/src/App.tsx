@@ -15,6 +15,7 @@ import PublicPage from './Pages/PublicPage/PublicPage'
 import CreateEvent from './Components/Events/Events'
 import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes'
 import PublicOnlyRoute from './Components/Public/PublicRoutes'
+import EventDetailsPage from './Pages/EventDetailsPage/EventDetailsPage'
 
 function App() {
   return (
@@ -98,6 +99,16 @@ function App() {
                 </PublicOnlyRoute>
               }
             />
+            
+            <Route path="/eventdetailspage/:id"
+           element={
+            <ProtectedRoute>
+              <EventDetailsPage />
+            </ProtectedRoute>
+          }
+            >
+
+            </Route>
           </Routes>
         </Container>
       </main>
