@@ -130,15 +130,6 @@ function AboutPage() {
                             comprehensive search feature.
                         </p>
                     </div>
-
-                    <div className={styles.featureBox}>
-                        <h3>Weather Widget</h3>
-                        <p>
-                            Stay informed about weather day conditions right from our
-                            navigation bar to better plan your events.
-                        </p>
-                    </div>
-
                     <div className={styles.featureBox}>
                         <h3>Admin Panel</h3>
                         <p>
