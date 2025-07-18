@@ -25,7 +25,7 @@ function App() {
         <Container>
           <Routes>
             <Route
-              path="/"
+              path="/calendar"
               element={
                 <ProtectedRoute>
                   <Calendar />
@@ -92,20 +92,20 @@ function App() {
             />
 
             <Route
-              path="/publicpage"
+              path="/"
               element={
                 <PublicOnlyRoute>
                   <PublicPage />
                 </PublicOnlyRoute>
               }
             />
-            
+
             <Route path="/eventdetailspage/:id"
-           element={
-            <ProtectedRoute>
-              <EventDetailsPage />
-            </ProtectedRoute>
-          }
+              element={
+                <ProtectedRoute>
+                  <EventDetailsPage />
+                </ProtectedRoute>
+              }
             >
 
             </Route>
