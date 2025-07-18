@@ -1,0 +1,70 @@
+.contacts-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.blured {
+    filter: blur(5px);
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.all-contacts,
+.primary-box {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 15px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+button.active {
+    background-color: #b3ff00;
+    color: white;
+}
+
+.search-section input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.contact-list {
+    margin-bottom: 20px;
+}
+
+.remove-button,
+.delete-button {
+    margin-left: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.search-result {
+    cursor: pointer;
+}
+
+.search-result:hover {
+    background-color: #f0f0f0;
+}

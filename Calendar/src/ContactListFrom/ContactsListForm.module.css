@@ -1,0 +1,133 @@
+.primaryContainer {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 24px;
+    background-color: var(--bg-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--text-color);
+    cursor: pointer;
+  }
+  
+  .subTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--sub-title-color);
+  }
+  
+  .inputContainer {
+    margin-bottom: 16px;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--label-color);
+  }
+  
+  .input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  
+  .usersContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .allUsers,
+  .selectedUsers {
+    background-color: var(--all-users-bg-color);
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .usersList {
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  
+  .user,
+  .selectedUser {
+    cursor: pointer;
+    padding: 8px;
+    background-color: var(--user-bg-color);
+    border-radius: 4px;
+    margin-bottom: 4px;
+    border: 1px solid var(--user-border-color);
+    transition: background-color 0.3s;
+  }
+  
+  .removeText {
+    font-size: 0.75rem;
+    color: var(--remove-user-text-color);
+  }
+  
+  .noUsers {
+    font-size: 0.875rem;
+    color: var(--no-users-text-color);
+    font-style: italic;
+  }
+  
+  .error {
+    color: red;
+    text-align: center;
+  }
+  
+  .success {
+    color: green;
+    text-align: center;
+  }
+  
+  .buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .submitButton,
+  .clearButton {
+    width: 100%;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+  
+  .submitButton {
+    background-color: #5565dd;
+  }
+  
+  .clearButton {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+  }
+  
+  .submitButton:hover {
+    background-color: #4c52b7;
+  }
+  
+  .clearButton:hover {
+    background-color: #e0e0e0;
+  }
+  
