@@ -38,7 +38,7 @@ function NavigationBar() {
                     {isLoggedIn ? (
                         <nav className={style.calendar}>
                             <NavLink
-                                to="/"
+                                to="/calendar"
                                 className={({ isActive }) =>
                                     isActive ? `${style.navLink} ${style.active}` : style.navLink
                                 }
