@@ -54,8 +54,9 @@ function NavigationBar() {
                                     isActive ? `${style.navLink} ${style.active}` : style.navLink
                                 }
                             >
-                                Public Page
+                                
                             </NavLink>
+                            
                         </nav>
                     )}
                 </div>

@@ -89,16 +89,24 @@ const PublicPage = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch(`${key}/api/events/public`)
-            .then((res) => res.json())
-            .then((data) => {
+        const fetchPublicEvents = async () => {
+            try {
+                
+                const response = await fetch(`${key}/api/events/public`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch public events");
+                }
+                const data = await response.json();
+                console.log("Fetched public events:", data);
+                
                 setPublicEvents(data);
+            } catch (error) {
+                console.error("Error fetching public events:", error);
+            } finally {
                 setLoading(false);
-            })
-            .catch((err) => {
-                console.error("Failed to fetch public events:", err);
-                setLoading(false);
-            });
+            }
+        }
+        fetchPublicEvents();
     }, []);
 
     const eventsToProcess = searchResults !== null ? searchResults : publicEvents;

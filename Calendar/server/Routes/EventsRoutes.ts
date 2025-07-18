@@ -77,6 +77,17 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
 
 router.post("/", verifyToken, createEvent);
 
+const getAllPublicEvents: RequestHandler = async (req, res) => {
+  try {
+    const events = await Event.find({ type: "public" });
+    res.json(events);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+router.get("/public", getAllPublicEvents);
+
 
 const getMyEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -104,12 +115,10 @@ const getMyEventsParticipants: RequestHandler = async (req: AuthenticatedRequest
 
 };
 router.get("/participants", verifyToken, getMyEventsParticipants);
+
 // public event by id
 const getPublicEventById: RequestHandler = async (req, res) => {
   const { id } = req.params;
-
-
-
   try {
     const event = await Event.findOne({ _id: id, type: "public" });
 
@@ -122,6 +131,8 @@ const getPublicEventById: RequestHandler = async (req, res) => {
 };
 
 router.get("/api/events/public/:id", getPublicEventById);
+
+
 
 
 
