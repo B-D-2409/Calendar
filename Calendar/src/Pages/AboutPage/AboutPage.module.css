@@ -1,9 +1,147 @@
-.aboutPage{
+.primaryContainer {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #4299e1;
+    border-radius: 20px;
+    background: #fbfefb;
+}
+
+.headerSection {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.mainHeading {
+    font-size: 2.5rem;
+    color: #2b6cb0;
+    margin-bottom: 10px;
+}
+
+.subHeading {
+    font-size: 1.2rem;
+    color: #4a5568;
+    font-style: italic;
+}
+
+.divider {
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+    margin: 20px 0;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.sectionHeading {
+    font-size: 1.8rem;
+    color: #2c5282;
+    margin-bottom: 16px;
+}
+
+.paragraph {
+    line-height: 1.7;
+}
+
+.techStackContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.techStackBoxFrontend,
+.techStackBoxBackend {
+    flex: 1;
+    min-width: 250px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.techStackBoxFrontend {
+    background: #bee3f8;
+}
+
+.techStackBoxBackend {
+    background: #c6f6d5;
+}
+
+.techStackBoxHeading {
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.techList {
+    list-style: none;
+    padding-left: 0;
+}
+
+.techList li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.featuresContainer {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 20px;
+}
+
+.featureBox {
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #faf5ff;
+}
+
+.calendarTypes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.monthly {
+    background: #ebf8ff;
+    color: #3182ce;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.weekly {
+    background: #e6fffa;
+    color: #319795;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.workweek {
+    background: #f3e8ff;
+    color: #805ad5;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.daily {
+    background: #fffaf0;
+    color: #dd6b20;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.teamContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
     justify-content: center;
-    padding: 20px;
-    background-color: #535050;
-    color: #000000;
+}
+
+.teamMember {
+    text-align: center;
+    background: #c6f6d5;
+    padding: 16px;
+    border-radius: 8px;
 }
