@@ -109,3 +109,56 @@
     position: relative;
   }
   
+
+  /* DARK theme for myevents page */
+
+[data-theme='dark'] .myeventsBoxContainerTabs {
+  background-color: #1e1e1e; /* dark background */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme='dark'] .tabsList {
+  background-color: #2c2c2c;
+}
+
+[data-theme='dark'] .tabTrigger {
+  color: #e0e0e0; /* light text for tabs */
+}
+
+[data-theme='dark'] .tabTrigger:hover {
+  color: #4dabf7; /* blue on hover */
+}
+
+[data-theme='dark'] .activeTab {
+  border-bottom-color: #4dabf7;
+  color: #4dabf7;
+}
+
+[data-theme='dark'] .createEventButton {
+  background-color: #4dabf7; /* primary blue */
+  color: #fff;
+}
+
+[data-theme='dark'] .createEventButton:hover {
+  background-color: #3390e0;
+}
+
+[data-theme='dark'] .modalContent {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+}
+
+[data-theme='dark'] .myeventsTitleH1 {
+  color: #f5f5f5;
+}
+
+[data-theme='dark'] .tabsContent {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+/* Optional: dark overlay can remain same if already dark enough */
+[data-theme='dark'] .modalOverlay {
+  background-color: rgba(0, 0, 0, 0.6);
+}

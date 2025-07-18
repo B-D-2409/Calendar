@@ -145,3 +145,123 @@
     padding: 16px;
     border-radius: 8px;
 }
+
+/* DARK mode for primaryContainer and its elements */
+
+[data-theme='dark'] .primaryContainer {
+    background: #121212;
+    border: 1px solid #2563eb;
+    /* slightly brighter blue */
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .headerSection {
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .mainHeading {
+    color: #60a5fa;
+    /* lighter blue */
+}
+
+[data-theme='dark'] .subHeading {
+    color: #94a3b8;
+    /* lighter gray-blue */
+    font-style: italic;
+}
+
+[data-theme='dark'] .divider {
+    border-bottom: 1px solid #374151;
+    /* dark gray */
+}
+
+[data-theme='dark'] .section {
+    /* no background, just spacing */
+}
+
+[data-theme='dark'] .sectionHeading {
+    color: #3b82f6;
+    /* bright blue */
+}
+
+[data-theme='dark'] .paragraph {
+    line-height: 1.7;
+    color: #d1d5db;
+    /* light gray */
+}
+
+[data-theme='dark'] .techStackContainer {
+    /* flex styling stays same */
+}
+
+[data-theme='dark'] .techStackBoxFrontend,
+[data-theme='dark'] .techStackBoxBackend {
+    border: 1px solid #374151;
+    color: #d1d5db;
+}
+
+[data-theme='dark'] .techStackBoxFrontend {
+    background: #1e40af;
+    /* darker blue shade */
+}
+
+[data-theme='dark'] .techStackBoxBackend {
+    background: #14532d;
+    /* darker green shade */
+}
+
+[data-theme='dark'] .techStackBoxHeading {
+    color: #93c5fd;
+    /* light blue */
+}
+
+[data-theme='dark'] .techList li {
+    color: #d1d5db;
+}
+
+[data-theme='dark'] .featuresContainer {
+    /* same flex */
+}
+
+[data-theme='dark'] .featureBox {
+    background: #2a2a2a;
+    border: 1px solid #374151;
+    color: #d1d5db;
+}
+
+[data-theme='dark'] .calendarTypes {
+    /* flex styling unchanged */
+}
+
+[data-theme='dark'] .monthly {
+    background: #1e40af;
+    color: #bfdbfe;
+    /* light blue */
+}
+
+[data-theme='dark'] .weekly {
+    background: #064e3b;
+    color: #a7f3d0;
+    /* light teal */
+}
+
+[data-theme='dark'] .workweek {
+    background: #4c1d95;
+    color: #c4b5fd;
+    /* light purple */
+}
+
+[data-theme='dark'] .daily {
+    background: #78350f;
+    color: #fdba74;
+    /* light orange */
+}
+
+[data-theme='dark'] .teamContainer {
+    /* flex styling unchanged */
+}
+
+[data-theme='dark'] .teamMember {
+    background: #14532d;
+    color: #d1d5db;
+}

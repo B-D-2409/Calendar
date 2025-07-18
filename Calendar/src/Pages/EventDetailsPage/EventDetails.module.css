@@ -178,3 +178,71 @@
     }
   }
   
+
+  /* DARK theme for Event Details page */
+
+[data-theme='dark'] .eventDetailsContainer {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .eventBox {
+  background: #2c2c2c;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .badge {
+  background-color: #4dabf7;
+  color: #0c0c0c;
+}
+
+[data-theme='dark'] .heading {
+  color: #90caf9;
+  border-bottom: 2px solid #4dabf7;
+}
+
+[data-theme='dark'] .imageContainer {
+  box-shadow: 0 6px 12px rgba(77, 171, 247, 0.5);
+}
+
+[data-theme='dark'] .label {
+  color: #cfcfcf;
+}
+
+[data-theme='dark'] .participantItem {
+  background: #2c2c2c;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+[data-theme='dark'] .participantItem:hover {
+  background-color: #3a3a3a;
+}
+
+[data-theme='dark'] .participantName {
+  color: #e0e0e0;
+}
+
+[data-theme='dark'] .icon {
+  color: #4dabf7;
+}
+
+[data-theme='dark'] .removeButton {
+  color: #ef5350; /* Red-400 */
+  border-color: #ef5350;
+}
+
+[data-theme='dark'] .removeButton:hover {
+  background-color: #ef5350;
+  color: #0c0c0c;
+}
+
+[data-theme='dark'] .leaveButton {
+  color: #ffa726; /* Orange-400 */
+  border-color: #ffa726;
+}
+
+[data-theme='dark'] .leaveButton:hover {
+  background-color: #ffa726;
+  color: #0c0c0c;
+}

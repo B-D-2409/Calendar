@@ -1,303 +1,451 @@
-/* Admin.css */
-
 .adminContainer {
-    max-width: 95vw;
-    margin: 40px auto;
-    padding: 30px 40px;
+    background-color: #121212;
+    /* dark background */
+    color: #e0e0e0;
+    /* light text */
+    min-height: 100vh;
+    padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9fafb;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    color: #222222;
-    min-height: 80vh;
-    box-sizing: border-box;
 }
 
 .adminTitle {
-    text-align: center;
-    font-size: 2.6rem;
-    margin-bottom: 40px;
-    color: #222;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ffffff;
 }
 
 .sectionsContainer {
     display: flex;
+    gap: 20px;
     flex-wrap: wrap;
-    gap: 2rem;
     justify-content: space-between;
 }
 
 .panel {
-    background: #fff;
-    border-radius: 6px;
-    padding: 20px 25px;
-    margin-bottom: 35px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    flex: 1 1 48%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 15px 20px;
+    flex: 1 1 300px;
+    box-shadow: 0 0 10px #00000099;
+    max-width: 600px;
 }
 
 .panelTitle {
+    font-size: 1.5rem;
     margin-bottom: 15px;
-    font-weight: 700;
-    font-size: 1.8rem;
-    color: #333;
+    color: #f5f5f5;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
 }
 
 .searchInput {
     width: 100%;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border: 1.8px solid #d1d5db;
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #444;
     border-radius: 5px;
-    margin-bottom: 20px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-}
-
-.searchInput:focus {
-    border-color: #4f46e5;
-    outline: none;
-    box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
-}
-
-.paginationControls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-.pageButton {
-    background-color: #007bff;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 8px;
+    background-color: #222;
+    color: #eee;
     font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.pageButton:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-    transform: none;
+.searchInput::placeholder {
+    color: #777;
 }
 
-.pageButton:not(:disabled):hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-
-.pageInfo {
-    font-size: 1rem;
-    color: #333;
-    font-weight: 500;
-}
-
-.userList {
+.userList,
+.eventList,
+.deleteRequestsList {
     list-style: none;
-    padding: 0 15px;
+    padding: 0;
     margin: 0;
-    max-height: 550px;
+    max-height: 300px;
     overflow-y: auto;
-    border-top: 1px solid #e5e7eb;
-    background-color: #fafafa;
-    border-radius: 6px;
-    box-shadow: inset 0 0 5px #e0e0e0;
+    border-top: 1px solid #333;
 }
 
-.userListItem {
+.userListItem,
+.eventListItem,
+.deleteRequestItem {
+    padding: 10px 10px;
+    border-bottom: 1px solid #333;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 0;
-    border-bottom: 1.5px solid #e5e7eb;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1f2937;
+    color: #ddd;
 }
 
 .userInfo {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    color: #111827;
+    gap: 10px;
+    flex: 1;
+    overflow-wrap: anywhere;
 }
 
 .userName {
-    font-weight: 700;
+    font-weight: 600;
+    color: #bb86fc;
 }
 
 .userEmail {
-    font-weight: 400;
-    color: #555;
+    font-style: italic;
+    color: #999;
 }
 
-.userAction {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.userAction button {
-    padding: 8px 14px;
-    font-size: 0.9rem;
-    border-radius: 7px;
-    border: none;
+.userAction button,
+.approveButton,
+.editButton,
+.deleteButton,
+.btnBlock,
+.btnUnblock,
+.saveButton,
+.cancelButton,
+.pageButton {
     cursor: pointer;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
 }
 
-.userAction button:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+/* Buttons */
 
 .btnBlock {
-    background-color: #ef4444;
-    color: white;
+    background-color: #cf6679;
+    /* red-ish */
+    color: #fff;
 }
 
 .btnBlock:hover {
-    background-color: #b91c1c;
+    background-color: #b54f61;
 }
 
 .btnUnblock {
-    background-color: #10b981;
-    color: white;
+    background-color: #03dac6;
+    /* teal-ish */
+    color: #000;
 }
 
 .btnUnblock:hover {
-    background-color: #047857;
+    background-color: #02b3a3;
 }
 
 .deleteButton {
-    background-color: #6b7280;
-    color: white;
+    background-color: #bb86fc;
+    color: #121212;
+    margin-left: 10px;
 }
 
 .deleteButton:hover {
-    background-color: #374151;
-}
-
-.eventsList {
-    list-style: none;
-    padding: 0 15px;
-    margin: 0;
-    max-height: 550px;
-    overflow-y: auto;
-    border-top: 1px solid #e5e7eb;
-    background-color: #fafafa;
-    border-radius: 6px;
-    box-shadow: inset 0 0 5px #e0e0e0;
-}
-
-.eventItem {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 16px 0;
-    border-bottom: 1.5px solid #e5e7eb;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.eventActions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.eventActions button {
-    padding: 8px 14px;
-    font-size: 0.95rem;
-    border-radius: 7px;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.eventActions button:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #9a63e3;
 }
 
 .editButton {
-    background-color: #3b82f6;
-    color: white;
+    background-color: #03a9f4;
+    color: #fff;
+    margin-right: 10px;
 }
 
 .editButton:hover {
-    background-color: #1e40af;
+    background-color: #0277bd;
+}
+
+.approveButton {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.approveButton:hover {
+    background-color: #388e3c;
 }
 
 .saveButton {
-    background-color: #10b981;
-    color: white;
+    background-color: #4caf50;
+    color: #fff;
+    margin-right: 10px;
 }
 
 .saveButton:hover {
-    background-color: #047857;
+    background-color: #388e3c;
 }
 
 .cancelButton {
-    background-color: #6b7280;
-    color: white;
+    background-color: #f44336;
+    color: #fff;
 }
 
 .cancelButton:hover {
-    background-color: #374151;
+    background-color: #c62828;
 }
 
-.editInput,
-.editTextArea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1.8px solid #d1d5db;
-    border-radius: 5px;
-    font-size: 1rem;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-}
+/* Pagination controls */
 
-.editInput:focus,
-.editTextArea:focus {
-    border-color: #4f46e5;
-    outline: none;
-    box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
-    background-color: #fff;
-}
-
-.editTextArea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.editButtons {
-    margin-top: 8px;
+.paginationControls {
+    margin-top: 15px;
     display: flex;
-    gap: 12px;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
 
-@media (max-width: 768px) {
-    .sectionsContainer {
-        flex-direction: column;
-    }
+.pageButton {
+    background-color: #333;
+    color: #eee;
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid #555;
+}
 
-    .panel {
-        flex-basis: 100%;
-        min-width: auto;
-    }
+.pageButton:hover:not(:disabled) {
+    background-color: #555;
+}
+
+.pageButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    font-weight: 600;
+    color: #ccc;
+}
+
+/* Editing inputs */
+
+.editInput {
+    width: 100%;
+    padding: 6px 8px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #222;
+    color: #eee;
+    font-size: 1rem;
+}
+
+.editTextarea {
+    width: 100%;
+    height: 80px;
+    padding: 6px 8px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    background-color: #222;
+    color: #eee;
+    resize: vertical;
+    font-size: 1rem;
+}
+
+/* Scrollbar for lists */
+.userList::-webkit-scrollbar,
+.eventList::-webkit-scrollbar,
+.deleteRequestsList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.userList::-webkit-scrollbar-thumb,
+.eventList::-webkit-scrollbar-thumb,
+.deleteRequestsList::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+.userList::-webkit-scrollbar-track,
+.eventList::-webkit-scrollbar-track,
+.deleteRequestsList::-webkit-scrollbar-track {
+    background-color: #1e1e1e;
+}
+
+.lightMode {
+    background-color: white !important;
+    color: black !important;
+}
+
+.lightMode input,
+.lightMode textarea {
+    background-color: white !important;
+    color: black !important;
+    border-color: #ccc !important;
+}
+
+.lightMode button {
+    /* adjust buttons if needed for light */
+    color: black !important;
+    background-color: #eee !important;
+    border: 1px solid #ccc !important;
+}
+
+.lightMode .panel {
+    background-color: #f9f9f9 !important;
+    color: black !important;
+    box-shadow: 0 0 8px #aaa !important;
+}
+
+[data-theme='light'] .adminContainer {
+    background-color: #ffffff;
+    /* white background for light mode */
+    color: #000000;
+    /* black text */
+}
+
+[data-theme='dark'] .adminContainer {
+    background-color: #121212;
+    /* dark background for dark mode */
+    color: #e0e0e0;
+    /* light text */
+}
+
+
+/* LIGHT MODE */
+
+[data-theme='light'] .adminContainer {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+[data-theme='light'] .sectionsContainer {
+    background-color: #f9f9f9;
+}
+
+[data-theme='light'] .panel {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    color: #000000;
+}
+
+[data-theme='light'] .adminTitle,
+[data-theme='light'] .panelTitle {
+    color: #222222;
+}
+
+[data-theme='light'] .searchInput,
+[data-theme='light'] .editInput,
+[data-theme='light'] .editTextarea {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+}
+
+[data-theme='light'] .userList li,
+[data-theme='light'] .eventList li,
+[data-theme='light'] .deleteRequestsList li {
+    background-color: #fff;
+    color: #000;
+    border-bottom: 1px solid #ddd;
+}
+
+[data-theme='light'] .btnBlock,
+[data-theme='light'] .btnUnblock,
+[data-theme='light'] .deleteButton,
+[data-theme='light'] .editButton,
+[data-theme='light'] .approveButton,
+[data-theme='light'] .saveButton,
+[data-theme='light'] .cancelButton,
+[data-theme='light'] .pageButton {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+[data-theme='light'] .btnBlock:hover,
+[data-theme='light'] .btnUnblock:hover,
+[data-theme='light'] .deleteButton:hover,
+[data-theme='light'] .editButton:hover,
+[data-theme='light'] .approveButton:hover,
+[data-theme='light'] .saveButton:hover,
+[data-theme='light'] .cancelButton:hover,
+[data-theme='light'] .pageButton:hover {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+/* DARK MODE */
+
+[data-theme='dark'] .adminContainer {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .sectionsContainer {
+    background-color: #1e1e1e;
+}
+
+[data-theme='dark'] .panel {
+    background-color: #1f1f1f;
+    border: 1px solid #444;
+    color: #e0e0e0;
+}
+
+[data-theme='dark'] .adminTitle,
+[data-theme='dark'] .panelTitle {
+    color: #ffffff;
+}
+
+[data-theme='dark'] .searchInput,
+[data-theme='dark'] .editInput,
+[data-theme='dark'] .editTextarea {
+    background-color: #2a2a2a;
+    color: #ddd;
+    border: 1px solid #555;
+}
+
+[data-theme='dark'] .userList li,
+[data-theme='dark'] .eventList li,
+[data-theme='dark'] .deleteRequestsList li {
+    background-color: #2a2a2a;
+    color: #ddd;
+    border-bottom: 1px solid #444;
+}
+
+
+
+[data-theme='dark'] .btnBlock:hover,
+[data-theme='dark'] .btnUnblock:hover,
+[data-theme='dark'] .deleteButton:hover,
+[data-theme='dark'] .editButton:hover,
+[data-theme='dark'] .approveButton:hover,
+[data-theme='dark'] .saveButton:hover,
+[data-theme='dark'] .cancelButton:hover,
+[data-theme='dark'] .pageButton:hover {
+    background-color: #555555;
+    color: #fff;
+}
+
+.editButton,
+.deleteButton {
+    cursor: pointer;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px; /* ensures same minimum width */
+    height: 32px;    /* fixed height for all buttons */
+    white-space: nowrap; /* prevent text wrapping */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.editButton {
+    background-color: #03a9f4;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.editButton:hover {
+    background-color: #0277bd;
+}
+
+.deleteButton {
+    background-color: #bb86fc;
+    color: #121212;
+    margin-left: 10px;
+}
+
+.deleteButton:hover {
+    background-color: #9a63e3;
 }
