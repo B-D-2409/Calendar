@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { AuthenticatedRequest, CustomJwtPayload } from "../types"; // import CustomJwtPayload here
+import { AuthenticatedRequest, CustomJwtPayload } from "../types"; 
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
 
@@ -23,7 +23,7 @@ export default function verifyToken(
       return;
     }
 
-    req.user = decoded as CustomJwtPayload; // <-- cast here
+    req.user = decoded as CustomJwtPayload; 
     next();
   });
 }

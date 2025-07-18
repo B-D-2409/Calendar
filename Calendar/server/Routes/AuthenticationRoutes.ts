@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import User from "../Models/User.model";
 import verifyToken from "../views/middlewares";
-
+import { AuthenticatedRequest } from "../types";
+import DeleteRequest from "../Models/DeleteRequest.model";
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
@@ -59,7 +60,6 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
             return;
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
             username,
@@ -76,7 +76,7 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
 
         const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
         const token = jwt.sign(
-            { id: newUser._id, role: newUser.role }, // include role here
+            { id: newUser._id, role: newUser.role },
             JWT_SECRET,
             { expiresIn: "1h" }
         );
@@ -147,6 +147,54 @@ router.get("/users", verifyToken, async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+const getUsersMe: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+router.get("/me", verifyToken, getUsersMe);
+
+const getDeleteRequest: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const requests = await DeleteRequest.find({ userId: req.user.id });
+        res.json(requests);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+router.get("/api/delete-requests", verifyToken, getDeleteRequest);
+
+const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const deleteRequestId = req.params.id;
+        const deleteRequest = await DeleteRequest.findById(deleteRequestId);
+
+        if (!deleteRequest) {
+            return res.status(404).json({ message: "Delete request not found" });
+        }
+
+        if (deleteRequest.userId.toString() !== req.user.id) {
+            return res.status(403).json({
+                message: "You do not have permission to delete this request",
+            });
+        }
+
+        await DeleteRequest.findByIdAndDelete(deleteRequestId);
+
+        res.status(200).json({ message: "Delete request deleted" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+router.delete("/api/delete-requests/:id", verifyToken, deleteRequestId);
 
 
 export default router;

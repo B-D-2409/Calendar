@@ -1,6 +1,5 @@
-import express, { RequestHandler, Response, Request } from "express";
+import express, { RequestHandler } from "express";
 import User from "../Models/User.model";
-import verifyToken from "../views/middlewares";
 import { verifyAdmin } from "../views/middlewares";
 import { ParsedQs } from "qs";
 import DeleteRequest from "../Models/DeleteRequest.model";
