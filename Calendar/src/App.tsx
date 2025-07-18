@@ -16,6 +16,8 @@ import CreateEvent from './Components/Events/Events'
 import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes'
 import PublicOnlyRoute from './Components/Public/PublicRoutes'
 import EventDetailsPage from './Pages/EventDetailsPage/EventDetailsPage'
+import Contacts from "./Pages/Contacts/Contacts";
+import ProfileDetailsComponent from './Pages/ProfilePage/ProfilePage'
 
 function App() {
   return (
@@ -39,16 +41,16 @@ function App() {
               path="/contact"
               element={
                 <ProtectedRoute>
-                  <ContactListForm />
+                  <Contacts />
                 </ProtectedRoute>
               }
             />
 
             <Route
-              path="/ProfileInfo"
+              path="/profilepage"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <ProfileDetailsComponent />
                 </ProtectedRoute>
               }
             />

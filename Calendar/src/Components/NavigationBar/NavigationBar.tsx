@@ -116,7 +116,7 @@ function NavigationBar() {
                         Contact
                     </NavLink>
                     <NavLink
-                        to="/ProfileInfo"
+                        to="/profilepage"
                         className={({ isActive }) =>
                             isActive ? `${style.navLink} ${style.active}` : style.navLink
                         }
