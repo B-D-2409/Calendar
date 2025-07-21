@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
-import styles from './Home.module.css'
+import styles from './Home.module.css';
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-
 
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
@@ -16,12 +15,15 @@ interface Event {
     endDate?: string;
     start?: string;
     end?: string;
-    location?: Location;
+    location?: any;
     description?: string;
     participants: string[];
     userId?: string | { toString(): string };
+    date?: string; // Added for display fallback
+    time?: string; // Added for display fallback
     [key: string]: any;
 }
+
 function HomePage() {
     const [publicEvents, setPublicEvents] = useState<Event[]>([]);
     const [myEvents, setMyEvents] = useState<Event[]>([]);
@@ -31,20 +33,15 @@ function HomePage() {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const eventsPerPage = 6;
 
-    const location = useLocation()
-
+    const location = useLocation();
 
     const handlePrevPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
 
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
 
     const handleDeleteEvent = async (event: Event) => {
         if (!event._id) return;
@@ -54,13 +51,10 @@ function HomePage() {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             });
-            setMyEvents((prev) => prev.filter((e) => e._id !== event._id));
+            setMyEvents(prev => prev.filter(e => e._id !== event._id));
 
             if (searchResults) {
-                setSearchResults((prev) => {
-                    if (!prev) return prev;
-                    return prev.filter((e) => e._id !== event._id);
-                });
+                setSearchResults(prev => (prev ? prev.filter(e => e._id !== event._id) : prev));
             }
         } catch (err) {
             alert("Failed to delete event");
@@ -72,22 +66,22 @@ function HomePage() {
         if (location.state?.searchResults && location.state?.searchTerm) {
             setSearchResults(location.state.searchResults);
             setSearchTerm(location.state.searchTerm);
-            // Clear the navigation state to prevent re-triggering
             window.history.replaceState({}, document.title);
         }
     }, [location.state]);
 
-    // Listen for search events from NavComponent
     useEffect(() => {
         const handleGlobalSearch = (event: any) => {
             const { results, term } = event.detail;
             setSearchResults(results);
             setSearchTerm(term);
+            setCurrentPage(1);
         };
 
         const handleGlobalClearSearch = () => {
             setSearchResults(null);
             setSearchTerm("");
+            setCurrentPage(1);
         };
 
         window.addEventListener('homepageSearch', handleGlobalSearch);
@@ -104,9 +98,9 @@ function HomePage() {
 
         // Fetch all public events
         fetch(`${key}/api/events/public`)
-            .then((res) => res.json())
-            .then((data) => Array.isArray(data) ? setPublicEvents(data) : setPublicEvents([]))
-            .catch((err) => {
+            .then(res => res.json())
+            .then(data => Array.isArray(data) ? setPublicEvents(data) : setPublicEvents([]))
+            .catch(err => {
                 setPublicEvents([]);
                 console.error("Failed to fetch public events:", err);
             });
@@ -114,18 +108,16 @@ function HomePage() {
         if (token) {
             const authHeaders = { Authorization: `Bearer ${token}` };
 
-            // Fetch events created by the user
             fetch(`${key}/api/events`, { headers: authHeaders })
-                .then((res) => (res.ok ? res.json() : []))
-                .then((data) => Array.isArray(data) ? setMyEvents(data) : setMyEvents([]))
-                .catch((err) => {
-                    setMyEvents([]);
-                    console.error("Failed to fetch my events:", err);
-                });
-
+            .then(res => res.ok ? res.json() : Promise.reject("Failed to fetch my events"))
+            .then(data => Array.isArray(data) ? setMyEvents(data) : setMyEvents([]))
+            .catch(err => {
+                setMyEvents([]);
+                console.error(err);
+            });
             // Fetch events where user is a participant
-            fetch(`${key}/api/events/participating`, { headers: authHeaders })
-                .then((res) => {
+            fetch(`${key}/api/events/participants`, { headers: authHeaders })
+                .then(res => {
                     if (res.status === 500) {
                         return res.json().then(errorData => {
                             console.error("500 Error details:", errorData);
@@ -136,19 +128,16 @@ function HomePage() {
                             return [];
                         });
                     }
-
                     if (res.status === 403) {
                         setParticipatingEvents([]);
                         return [];
                     }
-                    return res.ok ? res.json() : [];
+                    return res.ok ? res.json() : Promise.resolve([]);
                 })
-                .then((data) => {
-                    Array.isArray(data)
-                        ? setParticipatingEvents(data)
-                        : setParticipatingEvents([]);
+                .then(data => {
+                    setParticipatingEvents(Array.isArray(data) ? data : []);
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.error("Participating events fetch error:", err);
                     setParticipatingEvents([]);
                 });
@@ -156,14 +145,12 @@ function HomePage() {
             setMyEvents([]);
             setParticipatingEvents([]);
         }
-
     }, []);
 
-
-    // Iterate through all events to remove "duplicated" events
+    // Combine events uniquely by _id
     const uniqueEvents = useMemo(() => {
-        const allEventsMap = new Map();
-        [...publicEvents, ...myEvents, ...participatingEvents].forEach((event) => {
+        const allEventsMap = new Map<string, Event>();
+        [...publicEvents, ...myEvents, ...participatingEvents].forEach(event => {
             if (event && event._id) {
                 allEventsMap.set(event._id, event);
             }
@@ -171,20 +158,15 @@ function HomePage() {
         return Array.from(allEventsMap.values());
     }, [publicEvents, myEvents, participatingEvents]);
 
-
-    // Display events pagination
+    // Decide which events to show (search results or all unique)
     const allEvents = searchResults !== null ? searchResults : uniqueEvents;
 
-    // Calculate total pages
+    // Pagination calculations
     const totalPages = Math.ceil(allEvents.length / eventsPerPage);
-
-    // Get current events for display
     const indexOfLastEvent = currentPage * eventsPerPage;
     const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
     const eventsToDisplay = allEvents.slice(indexOfFirstEvent, indexOfLastEvent);
 
-    // Display 'search results' or 'all events'
-    // const eventsToDisplay = searchResults !== null ? searchResults : uniqueEvents;
     const displayTitle = searchResults !== null
         ? `Search Results for "${searchTerm}"`
         : "All Events";
@@ -192,22 +174,14 @@ function HomePage() {
     const clearSearch = () => {
         setSearchResults(null);
         setSearchTerm("");
-        setCurrentPage(1); // Reset to fist page
-        // Also clear the search in NavComponent
+        setCurrentPage(1);
         window.dispatchEvent(new CustomEvent('clearNavSearch'));
     };
 
-
-
     return (
         <div className={styles.homePageContainer}>
-            <h1 className={styles.headingWelcome}>
-                Events
-            </h1>
-
-            <p className={styles.headingWelcomeSecond}>
-                Discover and manage events effortlessly
-            </p>
+            <h1 className={styles.headingWelcome}>Events</h1>
+            <p className={styles.headingWelcomeSecond}>Discover and manage events effortlessly</p>
 
             <div className={styles.publicEventsContainer}>
                 <div className={styles.publicEventsBox}>
@@ -227,6 +201,10 @@ function HomePage() {
                         <div
                             onClick={handlePrevPage}
                             className={`${styles.arrowButton} ${currentPage <= 1 ? styles.disabledArrow : ""}`}
+                            aria-disabled={currentPage <= 1}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={e => { if (e.key === 'Enter') handlePrevPage(); }}
                         >
                             &#8592;
                         </div>
@@ -235,21 +213,24 @@ function HomePage() {
                             {eventsToDisplay.length > 0 ? (
                                 <>
                                     <div className={styles.eventsList}>
-                                        {eventsToDisplay.map((event) => (
-                                            <div key={event._id} className={styles.eventCard}>
-                                                <h3>{event.title}</h3>
-                                                <p>{event.description}</p>
-                                                <p>
-                                                    {new Date(event.date).toLocaleDateString()} {event.time}
-                                                </p>
-                                                <button
-                                                    onClick={() => handleDeleteEvent(event)}
-                                                    className={styles.deleteButton}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        ))}
+                                        {eventsToDisplay.map(event => {
+                                            const dateToShow = event.startDateTime || event.start || event.date;
+                                            const timeToShow = event.startDateTime ? new Date(event.startDateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : event.time || "";
+
+                                            return (
+                                                <div key={event._id} className={styles.eventCard}>
+                                                    <h3>{event.title}</h3>
+                                                    <p>{event.description}</p>
+                                                    <p>{dateToShow ? new Date(dateToShow).toLocaleDateString() : "No date"} {timeToShow}</p>
+                                                    <button
+                                                        onClick={() => handleDeleteEvent(event)}
+                                                        className={styles.deleteButton}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
 
                                     <div className={styles.paginationInfo}>
@@ -268,6 +249,10 @@ function HomePage() {
                         <div
                             onClick={handleNextPage}
                             className={`${styles.arrowButton} ${currentPage >= totalPages ? styles.disabledArrow : ""}`}
+                            aria-disabled={currentPage >= totalPages}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={e => { if (e.key === 'Enter') handleNextPage(); }}
                         >
                             &#8594;
                         </div>

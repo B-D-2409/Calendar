@@ -31,7 +31,7 @@ function App() {
         <Container>
           <Routes>
             <Route
-              path="/"
+              path="/calendar"
               element={
                 isLoggedIn ? (
                   <ProtectedRoute>

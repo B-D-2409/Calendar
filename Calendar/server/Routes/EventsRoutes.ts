@@ -77,6 +77,17 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
 
 router.post("/", verifyToken, createEvent);
 
+const getAllEvents: RequestHandler = async (req, res) => {
+  try {
+    const events = await Event.find().populate("participants", "username");
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+router.get("/events", getAllEvents);
+
 const getAllPublicEvents: RequestHandler = async (req, res) => {
   try {
     const events = await Event.find({ type: "public" });

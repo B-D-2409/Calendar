@@ -13,9 +13,6 @@
     overflow: hidden;
 }
 
-
-
-
 .nav,
 .calendar {
     display: flex;
@@ -138,14 +135,14 @@
 
 
 .mode {
-    position: fixed;
-    top: 1.3rem;
-    left: 91rem;
-    z-index: 1100;
     background-color: transparent;
     border: none;
     font-size: 1rem;
     cursor: pointer;
+    color: #333; /* Ensure visibility */
+}
+.admin {
+    margin-right: 1rem; /* Adjust as needed */
 }
 
 .navLink {
@@ -211,4 +208,59 @@
 
 .sidebar a {
     transition: color 0.3s ease;
+}
+
+.searchContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    /* Important for absolute input */
+    width: 250px;
+    /* Fixed width, enough for input to expand inside */
+}
+
+.bigSearchButton {
+    margin-left: auto;
+    background-color: #64e969;
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.bigSearchButton:hover {
+    background-color: #3b9e40;
+}
+
+
+
+.searchInput {
+    position: absolute;
+    /* floats inside the container */
+    right: 0;
+    /* stick to right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    opacity: 0;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.searchContainer.show .searchInput {
+    width: 200px;
+    /* expand to visible */
+    opacity: 1;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Adjust spacing between buttons as you prefer */
 }

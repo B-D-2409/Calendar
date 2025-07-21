@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 import SidebarCalendar from "./SideBarCalendar";
 import style from "./NavigationBar.module.css";
@@ -6,16 +6,52 @@ import { NavLink } from "react-router-dom";
 import "./SideBarCalendar.css";
 import { AuthContext } from "../../Common/AuthContext";
 import { AuthContextType } from "../../Common/AuthContext";
+import Searchbar from "../SearchBar/SearchBar";
+
+interface EventData {
+    _id: string;
+    title: string;
+    coverPhoto?: string;
+    startDateTime?: string;
+    startDate?: string;
+    endDateTime?: string;
+    endDate?: string;
+    start?: string;
+    end?: string;
+    location?: Location;
+    description?: string;
+    participants: string[];
+    type?: string;
+    userId?: string | { toString(): string };
+    [key: string]: any;
+}
 
 function NavigationBar() {
     const [sideBarOpen, setSideBarOpen] = useState(false);
     const { theme, toggleTheme } = useTheme();
+    const [showSearch, setShowSearch] = useState(false);
+    const searchRef = useRef<HTMLDivElement | null>(null);
+
+    const toggleSearch = () => setShowSearch(prev => !prev);
 
     const { isLoggedIn, user } = useContext(AuthContext) as AuthContextType;
+
     const toggleSideBar = () => {
         setSideBarOpen(!sideBarOpen);
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setShowSearch(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     return (
         <>
             <div className={style.header}>
@@ -23,6 +59,15 @@ function NavigationBar() {
                     ☰
                 </button>
 
+                <div ref={searchRef} className={style.searchContainer}>
+                {showSearch ? (
+                    <Searchbar />
+                ) : (
+                    <button onClick={toggleSearch} className={style.bigSearchButton}>
+                        🔍 Search
+                    </button>
+                )}
+            </div>
                 <div className={style.navContainer}>
                     <nav className={style.nav}>
                         <NavLink
