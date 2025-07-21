@@ -17,8 +17,13 @@ import PublicOnlyRoute from './Components/Public/PublicRoutes'
 import EventDetailsPage from './Pages/EventDetailsPage/EventDetailsPage'
 import Contacts from "./Pages/Contacts/Contacts";
 import ProfileDetailsComponent from './Pages/ProfilePage/ProfilePage'
+import { useContext } from 'react'
+import { AuthContext, AuthContextType } from './Common/AuthContext'
+
 
 function App() {
+
+  const { isLoggedIn } = useContext(AuthContext) as AuthContextType;
   return (
     <div className="App">
       <SideBar />
@@ -26,14 +31,19 @@ function App() {
         <Container>
           <Routes>
             <Route
-              path="/calendar"
+              path="/"
               element={
-                <ProtectedRoute>
-                  <Calendar />
-                </ProtectedRoute>
+                isLoggedIn ? (
+                  <ProtectedRoute>
+                    <Calendar />
+                  </ProtectedRoute>
+                ) : (
+                  <PublicOnlyRoute>
+                    <PublicPage />
+                  </PublicOnlyRoute>
+                )
               }
             />
-
             <Route path="/about" element={<AboutPage />} />
 
             <Route
