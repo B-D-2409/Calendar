@@ -44,6 +44,7 @@ function HomePage() {
     };
 
     const handleDeleteEvent = async (event: Event) => {
+        console.log("Deleting:", event._id);
         if (!event._id) return;
         try {
             await axios.delete(`${key}/api/events/${event._id}`, {
