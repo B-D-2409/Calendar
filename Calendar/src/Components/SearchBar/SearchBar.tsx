@@ -111,7 +111,7 @@ const Searchbar = () => {
 
                 if (token) {
                     try {
-                        const myEventsRes = await axios.get(`${key}/api/events`, { headers: authHeaders });
+                        const myEventsRes = await axios.get(`${key}/api/events/mine`, { headers: authHeaders });
                         freshMyEvents = Array.isArray(myEventsRes.data)
                             ? myEventsRes.data as Event[]
                             : [];
@@ -120,7 +120,7 @@ const Searchbar = () => {
                     }
 
                     try {
-                        const participatingRes = await axios.get(`${key}/api/events/participating`, { headers: authHeaders });
+                        const participatingRes = await axios.get(`${key}/api/events/participants`, { headers: authHeaders });
                         freshParticipatingEvents = Array.isArray(participatingRes.data)
                             ? participatingRes.data as Event[]
                             : [];

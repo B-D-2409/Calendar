@@ -127,6 +127,32 @@ const getMyEventsParticipants: RequestHandler = async (req: AuthenticatedRequest
 };
 router.get("/participants", verifyToken, getMyEventsParticipants);
 
+const getAllEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+    const publicEvents = await Event.find({ type: "public" });
+
+    let myEvents = [];
+    let participatingEvents = [];
+
+    if (req.user) {
+      myEvents = await Event.find({ userId: req.user.id });
+      participatingEvents = await Event.find({ participants: req.user.id });
+    }
+
+    // Combine into unique events by _id
+    const allEventsMap = new Map();
+    [...publicEvents, ...myEvents, ...participatingEvents].forEach((event) => {
+      allEventsMap.set(event._id.toString(), event);
+    });
+
+    res.status(200).json(Array.from(allEventsMap.values()));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch all events" });
+  }
+};
+router.get("/all", verifyToken, getAllEvent);
+
 // public event by id
 const getPublicEventById: RequestHandler = async (req, res) => {
   const { id } = req.params;
