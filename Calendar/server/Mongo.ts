@@ -10,7 +10,6 @@ import AuthenticationRoutes from "./Routes/AuthenticationRoutes";
 import EventsRoutes from "./Routes/EventsRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
 import ContactListRoutes from "./Routes/ContactListRoutes";
-import UsersRoutes from "./Routes/UsersRoutes";
 const app = express();
 const server = http.createServer(app);
 
@@ -45,7 +44,7 @@ app.use('/api/auth', AuthenticationRoutes);
 app.use('/api/admin', AdminRoutes);
 app.use('/api/events', EventsRoutes);
 app.use('/api/contacts', ContactListRoutes);
-app.use('/api/users', UsersRoutes)
+
 
 
 if (!process.env.mongoDB_URL) {
