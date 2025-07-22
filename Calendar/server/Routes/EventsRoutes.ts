@@ -86,7 +86,7 @@ const getAllEvents: RequestHandler = async (req, res) => {
   }
 };
 
-router.get("/events", getAllEvents);
+router.get("/", getAllEvents);
 
 const getAllPublicEvents: RequestHandler = async (req, res) => {
   try {
@@ -195,7 +195,7 @@ const leaveEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   }
 };
 
-router.delete("/api/events/:id/leave", verifyToken, leaveEvent);
+router.delete("/:id/leave", verifyToken, leaveEvent);
 
 const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -238,7 +238,7 @@ const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res)
     res.status(500).json({ message: "Server error" });
   }
 };
-router.post("/api/events/invite/:id", verifyToken, inviteParticipant);
+router.post("/invite/:id", verifyToken, inviteParticipant);
 
 const deleteEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -263,7 +263,7 @@ const deleteEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   }
 };
 
-router.delete("/api/events/:id", verifyToken, deleteEvent);
+router.delete("/:id", verifyToken, deleteEvent);
 
 
 const seriesOfEventsDelete: RequestHandler = async (req: AuthenticatedRequest, res) => {
@@ -318,7 +318,7 @@ const changeEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   }
 };
 
-router.put("/api/events/:id", verifyToken, changeEvent);
+router.put("/:id", verifyToken, changeEvent);
 
 const changeSeriesOfEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -345,7 +345,7 @@ const changeSeriesOfEvents: RequestHandler = async (req: AuthenticatedRequest, r
   }
 };
 
-router.put("/api/event-series/:id", verifyToken, changeSeriesOfEvents);
+router.put("/event-series/:id", verifyToken, changeSeriesOfEvents);
 
 const getSeriesEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -355,12 +355,7 @@ const getSeriesEvents: RequestHandler = async (req: AuthenticatedRequest, res) =
     res.status(500).json({ message: err.message });
   }
 };
-router.get("/api/event-series", verifyToken, getSeriesEvents);
-
-
-
-
-
+router.get("/event-series", verifyToken, getSeriesEvents);
 
 
 export default router;
