@@ -44,7 +44,7 @@
     text-decoration: none;
     color: #333;
     font-weight: bold;
-    box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
+
 }
 
 .menuButton {
@@ -141,9 +141,7 @@
     cursor: pointer;
     color: #333; /* Ensure visibility */
 }
-.admin {
-    margin-right: 1rem; /* Adjust as needed */
-}
+
 
 .navLink {
     text-decoration: none;

@@ -196,6 +196,29 @@ const deleteEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
 
 router.delete("/:id", verifyToken, deleteEvent);
 
+const removeParticipant: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+      const { id, participantId } = req.params;
+
+      const event = await Event.findById(id);
+      if (!event) {
+          return res.status(404).json({ message: "Event not found" });
+      }
+
+      // Remove participant from the array
+      event.participants = event.participants.filter(p => p.toString() !== participantId);
+      await event.save();
+
+      const updatedEvent = await Event.findById(id).populate("participants", "username email");
+
+      res.status(200).json({ message: "Participant removed", participants: updatedEvent?.participants });
+  } catch (error: any) {
+      console.error("Error removing participant:", error);
+      res.status(500).json({ message: error.message });
+  }
+};
+router.delete("/:id/participants/:participantId", verifyToken, removeParticipant);
+
 
 
 const getEventById: RequestHandler = async (req: AuthenticatedRequest, res) => {
