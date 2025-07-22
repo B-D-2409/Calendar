@@ -413,7 +413,44 @@
 }
 
 
-/* Dark mode buttons */
+.deleteContactButton {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: color 0.2s;
+}
+
+.deleteContactButton:hover {
+    color: #c0392b;
+}
+
+.invitePopup input[type="text"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.invitePopup button {
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.3s;
+}
+
+.invitePopup button:hover {
+    background-color: #2980b9;
+}
+
 
 [data-theme='dark'] .eventDetails button {
     background-color: #22c55e;
@@ -433,4 +470,24 @@
 [data-theme='dark'] .closeButton:hover {
     background-color: #b91c1c;
     box-shadow: 0 4px 10px rgba(220, 38, 38, 0.4);
+}
+
+.deleteListButton {
+    margin-left: 10px;
+    background-color: #cc0000;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.deleteListButton:hover {
+    background-color: #990000;
+}
+
+.contactListHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

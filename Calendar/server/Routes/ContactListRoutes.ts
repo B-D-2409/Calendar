@@ -94,53 +94,49 @@ const getUserByUsername: RequestHandler = async (req, res) => {
 router.get("/username/:username", verifyToken, getUserByUsername);
 
 // DELETE a contact list by ID
+// Delete entire contact list by listId
 const deleteContactList: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
-        const deletedList = await ContactListModel.findByIdAndDelete(req.params.id);
+        const { listId } = req.params;
+
+        const deletedList = await ContactListModel.findByIdAndDelete(listId);
         if (!deletedList) {
             return res.status(404).json({ message: "Contact list not found" });
         }
+
         res.json({ message: "Contact list deleted successfully" });
     } catch (error: any) {
         console.error("Error deleting contact list:", error);
         res.status(500).json({ message: error.message });
     }
 };
-
-router.delete("/:id", verifyToken, deleteContactList);
-
-
-
-// DELETE a specific contact from a contact list
+router.delete("/lists/:listId", verifyToken, deleteContactList);
+// Delete a contact inside a contact list
 const deleteContactFromList: RequestHandler = async (req: AuthenticatedRequest, res) => {
-    const { listId, userId } = req.params;
     try {
+        const { listId, contactId } = req.params;
+
         const list = await ContactListModel.findById(listId);
         if (!list) {
             return res.status(404).json({ message: "Contact list not found" });
         }
 
-        list.contacts = list.contacts.filter(
-            (contact) => contact.toString() !== userId
-        );
+        // Filter out the contact from the contacts array
+        list.contacts = list.contacts.filter(c => c.toString() !== contactId);
 
         await list.save();
 
-        const updatedList = await ContactListModel.findById(listId).populate(
-            "contacts",
-            "username email phone"
-        );
-
-        res.json({
-            message: "Contact removed from list",
-            contacts: updatedList?.contacts || [],
-        });
+        res.json({ message: "Contact removed from list successfully" });
     } catch (error: any) {
-        console.error("Error removing contact from list:", error);
+        console.error("Error deleting contact from list:", error);
         res.status(500).json({ message: error.message });
     }
 };
 
-router.delete("/:listId/contacts/:userId", verifyToken, deleteContactFromList);
+router.delete("/lists/:listId/contacts/:contactId", verifyToken, deleteContactFromList);
+
+
+
+
 
 export default router;

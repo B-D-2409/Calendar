@@ -77,7 +77,7 @@ function Contacts() {
         }
 
         try {
-            // ✅ Fetch user by username from correct route
+
             const userRes = await axios.get(
                 `${key}/api/contacts/username/${selectedUsername.trim()}`,
                 { headers: { Authorization: `Bearer ${token}` } }
@@ -85,7 +85,7 @@ function Contacts() {
 
             const userId = userRes.data._id;
 
-            // ✅ Add participant to event
+
             await axios.post(
                 `${key}/api/contacts/${currentEventId}/participants/${userId}`,
                 {},
@@ -115,6 +115,27 @@ function Contacts() {
             toast.error("Failed to load your contact lists");
         }
     };
+    const handleDeleteContactFromList = async (listId: string, contactId?: string) => {
+        try {
+            if (contactId) {
+                // delete contact from list API call
+                await axios.delete(`${key}/api/contacts/lists/${listId}/contacts/${contactId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                toast.success("Contact removed from list successfully");
+            } else {
+                // delete entire list API call
+                await axios.delete(`${key}/api/contacts/lists/${listId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                toast.success("Contact list deleted successfully");
+            }
+            fetchContactLists();
+        } catch (error: any) {
+            console.error("Failed to delete:", error);
+            toast.error(error?.response?.data?.message || "Failed to delete");
+        }
+    };
 
 
     const formatDate = (dateString: string | undefined | null): string => {
@@ -141,7 +162,7 @@ function Contacts() {
             </button>
 
             <CreateContactsListForm onListCreated={() => {
-                // handle what happens after the list is created
+
                 console.log("List created!");
             }} />
 
@@ -194,23 +215,36 @@ function Contacts() {
                     </div>
                 </div>
             )}
-            <div className={styles.contactListsContainer}>
-                <h3 className={styles.contactListsHeading}>Your Contact Lists</h3>
-                <ul className={styles.contactLists}>
-                    {contactLists.map((list) => (
-                        <li key={list._id} className={styles.contactListItem}>
+            <ul className={styles.contactLists}>
+                {contactLists.map((list) => (
+                    <li key={list._id} className={styles.contactListItem}>
+                        <div className={styles.contactListHeader}>
                             <h4 className={styles.contactListTitle}>{list.title}</h4>
-                            <ul className={styles.contactListContacts}>
-                                {list.contacts.map((contact: Contact) => (
-                                    <li key={contact._id} className={styles.contactListContactItem}>
-                                        {contact.username}
-                                    </li>
-                                ))}
-                            </ul>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                            <button
+                                onClick={() => handleDeleteContactFromList(list._id)}
+                                className={styles.deleteListButton}
+                            >
+                                Delete List
+                            </button>
+                        </div>
+                        <ul className={styles.contactListContacts}>
+                            {list.contacts.map((contact: Contact) => (
+                                <li key={contact._id} className={styles.contactListContactItem}>
+                                    {contact.username}
+                                    <button
+                                        onClick={() => handleDeleteContactFromList(list._id, contact._id)}
+                                        className={styles.deleteButton}
+                                    >
+                                        Delete
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </li>
+                ))}
+            </ul>
+
+
 
             <ul className={styles.contactsList}>
                 {contacts.map((contact) => (
