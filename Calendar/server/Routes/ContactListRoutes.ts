@@ -48,7 +48,7 @@ const getContactLists: RequestHandler = async (req: AuthenticatedRequest, res) =
     }
 };
 
-router.get("/", verifyToken, getContactLists);
+router.get("/lists", verifyToken, getContactLists);
 
 const addParticipantToEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
     const { eventId, userId } = req.params;
