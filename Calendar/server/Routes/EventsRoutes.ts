@@ -5,7 +5,7 @@ import Event from "../Models/Event.model";
 import verifyToken from "../views/middlewares";
 import { AuthenticatedRequest } from "../types";
 import EventSeries from "../Models/SeriesOfEvents.model";
-
+import SeriesOfEventsModel from "../Models/SeriesOfEvents.model";
 interface CreateEventRequestBody {
   title: string;
   description: string;
@@ -87,6 +87,29 @@ const getAllEvents: RequestHandler = async (req, res) => {
 };
 
 router.get("/", getAllEvents);
+
+const createSeriesOfEvents: RequestHandler =  async (req: AuthenticatedRequest, res) => {
+  try {
+    const newSeries = new SeriesOfEventsModel({
+      name: req.body.name,
+      creatorId: req.user.id,
+      seriesType: req.body.seriesType,
+      isIndefinite: req.body.isIndefinite,
+      startingEvent: req.body.startingEvent,
+      endingEvent: req.body.isIndefinite ? undefined : req.body.endingEvent,
+      recurrenceRule:
+        req.body.seriesType === "recurring" ? req.body.recurrenceRule : undefined,
+      eventsId: req.body.seriesType === "manual" ? req.body.eventsId : [],
+    });
+
+    const savedSeries = await newSeries.save();
+    res.status(201).json(savedSeries);
+  } catch (err) {
+    console.error("Error creating event series:", err);
+    res.status(400).json({ error: err.message });
+  }
+};
+router.post("/event-series", verifyToken, createSeriesOfEvents);
 
 const getAllPublicEvents: RequestHandler = async (req, res) => {
   try {

@@ -19,7 +19,7 @@ import Contacts from "./Pages/Contacts/Contacts";
 import ProfileDetailsComponent from './Pages/ProfilePage/ProfilePage'
 import { useContext } from 'react'
 import { AuthContext, AuthContextType } from './Common/AuthContext'
-
+import EventSeriesForm from './Components/SeriesOfEvents/SeriesOfEvents'
 
 function App() {
 
@@ -119,6 +119,12 @@ function App() {
               }
             >
 
+            </Route>
+
+            <Route  
+            path="/seriesofevents"
+            element={<EventSeriesForm />}
+            >
             </Route>
           </Routes>
         </Container>

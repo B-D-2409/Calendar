@@ -152,6 +152,15 @@ function NavigationBar() {
                     >
                         My Events
                     </NavLink>
+
+                    <NavLink
+                        to="/seriesofevents"
+                        className={({ isActive }) =>
+                            isActive ? `${style.navLink} ${style.active}` : style.navLink
+                        }
+                    >
+                        Series Of Events
+                    </NavLink>
                     <NavLink
                         to="/contact"
                         className={({ isActive }) =>
