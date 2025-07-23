@@ -1,116 +1,319 @@
-.myeventsContainerWithTabs {
-    padding: 1rem;
-    max-width: 900px;
-    margin: 0 auto;
-    transition: filter 0.3s ease;
-    position: relative;
-  }
-  
-  .blurred {
-    filter: blur(3px);
-    pointer-events: none;
-    user-select: none;
-  }
-  
-  .myeventsTitleH1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  
-  .myeventsBoxContainerTabs {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-    min-height: 850px;
-    padding: 1rem;
-  }
-  
-  .tabsRoot {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .tabsList {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    background-color: #f8f3f3;
-    padding: 0.5rem 0;
-    border-radius: 8px 8px 0 0;
-  }
-  
-  .tabTrigger {
-    font-size: 18px;
-    font-weight: 700;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem 1rem;
-    border-bottom: 3px solid transparent;
-    transition: border-color 0.3s ease;
-    color: #333;
-  }
-  
-  .tabTrigger:hover {
-    color: #5565dd;
-  }
-  
-  .activeTab {
-    border-bottom-color: #5565dd;
-    color: #5565dd;
-  }
-  
-  .createEventButton {
-    font-size: 18px;
-    font-weight: 700;
-    background-color: #5565dd;
-    color: #fff;
-    border: none;
-    border-radius: 22px;
-    padding: 0.5rem 1.5rem;
-    cursor: pointer;
-    margin: 0 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .createEventButton:hover {
-    background-color: #4351b8;
-  }
-  
-  .tabsContent {
-    flex-grow: 1;
-    padding: 1rem;
-    overflow-y: auto;
-  }
-  
-  .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modalContent {
-    background-color: #fff;
-    border-radius: 12px;
-    padding: 2rem;
-    max-width: 600px;
-    width: 90%;
-    box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
-    position: relative;
-  }
-  
 
-  /* DARK theme for myevents page */
+.myeventsTitleH1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.myeventsBoxContainerTabs {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.tabsRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.tabsList {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tabTrigger {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+
+.tabTrigger:hover {
+  background-color: #0056b3;
+}
+
+.activeTab {
+  background-color: #0056b3;
+}
+
+.createEventButton {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.createEventButton:hover {
+  background-color: #218838;
+}
+
+.eventCard {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: calc(33% - 20px);
+  margin: 10px;
+  transition: box-shadow 0.3s ease;
+  position: relative;
+}
+
+.eventCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.eventCard h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.eventCard p {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.eventDetailLink {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.eventDetailLink:hover {
+  text-decoration: underline;
+}
+
+.joinButton, .leaveButton, .deleteButton, .inviteButton {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.joinButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.joinButton:hover {
+  background-color: #0056b3;
+}
+
+.leaveButton {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.leaveButton:hover {
+  background-color: #c82333;
+}
+
+.deleteButton {
+  background-color: #9b59b6; /* Purple color for delete button */
+  color: white;
+  border: none;
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Move it to the right side of the card */
+}
+
+.deleteButton:hover {
+  background-color: #8e44ad; /* Darker purple for hover */
+}
+
+.inviteButton {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+}
+
+.inviteButton:hover {
+  background-color: #138496;
+}
+
+.myeventsBoxContainerTabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.myeventsContainerWithTabs.blurred {
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.invitePopup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  width: 80%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.invitePopup input {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.invitePopup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.invitePopup li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.invitePopup li button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.invitePopup li button:hover {
+  background-color: #0056b3;
+}
+
+/* Backdrop that covers the entire screen */
+.eventFormBackdrop {
+  position: fixed; /* stay fixed on screen */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center;     /* center vertically */
+  z-index: 1000;           /* on top of everything */
+}
+
+/* The form container */
+.event-form-container {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 90vh;       /* maximum height is 90% of viewport height */
+  overflow-y: auto;     
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.blurred {
+  filter: blur(3px);
+  pointer-events: none; /* optional: disable interaction with background */
+  user-select: none;
+}
+
+.closeButton {
+  position: absolute;
+  top: 75px;
+  left: 1000px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #ff0000;
+  transition: color 0.2s ease;
+  line-height: 1;
+  padding: 0;
+  z-index: 10; 
+}
+
+.closeButton:hover {
+  color: #fc5a5a; /* red on hover */
+}
+
+.inviteContainer {
+  margin-top: 10px;
+}
+
+.inviteSearchInput {
+  padding: 8px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.userList {
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+}
+
+.userItem {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.userItem:hover {
+  background-color: #eee;
+}
+
+.sendInviteButton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.usernameSelect {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  color: black;
+  margin: 8px 0;
+}
+
+.feedbackText {
+  color: red;
+  margin-top: 4px;
+}
+
+
+
+/* DARK theme for myevents page */
 
 [data-theme='dark'] .myeventsBoxContainerTabs {
   background-color: #1e1e1e; /* dark background */
@@ -158,7 +361,37 @@
   color: #e0e0e0;
 }
 
-/* Optional: dark overlay can remain same if already dark enough */
+[data-theme='dark'] .eventCard {
+  background-color: #333;
+  color: #fff;
+}
+
+[data-theme='dark'] .eventCard h2 {
+  color: #fff;
+}
+
+[data-theme='dark'] .eventCard p {
+  color: #ddd;
+}
+
+[data-theme='dark'] .deleteButton {
+  background-color: #8e44ad; /* Darker purple */
+  color: #fff;
+}
+
+[data-theme='dark'] .deleteButton:hover {
+  background-color: #732d91; /* Even darker purple for hover */
+}
+
+[data-theme='dark'] .eventDetailLink {
+  color: #4dabf7;
+}
+
+[data-theme='dark'] .eventDetailLink:hover {
+  text-decoration: underline;
+}
+
 [data-theme='dark'] .modalOverlay {
   background-color: rgba(0, 0, 0, 0.6);
 }
+

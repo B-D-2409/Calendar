@@ -67,7 +67,10 @@ interface User {
     [key: string]: any;
 }
 
-
+// Define the type for the props
+interface EventFormProps {
+    setShowCreateForm: React.Dispatch<React.SetStateAction<boolean>>;
+  }
 
 
 const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {

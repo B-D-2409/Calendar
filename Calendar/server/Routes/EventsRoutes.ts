@@ -274,44 +274,49 @@ router.delete("/:id/leave", verifyToken, leaveEvent);
 const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const { username } = req.body;
-
     const eventId = req.params.id;
 
     if (!username) {
       return res.status(400).json({ message: "Username is required" });
-    }  
+    }
 
     const userToInvite = await User.findOne({
       username: new RegExp(`^${username}$`, "i"),
-    });  
+    });
 
     if (!userToInvite) {
       return res.status(404).json({ message: "User not found" });
-    }  
+    }
 
     const event = await Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
-    }  
+    }
 
-    if (
-      event.participants.some(
-        (id) => id.toString() === userToInvite._id.toString()
-      )  
-    ) {
+    // Check if user is already a participant
+    if (event.participants.some(id => id.toString() === userToInvite._id.toString())) {
       return res.status(400).json({ message: "User already a participant" });
-    }  
+    }
 
-    event.participants.push(userToInvite._id);
+    // Check if user already invited
+    if (event.invitations.some(id => id.toString() === userToInvite._id.toString())) {
+      return res.status(400).json({ message: "User already invited" });
+    }
+
+    // Add to invitations instead of participants
+    event.invitations.push(userToInvite._id);
 
     await event.save();
 
-    res.json({ message: "User invited successfully" });
+    // Optionally: notify userToInvite (email, push, etc.)
+
+    res.json({ message: "Invitation sent successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
-  }  
-};  
+  }
+};
+
 router.post("/invite/:id", verifyToken, inviteParticipant);
 
 
