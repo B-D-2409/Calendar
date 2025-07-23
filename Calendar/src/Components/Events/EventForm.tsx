@@ -69,6 +69,8 @@ interface User {
 
 // Define the type for the props
 interface EventFormProps {
+    onEventCreated?: (event: EventState) => void;  
+    user?: User | null;
     setShowCreateForm: React.Dispatch<React.SetStateAction<boolean>>;
   }
 
