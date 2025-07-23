@@ -1,5 +1,6 @@
 import express, { RequestHandler } from "express";
 import mongoose from "mongoose";
+import { Types } from 'mongoose';
 import User from "../Models/User.model";
 import Event from "../Models/Event.model";
 import verifyToken from "../views/middlewares";
@@ -175,6 +176,51 @@ const getAllEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   }
 };
 router.get("/all", verifyToken, getAllEvent);
+
+const joinPublicEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+    const eventId = req.params.id;
+    const userId = req.user.id;
+    const userIdObj = new Types.ObjectId(userId); // convert here
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    }
+
+    const ownerId = event.userId.toString();
+
+    const isAlreadyParticipant = event.participants.some(
+      (p) => p.toString() === userIdObj.toString()
+    );
+
+    if (ownerId === userId) {
+      return res
+        .status(400)
+        .json({ error: "Owner cannot join their own event" });
+    }
+
+    if (isAlreadyParticipant) {
+      return res.status(400).json({ error: "You are already a participant" });
+    }
+
+    if (event.type === "private") {
+      return res.status(403).json({ error: "Cannot join private event" });
+    }
+
+    event.participants.push(userIdObj);
+    await event.save();
+
+    return res.status(200).json({
+      message: "Successfully joined the event",
+      participants: event.participants,
+    });
+  } catch (err) {
+    console.error("Join event error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+router.post("/:id/join", verifyToken,  joinPublicEvents);
 
 // public event by id
 const getPublicEventById: RequestHandler = async (req, res) => {

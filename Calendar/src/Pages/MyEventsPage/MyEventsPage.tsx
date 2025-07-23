@@ -143,34 +143,47 @@ function MyEventsPage() {
             toast.error("Please log in to join this event.");
             return;
         }
-
+    
         if (event.participants.includes(user._id)) {
             toast.error("You are already a participant in this event.");
             return;
         }
-
+    
         setIsJoining(true);
         try {
-            await axios.post(`${key}/api/events/${event._id}/join`, null, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            // Create updated event with current user added to participants
+            const response = await axios.post(
+                `${key}/api/events/${event._id}/join`,
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+    
+            // Get updated participants from backend response
+            const updatedParticipants = response.data.participants;
+    
+            // Update local event state with new participants list
             const updatedEvent = {
                 ...event,
-                participants: [...event.participants, user._id],
+                participants: updatedParticipants,
             };
-
+    
             setParticipatingEvents((prev) => [...prev, updatedEvent]);
+    
             toast.success("Successfully joined the event!");
-        } catch (error) {
-            toast.error("Failed to join event.");
+        } catch (error: any) {
+            if (error.response && error.response.data && error.response.data.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to join event.");
+            }
         } finally {
             setIsJoining(false);
         }
     };
+    
 
 
 
