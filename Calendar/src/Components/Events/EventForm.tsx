@@ -69,10 +69,10 @@ interface User {
 
 // Define the type for the props
 interface EventFormProps {
-    onEventCreated?: (event: EventState) => void;  
+    onEventCreated?: (event: EventState) => void;
     user?: User | null;
     setShowCreateForm: React.Dispatch<React.SetStateAction<boolean>>;
-  }
+}
 
 
 const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
@@ -283,7 +283,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
         if (!preparedEvent.isRecurring) {
             delete preparedEvent.recurrenceRule;
         } else if (preparedEvent.recurrenceRule) {
-        
+
             if (
                 !["daily", "weekly", "monthly"].includes(
                     preparedEvent.recurrenceRule.frequency || ""
@@ -291,16 +291,14 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
             ) {
                 preparedEvent.recurrenceRule.frequency = undefined;
             }
-        
+
             if (!preparedEvent.recurrenceRule.endDate) {
                 delete preparedEvent.recurrenceRule.endDate;
             } else {
-                preparedEvent.recurrenceRule.endDate = new Date(
-                    preparedEvent.recurrenceRule.endDate
-                );
+                preparedEvent.recurrenceRule.endDate = new Date(preparedEvent.recurrenceRule.endDate).toISOString();
             }
         }
-        
+
         try {
             console.log(`${key}/api/events`, preparedEvent);
 
@@ -308,7 +306,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
             const res = await axios.post(`${key}/api/events`, preparedEvent, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                 withCredentials: true,
-              });
+            });
             const createdEvent = res.data;
             setSuccessMessage("✅ Event created successfully!");
             setEvent({

@@ -25,7 +25,7 @@ const eventSchema = new mongoose.Schema(
         type: { type: String, required: true },
         startDateTime: { type: Date, required: true },
         endDateTime: { type: Date, required: true },
-        creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+        creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false},
         invitations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -42,7 +42,6 @@ const eventSchema = new mongoose.Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",
-                required: true,
             },
         ],
         isRecurring: {

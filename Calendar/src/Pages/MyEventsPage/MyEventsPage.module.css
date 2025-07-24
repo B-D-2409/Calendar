@@ -311,6 +311,20 @@
   margin-top: 4px;
 }
 
+.eventDetailLink {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.eventDetailLink:hover {
+  background-color: #0056b3;
+}
+
 
 
 /* DARK theme for myevents page */

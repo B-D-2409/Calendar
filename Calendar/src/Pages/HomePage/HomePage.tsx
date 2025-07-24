@@ -1,8 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useContext } from "react";
 import styles from './Home.module.css';
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-
+import { AuthContext, AuthContextType } from "../../Common/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
 interface Event {
@@ -19,9 +21,14 @@ interface Event {
     description?: string;
     participants: string[];
     userId?: string | { toString(): string };
-    date?: string; // Added for display fallback
-    time?: string; // Added for display fallback
+    date?: string;
+    time?: string;
     [key: string]: any;
+}
+
+interface User {
+    username: string;
+    _id: string;
 }
 
 function HomePage() {
@@ -31,9 +38,18 @@ function HomePage() {
     const [searchResults, setSearchResults] = useState<Event[] | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const { user, isLoggedIn } = useContext(AuthContext) as AuthContextType;
+    const [isJoining, setIsJoining] = useState(false);
+    const [isLeaving, setIsLeaving] = useState(false);
+    const [users, setUsers] = useState<User[]>([]);
+    const [isInviteVisible, setIsInviteVisible] = useState<string | null>(null);
+    const [selectedUsername, setSelectedUsername] = useState("");
+    const [feedback, setFeedback] = useState("");
+
     const eventsPerPage = 6;
 
     const location = useLocation();
+    const token = localStorage.getItem("token");
 
     const handlePrevPage = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -43,33 +59,100 @@ function HomePage() {
         if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
-    const handleDeleteEvent = async (event: Event) => {
-        console.log("Deleting:", event._id);
-        if (!event._id) return;
-        try {
-            await axios.delete(`${key}/api/events/${event._id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
-            setMyEvents(prev => prev.filter(e => e._id !== event._id));
+    const handleJoinEvent = async (event: Event) => {
+        if (!user || !user._id) {
+            toast.error("Please log in to join this event.");
+            return;
+        }
 
-            if (searchResults) {
-                setSearchResults(prev => (prev ? prev.filter(e => e._id !== event._id) : prev));
+        if (event.participants.includes(user._id)) {
+            toast.error("You are already a participant in this event.");
+            return;
+        }
+
+        setIsJoining(true);
+        try {
+            const response = await axios.post(
+                `${key}/api/events/${event._id}/join`,
+                null,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            const updatedParticipants = response.data.participants;
+            const updatedEvent = { ...event, participants: updatedParticipants };
+
+            // Update participatingEvents with new event data
+            setParticipatingEvents(prev => [...prev, updatedEvent]);
+
+            toast.success("Successfully joined the event!");
+        } catch (error: any) {
+            if (error.response?.data?.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("Failed to join event.");
             }
+        } finally {
+            setIsJoining(false);
+        }
+    };
+
+    const fetchAllUsers = async () => {
+        try {
+            const response = await axios.get(`${key}/api/auth/users`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setUsers(response.data);
         } catch (err) {
-            alert("Failed to delete event");
-            console.error(err);
+            console.error("Error fetching contacts:", err);
         }
     };
 
     useEffect(() => {
-        if (location.state?.searchResults && location.state?.searchTerm) {
-            setSearchResults(location.state.searchResults);
-            setSearchTerm(location.state.searchTerm);
-            window.history.replaceState({}, document.title);
+        fetchAllUsers();
+    }, []);
+    const handleSendInvite = async (eventId: string) => {
+        try {
+            if (!selectedUsername) return;
+
+            await axios.post(`${key}/api/events/invite/${eventId}`, { username: selectedUsername }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            setFeedback(`Invite sent to ${selectedUsername}!`);
+            setSelectedUsername("");
+            setSearchTerm("");
+            setIsInviteVisible(null);
+            toast.success("Invite sent!");
+        } catch (error) {
+            toast.error("Failed to send invite");
         }
-    }, [location.state]);
+    };
+
+
+
+    const handleLeaveEvent = async (event: Event) => {
+        if (!user || !user._id) {
+            toast.error("Please log in to leave this event.");
+            return;
+        }
+
+        setIsLeaving(true);
+        try {
+            await axios.delete(`${key}/api/events/${event._id}/leave`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            setParticipatingEvents(prev => prev.filter(e => e._id !== event._id));
+
+            toast.success("Successfully left the event!");
+        } catch (error) {
+            toast.error("Failed to leave event.");
+        } finally {
+            setIsLeaving(false);
+        }
+    };
 
     useEffect(() => {
         const handleGlobalSearch = (event: any) => {
@@ -94,9 +177,24 @@ function HomePage() {
         };
     }, []);
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
+    const handleDeleteEvent = async (event: Event) => {
+        if (!event._id) return;
+        try {
+            await axios.delete(`${key}/api/events/${event._id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            setMyEvents((prev) => prev.filter((e) => e._id !== event._id));
+            toast.success("Event successfully deleted");
+        } catch (err) {
+            toast.error("Failed to delete event");
+        }
+    };
 
+
+
+    useEffect(() => {
         // Fetch all public events
         fetch(`${key}/api/events/public`)
             .then(res => res.json())
@@ -110,13 +208,14 @@ function HomePage() {
             const authHeaders = { Authorization: `Bearer ${token}` };
 
             fetch(`${key}/api/events`, { headers: authHeaders })
-            .then(res => res.ok ? res.json() : Promise.reject("Failed to fetch my events"))
-            .then(data => Array.isArray(data) ? setMyEvents(data) : setMyEvents([]))
-            .catch(err => {
-                setMyEvents([]);
-                console.error(err);
-            });
-            // Fetch events where user is a participant
+                .then(res => res.ok ? res.json() : Promise.reject("Failed to fetch my events"))
+                .then(data => Array.isArray(data) ? setMyEvents(data) : setMyEvents([]))
+                .catch(err => {
+                    setMyEvents([]);
+                    console.error(err);
+                });
+
+            // Fetch participating events
             fetch(`${key}/api/events/participants`, { headers: authHeaders })
                 .then(res => {
                     if (res.status === 500) {
@@ -148,7 +247,6 @@ function HomePage() {
         }
     }, []);
 
-    // Combine events uniquely by _id
     const uniqueEvents = useMemo(() => {
         const allEventsMap = new Map<string, Event>();
         [...publicEvents, ...myEvents, ...participatingEvents].forEach(event => {
@@ -159,18 +257,11 @@ function HomePage() {
         return Array.from(allEventsMap.values());
     }, [publicEvents, myEvents, participatingEvents]);
 
-    // Decide which events to show (search results or all unique)
     const allEvents = searchResults !== null ? searchResults : uniqueEvents;
-
-    // Pagination calculations
     const totalPages = Math.ceil(allEvents.length / eventsPerPage);
     const indexOfLastEvent = currentPage * eventsPerPage;
     const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
     const eventsToDisplay = allEvents.slice(indexOfFirstEvent, indexOfLastEvent);
-
-    const displayTitle = searchResults !== null
-        ? `Search Results for "${searchTerm}"`
-        : "All Events";
 
     const clearSearch = () => {
         setSearchResults(null);
@@ -187,14 +278,9 @@ function HomePage() {
             <div className={styles.publicEventsContainer}>
                 <div className={styles.publicEventsBox}>
                     <div className={styles.headingAllEventsSearchResult}>
-                        <h2>{displayTitle}</h2>
+                        <h2>{searchResults !== null ? `Search Results for "${searchTerm}"` : "All Events"}</h2>
                         {searchResults !== null && (
-                            <button
-                                onClick={clearSearch}
-                                className={styles.clearSearchButton}
-                            >
-                                Clear Search
-                            </button>
+                            <button onClick={clearSearch} className={styles.clearSearchButton}>Clear Search</button>
                         )}
                     </div>
 
@@ -212,38 +298,90 @@ function HomePage() {
 
                         <div className={styles.eventsContent}>
                             {eventsToDisplay.length > 0 ? (
-                                <>
-                                    <div className={styles.eventsList}>
-                                        {eventsToDisplay.map(event => {
-                                            const dateToShow = event.startDateTime || event.start || event.date;
-                                            const timeToShow = event.startDateTime ? new Date(event.startDateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : event.time || "";
+                                <div className={styles.eventsList}>
+                                    {eventsToDisplay.map(event => (
+                                        <div key={event._id} className={styles.eventCard}>
+                                            <h3>{event.title}</h3>
+                                            <p>{event.description}</p>
 
-                                            return (
-                                                <div key={event._id} className={styles.eventCard}>
-                                                    <h3>{event.title}</h3>
-                                                    <p>{event.description}</p>
-                                                    <p>{dateToShow ? new Date(dateToShow).toLocaleDateString() : "No date"} {timeToShow}</p>
-                                                    <button
-                                                        onClick={() => handleDeleteEvent(event)}
-                                                        className={styles.deleteButton}
+                                            <Link
+                                                to={`/eventdetailspage/${event._id}`}
+                                                className={styles.eventDetailLink}
+                                            >
+                                                See Details
+                                            </Link>
+
+                                            <button
+                                                onClick={() => handleJoinEvent(event)}
+                                                disabled={isJoining}
+                                                className={styles.joinButton}
+                                            >
+                                                Join
+                                            </button>
+                                            <button
+                                                onClick={() => handleLeaveEvent(event)}
+                                                disabled={isLeaving}
+                                                className={styles.inviteButton}
+                                            >
+                                                Leave
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteEvent(event)}
+                                                className={styles.deleteButton}
+                                            >
+                                                Delete
+                                            </button>
+
+                                            {/* Invite toggle button */}
+                                            <button
+                                                onClick={() => setIsInviteVisible(isInviteVisible === event._id ? null : event._id)}
+                                                className={styles.inviteButton}
+                                            >
+                                                {isInviteVisible === event._id ? "Cancel Invite" : "Invite"}
+                                            </button>
+
+                                            {/* Invite UI */}
+                                            {isInviteVisible === event._id && (
+                                                <div className={styles.inviteContainer}>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Search users..."
+                                                        value={searchTerm}
+                                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                                        className={styles.searchInput}
+                                                    />
+
+                                                    <select
+                                                        value={selectedUsername}
+                                                        onChange={(e) => setSelectedUsername(e.target.value)}
+                                                        className={styles.selectUser}
                                                     >
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                                                        <option value="" disabled>Select a user</option>
+                                                        {users
+                                                            .filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
+                                                            .map(user => (
+                                                                <option key={user.username} value={user.username}>
+                                                                    {user.username}
+                                                                </option>
+                                                            ))}
+                                                    </select>
 
-                                    <div className={styles.paginationInfo}>
-                                        Page {currentPage} of {totalPages || 1}
-                                    </div>
-                                </>
+                                                    <button
+                                                        onClick={() => handleSendInvite(event._id)}
+                                                        disabled={!selectedUsername}
+                                                        className={styles.sendInviteButton}
+                                                    >
+                                                        Send Invite
+                                                    </button>
+
+                                                    {feedback && <p className={styles.feedbackText}>{feedback}</p>}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             ) : (
-                                <p className={styles.noEventsText}>
-                                    {searchResults !== null
-                                        ? `No events found for "${searchTerm}"`
-                                        : "No events available"}
-                                </p>
+                                <p className={styles.noEventsText}>No events found.</p>
                             )}
                         </div>
 
@@ -260,8 +398,11 @@ function HomePage() {
                     </div>
                 </div>
             </div>
+
+            <ToastContainer />
         </div>
     );
+
 }
 
 export default HomePage;

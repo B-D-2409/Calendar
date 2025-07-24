@@ -30,7 +30,7 @@ interface Event {
     
 }
 
-interface User {
+ interface User {
     username: string;
     _id: string;
 }

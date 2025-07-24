@@ -15,6 +15,8 @@ interface CreateEventRequestBody {
   endDateTime: Date;
   isRecurring: boolean;
   isLocation: boolean;
+  creator: string; // Creator's user ID
+  userId: string; // User ID of the creator
   location?: {
     address?: string;
     city?: string;
@@ -66,8 +68,10 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
       location: req.body.location || {},
       recurrenceRule: req.body.recurrenceRule || null,
       userId: userObjectId,
+      creator: userObjectId, 
       participants: participantIds,
     });
+    
 
     const savedEvent = await newEvent.save();
     res.status(201).json(savedEvent);
@@ -77,6 +81,61 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
 };
 
 router.post("/", verifyToken, createEvent);
+
+
+const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+    const { username } = req.body;
+    const eventId = req.params.id;
+
+    if (!username) {
+      console.log("No username provided");
+      return res.status(400).json({ message: "Username is required" });
+    }
+
+    const userToInvite = await User.findOne({
+      username: new RegExp(`^${username}$`, "i"),
+    });
+
+    if (!userToInvite) {
+      console.log("User not found for username:", username);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      console.log("Event not found with ID:", eventId);
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (!event.creator) {
+      console.log("Event creator missing for event ID:", eventId);
+      return res.status(400).json({ message: "Event creator is missing, cannot invite participants" });
+    }
+
+    if (event.participants.some(id => id.toString() === userToInvite._id.toString())) {
+      console.log(`User ${username} is already a participant`);
+      return res.status(400).json({ message: "User already a participant" });
+    }
+
+    if (event.invitations.some(id => id.toString() === userToInvite._id.toString())) {
+      console.log(`User ${username} is already invited`);
+      return res.status(400).json({ message: "User already invited" });
+    }
+
+    event.invitations.push(userToInvite._id);
+
+    await event.save();
+
+    res.json({ message: "Invitation sent successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+router.post("/invite/:id", verifyToken, inviteParticipant);
 
 const getAllEvents: RequestHandler = async (req, res) => {
   try {
@@ -340,53 +399,7 @@ const leaveEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
 
 router.delete("/:id/leave", verifyToken, leaveEvent);
 
-const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res) => {
-  try {
-    const { username } = req.body;
-    const eventId = req.params.id;
 
-    if (!username) {
-      return res.status(400).json({ message: "Username is required" });
-    }
-
-    const userToInvite = await User.findOne({
-      username: new RegExp(`^${username}$`, "i"),
-    });
-
-    if (!userToInvite) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    // Check if user is already a participant
-    if (event.participants.some(id => id.toString() === userToInvite._id.toString())) {
-      return res.status(400).json({ message: "User already a participant" });
-    }
-
-    // Check if user already invited
-    if (event.invitations.some(id => id.toString() === userToInvite._id.toString())) {
-      return res.status(400).json({ message: "User already invited" });
-    }
-
-    // Add to invitations instead of participants
-    event.invitations.push(userToInvite._id);
-
-    await event.save();
-
-    // Optionally: notify userToInvite (email, push, etc.)
-
-    res.json({ message: "Invitation sent successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-router.post("/invite/:id", verifyToken, inviteParticipant);
 
 
 const seriesOfEventsDelete: RequestHandler = async (req: AuthenticatedRequest, res) => {
