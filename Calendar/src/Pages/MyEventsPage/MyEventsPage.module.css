@@ -61,7 +61,7 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: calc(33% - 20px);
+  width: calc(40% - 20px);
   margin: 10px;
   transition: box-shadow 0.3s ease;
   position: relative;
@@ -84,7 +84,7 @@
 }
 
 .eventDetailLink {
-  color: #007bff;
+  color: #ffffff;
   text-decoration: none;
   font-weight: bold;
 }
@@ -314,15 +314,15 @@
 .eventDetailLink {
   display: inline-block;
   padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
+  background-color: #0e5bae;
+  color: rgb(255, 255, 255);
   border-radius: 4px;
   text-decoration: none;
   cursor: pointer;
 }
 
 .eventDetailLink:hover {
-  background-color: #0056b3;
+  background-color: #0262c8;
 }
 
 
