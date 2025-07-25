@@ -2,7 +2,7 @@ import { useState, useContext, useRef, useEffect } from "react";
 import { useTheme } from "../ThemeProvider/ThemeProvider";
 import SidebarCalendar from "./SideBarCalendar";
 import style from "./NavigationBar.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./SideBarCalendar.css";
 import { AuthContext } from "../../Common/AuthContext";
 import { AuthContextType } from "../../Common/AuthContext";
@@ -31,15 +31,21 @@ function NavigationBar() {
     const { theme, toggleTheme } = useTheme();
     const [showSearch, setShowSearch] = useState(false);
     const searchRef = useRef<HTMLDivElement | null>(null);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    
+    const { isLoggedIn, user, logout } = useContext(AuthContext) as AuthContextType;
+    const navigate = useNavigate();
+
+    // Добавяме тази референция, за да можем да засичаме кликове извън менюто
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     const toggleSearch = () => setShowSearch(prev => !prev);
-
-    const { isLoggedIn, user } = useContext(AuthContext) as AuthContextType;
 
     const toggleSideBar = () => {
         setSideBarOpen(!sideBarOpen);
     };
 
+    // Затваряне на Searchbar, ако кликнеш извън него
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -52,6 +58,28 @@ function NavigationBar() {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    // Затваряне на dropdown-а при клик извън него
+    useEffect(() => {
+        const handleClickOutsideDropdown = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutsideDropdown);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutsideDropdown);
+        };
+    }, []);
+
+    // Функция за logout
+    const handleLogout = () => {
+        logout();
+        setDropdownOpen(false);
+        navigate('/authentication'); // или където искаш да препратиш след logout
+    };
+
     return (
         <>
             <div className={style.header}>
@@ -60,14 +88,14 @@ function NavigationBar() {
                 </button>
 
                 <div ref={searchRef} className={style.searchContainer}>
-                {showSearch ? (
-                    <Searchbar />
-                ) : (
-                    <button onClick={toggleSearch} className={style.bigSearchButton}>
-                        🔍 Search
-                    </button>
-                )}
-            </div>
+                    {showSearch ? (
+                        <Searchbar />
+                    ) : (
+                        <button onClick={toggleSearch} className={style.bigSearchButton}>
+                            🔍 Search
+                        </button>
+                    )}
+                </div>
                 <div className={style.navContainer}>
                     <nav className={style.nav}>
                         <NavLink
@@ -99,9 +127,7 @@ function NavigationBar() {
                                     isActive ? `${style.navLink} ${style.active}` : style.navLink
                                 }
                             >
-                                
                             </NavLink>
-                            
                         </nav>
                     )}
                 </div>
@@ -119,14 +145,39 @@ function NavigationBar() {
                     </div>
                 )}
 
-
                 <header className={style.headerRight}>
                     <button className={style.mode} onClick={toggleTheme}>
                         {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
                     </button>
-                    <NavLink to="/authentication" className={style.userButton}>
-                        👤 Account
-                    </NavLink>
+
+                    {isLoggedIn ? (
+                        <div className={style.dropdown} ref={dropdownRef}>
+                            <button
+                                className={style.userButton}
+                                onClick={() => setDropdownOpen((open) => !open)}
+                            >
+                                👤 Account
+                            </button>
+
+                            {dropdownOpen && (
+                                <div className={style.dropdownMenu}>
+                                    <div className={style.dropdownItem}>
+                                        Hello, {user?.username || 'User'}
+                                    </div>
+                                    <button
+                                        className={style.dropdownItem}
+                                        onClick={handleLogout}
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <NavLink to="/authentication" className={style.userButton}>
+                            👤 Account
+                        </NavLink>
+                    )}
                 </header>
             </div>
 
