@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../Common/AuthContext";
 import style from "./Authentication.module.css";
@@ -183,7 +183,7 @@ function Authentication() {
             setError({ general: msg });
             setSuccessMessage("");
         }
-        
+
     };
 
 
@@ -192,7 +192,12 @@ function Authentication() {
         if (mode === "register" && !validate()) return;
         mode === "login" ? handleLogin() : handleRegister();
     };
-    
+
+    useEffect(() => {
+        if (isLoggedIn && location.pathname === '/login') {
+            navigate('/calendar');
+        }
+    }, [isLoggedIn, navigate, location]);
 
 
     return (
@@ -225,17 +230,17 @@ function Authentication() {
                                 Register
                             </button>
                         </div>
-    
+
                         <form className={style["auth-form"]} onSubmit={handleSubmit}>
                             <h2>{mode === "login" ? "Login" : "Register"}</h2>
-    
+
                             {successMessage && (
                                 <div className={style.success}>{successMessage}</div>
                             )}
                             {error.general && (
                                 <div className={style.error}>{error.general}</div>
                             )}
-    
+
                             {mode === "register" && (
                                 <>
                                     <div>
@@ -249,7 +254,7 @@ function Authentication() {
                                             <div className={style.error}>{error.username}</div>
                                         )}
                                     </div>
-    
+
                                     <div>
                                         <input
                                             type="tel"
@@ -268,7 +273,7 @@ function Authentication() {
                                             <div className={style.error}>{error.phoneNumber}</div>
                                         )}
                                     </div>
-    
+
                                     <div>
                                         <input
                                             type="text"
@@ -280,7 +285,7 @@ function Authentication() {
                                             <div className={style.error}>{error.firstName}</div>
                                         )}
                                     </div>
-    
+
                                     <div>
                                         <input
                                             type="text"
@@ -294,7 +299,7 @@ function Authentication() {
                                     </div>
                                 </>
                             )}
-    
+
                             <div>
                                 <input
                                     type="email"
@@ -306,7 +311,7 @@ function Authentication() {
                                     <div className={style.error}>{error.email}</div>
                                 )}
                             </div>
-    
+
                             <div>
                                 <input
                                     type="password"
@@ -318,7 +323,7 @@ function Authentication() {
                                     <div className={style.error}>{error.password}</div>
                                 )}
                             </div>
-    
+
                             <button type="submit">
                                 {mode === "login" ? "Login" : "Register"}
                             </button>
@@ -328,7 +333,7 @@ function Authentication() {
             </div>
         </div>
     );
-    
+
 }
 
 export default Authentication;
