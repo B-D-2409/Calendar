@@ -103,7 +103,7 @@ function App() {
             />
 
             <Route
-              path="/"
+              path="/publicpage"
               element={
                 <PublicOnlyRoute>
                   <PublicPage />

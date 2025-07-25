@@ -11,6 +11,7 @@ type EventType = {
     description: string;
     title: string;
     date: string;
+    type: string;
 };
 
 export const CustomSpinner = ({
@@ -74,7 +75,6 @@ const PublicPage = () => {
                     margin: "20px auto",
                     borderRadius: "10px",
                     padding: "20px",
-                    // backgroundColor removed for dark mode
                     textAlign: "center",
                     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                 }}>
@@ -92,10 +92,10 @@ const PublicPage = () => {
                                 marginLeft: "5px",
                                 transition: "color 0.3s",
                                 background: "linear-gradient(90deg, lightgreen 20%, coral 80%)",
-                                color: "black", 
+                                color: "black",
                             }}
                             onMouseEnter={e => {
-                                e.currentTarget.style.filter = "brightness(1.1)"; 
+                                e.currentTarget.style.filter = "brightness(1.1)";
                                 e.currentTarget.style.transform = "scale(1.05)";
                             }}
                             onMouseLeave={e => {
@@ -108,12 +108,12 @@ const PublicPage = () => {
                     </p>
                 </div>
             </div>
-
+    
             {/* Events Section */}
             <div className="homePageContainer">
                 <div className="publicEventsBox" style={{ padding: "20px" }}>
                     <h2 style={{ fontSize: "1.8rem", marginBottom: "20px", textAlign: "center" }}>Public Events</h2>
-
+    
                     <IconContext.Provider value={{ size: "2.5em" }}>
                         <div style={{ display: "flex", alignItems: "center" }}>
                             <div
@@ -129,7 +129,7 @@ const PublicPage = () => {
                             >
                                 <MdArrowBackIosNew />
                             </div>
-
+    
                             <div style={{ flex: 1 }}>
                                 {loading ? (
                                     <CustomSpinner />
@@ -139,57 +139,74 @@ const PublicPage = () => {
                                         gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
                                         gap: "20px",
                                     }}>
-                                        {currentEvents.map((event) => (
-                                            <div key={event.id || event._id} style={{
-                                                border: "1px solid #e0e0e0",
-                                                borderRadius: "10px",
-                                                padding: "15px",
-                                                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                justifyContent: "space-between",
-                                            }}>
-                                                <div>
-                                                    <h3 style={{
-                                                        fontSize: "1.2rem",
-                                                        marginBottom: "10px"
-                                                    }}>{event.title}</h3>
-                                                    <p style={{ fontSize: "0.95rem" }}>{event.description}</p>
-                                                </div>
-                                                <Link
-                                                    to="/authentication"
-                                                    className="gradient-button"
+                                        {currentEvents.map((event) => {
+                                            const typeColor = event.type === "public" ? "green" : "red";
+                                            return (
+                                                <div
+                                                    key={event.id || event._id}
                                                     style={{
-                                                        marginTop: "15px",
-                                                        display: "inline-block",
-                                                        color: "black", 
-                                                        textAlign: "center",
-                                                        padding: "10px",
-                                                        borderRadius: "5px",
-                                                        textDecoration: "none",
-                                                        fontWeight: "500",
-                                                        transition: "background-color 0.3s",
-                                                        background: "linear-gradient(90deg, lightgreen 20%, coral 80%)",
-                                                    }}
-                                                    onMouseEnter={e => {
-                                                        e.currentTarget.style.filter = "brightness(1.1)"; 
-                                                        e.currentTarget.style.transform = "scale(1.05)";
-                                                    }}
-                                                    onMouseLeave={e => {
-                                                        e.currentTarget.style.filter = "brightness(1)";
-                                                        e.currentTarget.style.transform = "scale(1)";
+                                                        position: "relative",
+                                                        border: "1px solid #e0e0e0",
+                                                        borderRadius: "10px",
+                                                        padding: "15px",
+                                                        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        justifyContent: "space-between",
                                                     }}
                                                 >
-                                                    Join
-                                                </Link>
-                                            </div>
-                                        ))}
+                                                    <span style={{
+                                                        color: typeColor,
+                                                        fontWeight: "bold",
+                                                        position: "absolute",
+                                                        top: "15px",
+                                                        left: "15px",
+                                                    }}>
+                                                        {event.type.toUpperCase()}
+                                                    </span>
+    
+                                                    <div>
+                                                        <h3 style={{
+                                                            fontSize: "1.2rem",
+                                                            marginBottom: "10px"
+                                                        }}>{event.title}</h3>
+                                                        <p style={{ fontSize: "0.95rem" }}>{event.description}</p>
+                                                    </div>
+                                                    <Link
+                                                        to="/authentication"
+                                                        className="gradient-button"
+                                                        style={{
+                                                            marginTop: "15px",
+                                                            display: "inline-block",
+                                                            color: "black",
+                                                            textAlign: "center",
+                                                            padding: "10px",
+                                                            borderRadius: "5px",
+                                                            textDecoration: "none",
+                                                            fontWeight: "500",
+                                                            transition: "background-color 0.3s",
+                                                            background: "linear-gradient(90deg, lightgreen 20%, coral 80%)",
+                                                        }}
+                                                        onMouseEnter={e => {
+                                                            e.currentTarget.style.filter = "brightness(1.1)";
+                                                            e.currentTarget.style.transform = "scale(1.05)";
+                                                        }}
+                                                        onMouseLeave={e => {
+                                                            e.currentTarget.style.filter = "brightness(1)";
+                                                            e.currentTarget.style.transform = "scale(1)";
+                                                        }}
+                                                    >
+                                                        Join
+                                                    </Link>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 ) : (
-                                    <p style={{ textAlign: "center" /* color removed for dark mode */ }}>No public events available</p>
+                                    <p style={{ textAlign: "center" }}>No public events available</p>
                                 )}
                             </div>
-
+    
                             <div
                                 onClick={handleNextPage}
                                 style={{
@@ -205,14 +222,14 @@ const PublicPage = () => {
                             </div>
                         </div>
                     </IconContext.Provider>
-
+    
                     {/* Pagination Info */}
-                    <div style={{ textAlign: "center", marginTop: "20px", fontSize: "1rem" /* color removed for dark mode */ }}>
+                    <div style={{ textAlign: "center", marginTop: "20px", fontSize: "1rem" }}>
                         Page {currentPage} of {totalPages || 1}
                     </div>
                 </div>
             </div>
-
+    
             {/* About Page Button */}
             <div style={{
                 display: "flex",
@@ -223,7 +240,7 @@ const PublicPage = () => {
                     to="/about"
                     className="gradient-button about-button"
                     style={{
-                        color: "black", 
+                        color: "black",
                         fontWeight: "600",
                         textDecoration: "none",
                         cursor: "pointer",
@@ -233,7 +250,6 @@ const PublicPage = () => {
                         borderRadius: "10px",
                         boxShadow: "0 6px 10px rgba(85, 101, 221, 0.3)",
                         transition: "background-color 0.3s, transform 0.2s",
-                        
                     }}
                     onMouseEnter={e => {
                         e.currentTarget.style.filter = "brightness(1.1)";
@@ -249,6 +265,7 @@ const PublicPage = () => {
             </div>
         </>
     );
+    
 
 
 };

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export interface User {
@@ -48,6 +49,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const navigate = useNavigate();
   useEffect(() => {
     const initializeAuth = async () => {
       const storedToken = localStorage.getItem("token");
@@ -88,6 +90,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           ? profileRes.data.find((u) => u._id === fullUser.id)
           : null;
         if (found) fullUser = found;
+        navigate('/calendar');
       } catch (e) {
         console.error("Fetching full user failed", e);
       }
@@ -123,6 +126,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     });
     setToken(null);
     setUser(null);
+    navigate('/publicpage');
   };
 
   const isLoggedIn = !!token;

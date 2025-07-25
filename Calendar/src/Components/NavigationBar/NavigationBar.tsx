@@ -35,8 +35,6 @@ function NavigationBar() {
     
     const { isLoggedIn, user, logout } = useContext(AuthContext) as AuthContextType;
     const navigate = useNavigate();
-
-    // Добавяме тази референция, за да можем да засичаме кликове извън менюто
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     const toggleSearch = () => setShowSearch(prev => !prev);
@@ -45,7 +43,7 @@ function NavigationBar() {
         setSideBarOpen(!sideBarOpen);
     };
 
-    // Затваряне на Searchbar, ако кликнеш извън него
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -59,7 +57,7 @@ function NavigationBar() {
         };
     }, []);
 
-    // Затваряне на dropdown-а при клик извън него
+
     useEffect(() => {
         const handleClickOutsideDropdown = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -73,11 +71,11 @@ function NavigationBar() {
         };
     }, []);
 
-    // Функция за logout
+
     const handleLogout = () => {
         logout();
         setDropdownOpen(false);
-        navigate('/authentication'); // или където искаш да препратиш след logout
+        navigate('/authentication'); 
     };
 
     return (

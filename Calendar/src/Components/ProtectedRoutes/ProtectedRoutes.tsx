@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedOnlyRouteProps> = ({ children }) => {
     }
 
     if (!isLoggedIn) {
-        return <Navigate to="/public" state={{ from: location }} replace />;
+        return <Navigate to="/publicpage" state={{ from: location }} replace />;
     }
 
     return children;
