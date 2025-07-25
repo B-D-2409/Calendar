@@ -162,10 +162,11 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    width: calc(45% - 40px);
+    width: calc(50% - 50px);
     position: relative;
     transition: box-shadow 0.3s ease;
 }
+
 
 .eventCard:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);

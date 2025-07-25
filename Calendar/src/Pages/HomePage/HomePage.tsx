@@ -50,7 +50,6 @@ function HomePage() {
 
     const location = useLocation();
     const token = localStorage.getItem("token");
-
     const handlePrevPage = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
@@ -299,86 +298,101 @@ function HomePage() {
                         <div className={styles.eventsContent}>
                             {eventsToDisplay.length > 0 ? (
                                 <div className={styles.eventsList}>
-                                    {eventsToDisplay.map(event => (
-                                        <div key={event._id} className={styles.eventCard}>
-                                            <h3>{event.title}</h3>
-                                            <p>{event.description}</p>
+                                    {eventsToDisplay.map(event => {
+                                        const typeColor = event.type === "public" ? "green" : "red";
 
-                                            <Link
-                                                to={`/eventdetailspage/${event._id}`}
-                                                className={styles.eventDetailLink}
-                                            >
-                                                See Details
-                                            </Link>
+                                        return (
+                                            <div key={event._id} className={styles.eventCard}>
+                                                <h3>{event.title}</h3>
+                                                <p>{event.description}</p>
 
-                                            <button
-                                                onClick={() => handleJoinEvent(event)}
-                                                disabled={isJoining}
-                                                className={styles.joinButton}
-                                            >
-                                                Join
-                                            </button>
-                                            <button
-                                                onClick={() => handleLeaveEvent(event)}
-                                                disabled={isLeaving}
-                                                className={styles.inviteButton}
-                                            >
-                                                Leave
-                                            </button>
-                                            <button
-                                                onClick={() => handleDeleteEvent(event)}
-                                                className={styles.deleteButton}
-                                            >
-                                                Delete
-                                            </button>
+                                                <Link
+                                                    to={`/eventdetailspage/${event._id}`}
+                                                    className={styles.eventDetailLink}
+                                                >
+                                                    See Details
+                                                </Link>
 
-                                            {/* Invite toggle button */}
-                                            <button
-                                                onClick={() => setIsInviteVisible(isInviteVisible === event._id ? null : event._id)}
-                                                className={styles.inviteButton}
-                                            >
-                                                {isInviteVisible === event._id ? "Cancel Invite" : "Invite"}
-                                            </button>
-
-                                            {/* Invite UI */}
-                                            {isInviteVisible === event._id && (
-                                                <div className={styles.inviteContainer}>
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Search users..."
-                                                        value={searchTerm}
-                                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                                        className={styles.searchInput}
-                                                    />
-
-                                                    <select
-                                                        value={selectedUsername}
-                                                        onChange={(e) => setSelectedUsername(e.target.value)}
-                                                        className={styles.selectUser}
-                                                    >
-                                                        <option value="" disabled>Select a user</option>
-                                                        {users
-                                                            .filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
-                                                            .map(user => (
-                                                                <option key={user.username} value={user.username}>
-                                                                    {user.username}
-                                                                </option>
-                                                            ))}
-                                                    </select>
-
+                                                {event.type === "public" ? (
                                                     <button
-                                                        onClick={() => handleSendInvite(event._id)}
-                                                        disabled={!selectedUsername}
-                                                        className={styles.sendInviteButton}
+                                                        onClick={() => handleJoinEvent(event)}
+                                                        disabled={isJoining}
+                                                        className={styles.joinButton}
                                                     >
-                                                        Send Invite
+                                                        Join
                                                     </button>
+                                                ) : (
+                                                    <>
+                                                        <button
+                                                            onClick={() => setIsInviteVisible(isInviteVisible === event._id ? null : event._id)}
+                                                            className={styles.inviteButton}
+                                                        >
+                                                            {isInviteVisible === event._id ? "Cancel Invite" : "Invite"}
+                                                        </button>
 
-                                                    {feedback && <p className={styles.feedbackText}>{feedback}</p>}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                                                        {isInviteVisible === event._id && (
+                                                            <div className={styles.inviteContainer}>
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="Search users..."
+                                                                    value={searchTerm}
+                                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                                    className={styles.searchInput}
+                                                                />
+
+                                                                <select
+                                                                    value={selectedUsername}
+                                                                    onChange={(e) => setSelectedUsername(e.target.value)}
+                                                                    className={styles.selectUser}
+                                                                >
+                                                                    <option value="" disabled>Select a user</option>
+                                                                    {users
+                                                                        .filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
+                                                                        .map(user => (
+                                                                            <option key={user.username} value={user.username}>
+                                                                                {user.username}
+                                                                            </option>
+                                                                        ))}
+                                                                </select>
+
+                                                                <button
+                                                                    onClick={() => handleSendInvite(event._id)}
+                                                                    disabled={!selectedUsername}
+                                                                    className={styles.sendInviteButton}
+                                                                >
+                                                                    Send Invite
+                                                                </button>
+
+                                                                {feedback && <p className={styles.feedbackText}>{feedback}</p>}
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
+
+                                                <button
+                                                    onClick={() => handleLeaveEvent(event)}
+                                                    disabled={isLeaving}
+                                                    className={styles.inviteButton}
+                                                >
+                                                    Leave
+                                                </button>
+                                                <span style={{
+                                                    color: typeColor, fontWeight: "bold", position: "absolute",    
+                                                    top: "15px",           
+                                                    left: "270px"
+                                                }}>
+                                                    {event.type.toUpperCase()}
+                                                </span>
+
+                                                <button
+                                                    onClick={() => handleDeleteEvent(event)}
+                                                    className={styles.deleteButton}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             ) : (
                                 <p className={styles.noEventsText}>No events found.</p>
@@ -402,6 +416,7 @@ function HomePage() {
             <ToastContainer />
         </div>
     );
+
 
 }
 
