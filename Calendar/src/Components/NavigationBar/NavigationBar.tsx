@@ -120,7 +120,7 @@ function NavigationBar() {
                     ) : (
                         <nav className={style.nav}>
                             <NavLink
-                                to="/publicpage"
+                                to="/"
                                 className={({ isActive }) =>
                                     isActive ? `${style.navLink} ${style.active}` : style.navLink
                                 }

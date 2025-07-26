@@ -1,131 +1,62 @@
-import './App.css'
-import { Route, Routes } from 'react-router-dom'
-import Container from './Components/ControlContainer/ControlContainer'
-import Profile from './Components/ProfileInfo/ProfileInfo'
-import SideBar from './Components/NavigationBar/NavigationBar'
-import HomePage from './Pages/HomePage/HomePage'
-import AboutPage from './Pages/AboutPage/AboutPage'
-import Calendar from './Components/Calendar/Calendar'
+import './App.css';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import Container from './Components/ControlContainer/ControlContainer';
+import Profile from './Components/ProfileInfo/ProfileInfo';
+import SideBar from './Components/NavigationBar/NavigationBar';
+import HomePage from './Pages/HomePage/HomePage';
+import AboutPage from './Pages/AboutPage/AboutPage';
+import Calendar from './Components/Calendar/Calendar';
 import Authentication from './Components/Authentication/Authentication';
 import Admin from './Components/Admin/Admin';
 import 'react-toastify/dist/ReactToastify.css';
-import MyEventsPage from './Pages/MyEventsPage/MyEventsPage'
-import PublicPage from './Pages/PublicPage/PublicPage'
-import CreateEvent from './Components/Events/Events'
-import ProtectedRoute from './Components/ProtectedRoutes/ProtectedRoutes'
-import PublicOnlyRoute from './Components/Public/PublicRoutes'
-import EventDetailsPage from './Pages/EventDetailsPage/EventDetailsPage'
+import MyEventsPage from './Pages/MyEventsPage/MyEventsPage';
+import PublicPage from './Pages/PublicPage/PublicPage';
+import CreateEvent from './Components/Events/Events';
+import EventDetailsPage from './Pages/EventDetailsPage/EventDetailsPage';
 import Contacts from "./Pages/Contacts/Contacts";
-import ProfileDetailsComponent from './Pages/ProfilePage/ProfilePage'
-import { useContext } from 'react'
-import { AuthContext, AuthContextType } from './Common/AuthContext'
-import EventSeriesForm from './Components/SeriesOfEvents/SeriesOfEvents'
+import ProfileDetailsComponent from './Pages/ProfilePage/ProfilePage';
+import { useContext } from 'react';
+import { AuthContext, AuthContextType } from './Common/AuthContext';
+import EventSeriesForm from './Components/SeriesOfEvents/SeriesOfEvents';
+import Authenticated from './Common/AuthenticateUser';
 
 function App() {
-
   const { isLoggedIn } = useContext(AuthContext) as AuthContextType;
+
   return (
     <div className="App">
       <SideBar />
       <main className="main-content">
         <Container>
           <Routes>
+            {/* Redirect root based on login */}
             <Route
-              path="/calendar"
+              path="/"
               element={
-                isLoggedIn ? (
-                  <ProtectedRoute>
-                    <Calendar />
-                  </ProtectedRoute>
-                ) : (
-                  <PublicOnlyRoute>
-                    <PublicPage />
-                  </PublicOnlyRoute>
-                )
-              }
-            />
-            <Route path="/about" element={<AboutPage />} />
-
-            <Route
-              path="/contact"
-              element={
-                <ProtectedRoute>
-                  <Contacts />
-                </ProtectedRoute>
+                isLoggedIn ? <Navigate to="/calendar" replace /> : <PublicPage />
               }
             />
 
-            <Route
-              path="/profilepage"
-              element={
-                <ProtectedRoute>
-                  <ProfileDetailsComponent />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/homepage"
-              element={
-                <ProtectedRoute>
-                  <HomePage />
-                </ProtectedRoute>
-              }
-            />
-
+            {/* Auth route */}
             <Route path="/authentication" element={<Authentication />} />
 
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
+            {/* Protected routes */}
+            <Route path="/calendar" element={<Authenticated><Calendar /></Authenticated>} />
+            <Route path="/about" element={<Authenticated><AboutPage /></Authenticated>} />
+            <Route path="/contact" element={<Authenticated><Contacts /></Authenticated>} />
+            <Route path="/profilepage" element={<Authenticated><ProfileDetailsComponent /></Authenticated>} />
+            <Route path="/homepage" element={<Authenticated><HomePage /></Authenticated>} />
+            <Route path="/admin" element={<Authenticated><Admin /></Authenticated>} />
+            <Route path="/events" element={<Authenticated><CreateEvent /></Authenticated>} />
+            <Route path="/myeventpage" element={<Authenticated><MyEventsPage /></Authenticated>} />
+            <Route path="/eventdetailspage/:id" element={<Authenticated><EventDetailsPage /></Authenticated>} />
+            <Route path="/seriesofevents" element={<Authenticated><EventSeriesForm /></Authenticated>} />
 
-            <Route path="/events"
-
-              element={<ProtectedRoute>
-                <CreateEvent />
-              </ProtectedRoute>}
-
-            >
-            </Route>
-
-            <Route
-              path="/myeventpage"
-              element={
-                <ProtectedRoute>
-                  <MyEventsPage />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/publicpage"
-              element={
-                <PublicOnlyRoute>
-                  <PublicPage />
-                </PublicOnlyRoute>
-              }
-            />
-
-            <Route path="/eventdetailspage/:id"
-              element={
-                <ProtectedRoute>
-                  <EventDetailsPage />
-                </ProtectedRoute>
-              }
-            >
-
-            </Route>
-
-            <Route  
-            path="/seriesofevents"
-            element={<EventSeriesForm />}
-            >
-            </Route>
+            {/* Optional extra route to PublicPage if needed */}
+            <Route path="/publicpage" element={<PublicPage />} />
+            
+            {/* Catch-all fallback route */}
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Container>
       </main>
@@ -133,5 +64,4 @@ function App() {
   );
 }
 
-
-export default App
+export default App;
