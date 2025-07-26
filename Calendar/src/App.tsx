@@ -1,7 +1,6 @@
 import './App.css';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Container from './Components/ControlContainer/ControlContainer';
-import Profile from './Components/ProfileInfo/ProfileInfo';
 import SideBar from './Components/NavigationBar/NavigationBar';
 import HomePage from './Pages/HomePage/HomePage';
 import AboutPage from './Pages/AboutPage/AboutPage';
@@ -19,6 +18,7 @@ import { useContext } from 'react';
 import { AuthContext, AuthContextType } from './Common/AuthContext';
 import EventSeriesForm from './Components/SeriesOfEvents/SeriesOfEvents';
 import Authenticated from './Common/AuthenticateUser';
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext) as AuthContextType;
@@ -29,18 +29,13 @@ function App() {
       <main className="main-content">
         <Container>
           <Routes>
-            {/* Redirect root based on login */}
             <Route
               path="/"
               element={
                 isLoggedIn ? <Navigate to="/calendar" replace /> : <PublicPage />
               }
             />
-
-            {/* Auth route */}
             <Route path="/authentication" element={<Authentication />} />
-
-            {/* Protected routes */}
             <Route path="/calendar" element={<Authenticated><Calendar /></Authenticated>} />
             <Route path="/about" element={<Authenticated><AboutPage /></Authenticated>} />
             <Route path="/contact" element={<Authenticated><Contacts /></Authenticated>} />
@@ -52,14 +47,13 @@ function App() {
             <Route path="/eventdetailspage/:id" element={<Authenticated><EventDetailsPage /></Authenticated>} />
             <Route path="/seriesofevents" element={<Authenticated><EventSeriesForm /></Authenticated>} />
 
-            {/* Optional extra route to PublicPage if needed */}
             <Route path="/publicpage" element={<PublicPage />} />
             
-            {/* Catch-all fallback route */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Container>
       </main>
+          <ToastContainer position="bottom-right" autoClose={3000} />
     </div>
   );
 }
