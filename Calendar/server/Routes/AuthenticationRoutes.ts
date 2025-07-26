@@ -139,6 +139,17 @@ const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res)
 router.post("/login", loginHandler);
 
 
+const postLogOut: RequestHandler = (req, res) => {
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+};
+router.post("/logout", verifyToken, postLogOut);
+
+
 router.get("/users", verifyToken, async (req, res) => {
     try {
         const users = await User.find({}, "-password");
@@ -195,6 +206,8 @@ const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) =
 };
 
 router.delete("/api/delete-requests/:id", verifyToken, deleteRequestId);
+
+
 
 
 export default router;

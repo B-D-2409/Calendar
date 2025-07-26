@@ -118,16 +118,20 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async (): Promise<void> => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     await fetch(`${key}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
     });
+  
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setToken(null);
     setUser(null);
-    navigate('/publicpage');
   };
+  
 
   const isLoggedIn = !!token;
 

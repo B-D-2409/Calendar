@@ -37,7 +37,7 @@ function App() {
             />
             <Route path="/authentication" element={<Authentication />} />
             <Route path="/calendar" element={<Authenticated><Calendar /></Authenticated>} />
-            <Route path="/about" element={<Authenticated><AboutPage /></Authenticated>} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<Authenticated><Contacts /></Authenticated>} />
             <Route path="/profilepage" element={<Authenticated><ProfileDetailsComponent /></Authenticated>} />
             <Route path="/homepage" element={<Authenticated><HomePage /></Authenticated>} />
