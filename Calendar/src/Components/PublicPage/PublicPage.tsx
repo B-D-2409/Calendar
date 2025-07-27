@@ -97,7 +97,6 @@ const PublicPage = () => {
                     throw new Error("Failed to fetch public events");
                 }
                 const data = await response.json();
-                console.log("Fetched public events:", data);
                 
                 setPublicEvents(data);
             } catch (error) {

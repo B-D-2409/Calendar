@@ -52,7 +52,7 @@ function EventDetails(): JSX.Element {
             : `${backendUrl}/api/events/public/${id}`;
     
 
-            console.log("Fetching from:", url);
+  
           const response = await fetch(url, {
             headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           });

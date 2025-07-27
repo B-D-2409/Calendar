@@ -22,12 +22,12 @@ function Notifications() {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 
-                // Проверяваме дали отговорът е масив и ако не е, задаваме празен масив
+        
                 if (Array.isArray(res.data)) {
                     setInvitations(res.data);
                 } else {
                     console.error("Expected an array but got:", res.data);
-                    setInvitations([]);  // Ако не е масив, задаваме празен масив
+                    setInvitations([]); 
                 }
             } catch (error) {
                 toast.error("Failed to fetch invitations.");

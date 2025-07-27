@@ -300,8 +300,6 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
         }
 
         try {
-            console.log(`${key}/api/events`, preparedEvent);
-
 
             const res = await axios.post(`${key}/api/events`, preparedEvent, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

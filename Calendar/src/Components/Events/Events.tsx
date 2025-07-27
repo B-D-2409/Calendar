@@ -7,7 +7,6 @@ function CreateEvent() {
     const { user, isLoggedIn } = useContext(AuthContext) as AuthContextType;
     const [showCreateForm, setShowCreateForm] = useState(false);
     const handleEventCreated = (newEvent: any) => {
-        console.log("Event created:", newEvent);
     };
 
     if (!isLoggedIn) {

@@ -114,7 +114,7 @@ function Calendar() {
             if (!response.ok) throw new Error('Failed to fetch events');
 
             const data: Event[] = await response.json();
-            console.log('Fetched events from server:', data);
+    
 
             const filteredEvents = data.filter(
                 (event) =>
