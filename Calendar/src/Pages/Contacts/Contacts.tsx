@@ -4,6 +4,8 @@ import { AuthContext, AuthContextType } from "../../Common/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import styles from "./Contacts.module.css";
 import { CreateContactsListForm } from "../../ContactListFrom/CreateContactListForm";
+import { AxiosError } from 'axios';
+import { useParams } from "react-router-dom";
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 const DEFAULT_AVATAR =
     "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg";
@@ -21,6 +23,20 @@ interface Event {
     startDateTime?: string;
     endDateTime?: string;
 }
+interface EventInvite {
+    _id: string;
+    title: string;
+    creator: { username: string };
+}
+
+interface User {
+    username: string;
+    _id: string;
+}
+interface ApiErrorResponse {
+    message: string;
+   
+}
 
 
 function Contacts() {
@@ -34,6 +50,9 @@ function Contacts() {
     const [currentEventId, setCurrentEventId] = useState<string>("");
     const [feedback, setFeedback] = useState<string>("");
     const [contactLists, setContactLists] = useState<any[]>([]);
+    const [invitations, setInvitations] = useState<EventInvite[]>([]);
+    const { eventId } = useParams();
+    
 
     useEffect(() => {
         fetchAllUsers();
@@ -66,44 +85,55 @@ function Contacts() {
         }
     };
 
+    
     const handleSendInvite = async () => {
         if (!selectedUsername.trim()) {
             setFeedback("Please enter a username");
             return;
         }
+    
         if (!currentEventId) {
             setFeedback("Please select an event");
             return;
         }
-
+    
+        setLoading(true);
+        setIsInviting(true);
+    
         try {
-
-            const userRes = await axios.get(
-                `${key}/api/contacts/username/${selectedUsername.trim()}`,
-                { headers: { Authorization: `Bearer ${token}` } }
+            const response = await axios.post(
+                `${key}/api/events/invite/${currentEventId}`,
+                { username: selectedUsername },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
-
-            const userId = userRes.data._id;
-
-
-            await axios.post(
-                `${key}/api/contacts/${currentEventId}/participants/${userId}`,
-                {},
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-
-            toast.success(`Invite sent to ${selectedUsername}`);
+    
             setFeedback(`Invite sent to ${selectedUsername}`);
+            toast.success("Invite sent!");
             setSelectedUsername("");
-        } catch (error: any) {
-            console.error("Failed to send invite:", error);
-            toast.error(
-                error?.response?.data?.message || "Failed to send invite"
-            );
-            setFeedback("Failed to send invite");
+            setIsInviting(false);
+            setLoading(false);
+    
+        } catch (error) {
+            const axiosError = error as AxiosError<ApiErrorResponse>; 
+    
+            console.error("Error from API:", axiosError.response?.data);
+    
+            if (axiosError.response?.data?.message === "Event creator is missing, cannot invite participants") {
+                setFeedback("Cannot send invite: The event has no creator.");
+            } else {
+                setFeedback("Failed to send invite");
+            }
+    
+            setIsInviting(false);
+            setLoading(false);
         }
     };
-
+    
+    
     const fetchContactLists = async () => {
         try {
             const response = await axios.get(`${key}/api/contacts/lists`, {
