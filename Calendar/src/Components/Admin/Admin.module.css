@@ -354,21 +354,64 @@
     color: #000;
     border-bottom: 1px solid #ddd;
 }
-
-[data-theme='light'] .btnBlock,
-[data-theme='light'] .btnUnblock,
-[data-theme='light'] .deleteButton,
-[data-theme='light'] .editButton,
-[data-theme='light'] .approveButton,
-[data-theme='light'] .saveButton,
-[data-theme='light'] .cancelButton,
-[data-theme='light'] .pageButton {
-    background-color: #fff;
-    color: #000;
+/* LIGHT MODE BUTTONS */
+[data-theme='light'] .btnBlock {
+    background-color: #f44336; /* Red for Block */
+    color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
+[data-theme='light'] .btnUnblock {
+    background-color: #f44336; /* Red for Unblock */
+    color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+[data-theme='light'] .deleteButton {
+    background-color: #9c27b0; /* Purple for Delete */
+    color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+[data-theme='light'] .editButton {
+    background-color: #2196f3; /* Blue for Edit */
+    color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+[data-theme='light'] .approveButton {
+    background-color: #4caf50; /* Green for Save */
+    color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+[data-theme='light'] .saveButton {
+    background-color: #4caf50; /* Green for Save */
+    color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+[data-theme='light'] .cancelButton {
+    background-color: #f44336; /* Red for Cancel */
+    color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+[data-theme='light'] .pageButton {
+    background-color: #ac66e9; /* Default color for Page Button */
+    color: white;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+/* Hover Effects for Light Mode */
 [data-theme='light'] .btnBlock:hover,
 [data-theme='light'] .btnUnblock:hover,
 [data-theme='light'] .deleteButton:hover,
@@ -377,7 +420,7 @@
 [data-theme='light'] .saveButton:hover,
 [data-theme='light'] .cancelButton:hover,
 [data-theme='light'] .pageButton:hover {
-    background-color: #e0e0e0;
+    background-color: #a0fc84;
     color: #000;
 }
 
@@ -426,6 +469,6 @@
 [data-theme='dark'] .saveButton:hover,
 [data-theme='dark'] .cancelButton:hover,
 [data-theme='dark'] .pageButton:hover {
-    background-color: #555555;
+    background-color: #a0fc84;
     color: #fff;
 }
