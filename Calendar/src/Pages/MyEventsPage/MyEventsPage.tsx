@@ -8,8 +8,9 @@ import { Link } from "react-router-dom";
 
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
+// Combined RecurrenceRule interface
 interface RecurrenceRule {
-    frequency?: "daily" | "weekly" | "monthly";
+    frequency?: 'daily' | 'weekly' | 'monthly' | 'yearly'; // Allow `undefined`
     interval?: number;
     endDate?: Date | string;
 }
@@ -27,10 +28,44 @@ interface Event {
     location: Location;
     recurrenceRule?: RecurrenceRule;
     _id: string;
-    
+    isSeries?: boolean;
 }
 
- interface User {
+interface EventTime {
+    hour: number;
+    minute: number;
+}
+
+interface Location {
+    address: string;
+    city: string;
+    country: string;
+}
+
+interface EventTemplate {
+    title: string;
+    description: string;
+    startDateTime: Date;
+    startTime: EventTime;
+    endTime: EventTime;
+    location?: Location;
+}
+
+interface EventSeries {
+    _id: string;
+    name: string;
+    creatorId: string; // User ID referencing the creator of the event series
+    seriesType: 'recurring' | 'manual'; // Type of series: recurring or manual
+    isIndefinite: boolean; // Whether the event series has no end date
+    startingEvent: EventTemplate; // The first event in the series
+    endingEvent?: EventTemplate; // The last event in the series (only if the series isn't indefinite)
+    recurrenceRule?: RecurrenceRule; // Optional, only present if the series is recurring
+    eventsId: string[]; // List of event IDs (references to Event model)
+    createdAt?: string; // Timestamp for when the series was created (optional)
+    updatedAt?: string; // Timestamp for when the series was last updated (optional)
+}
+
+interface User {
     username: string;
     _id: string;
 }
@@ -51,6 +86,7 @@ function MyEventsPage() {
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const [seriesOfEvents, setSeriesOfEvents] = useState<EventSeries[]>([]);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -143,12 +179,12 @@ function MyEventsPage() {
             toast.error("Please log in to join this event.");
             return;
         }
-    
+
         if (event.participants.includes(user._id)) {
             toast.error("You are already a participant in this event.");
             return;
         }
-    
+
         setIsJoining(true);
         try {
             const response = await axios.post(
@@ -160,18 +196,18 @@ function MyEventsPage() {
                     },
                 }
             );
-    
+
             // Get updated participants from backend response
             const updatedParticipants = response.data.participants;
-    
+
             // Update local event state with new participants list
             const updatedEvent = {
                 ...event,
                 participants: updatedParticipants,
             };
-    
+
             setParticipatingEvents((prev) => [...prev, updatedEvent]);
-    
+
             toast.success("Successfully joined the event!");
         } catch (error: any) {
             if (error.response && error.response.data && error.response.data.error) {
@@ -183,7 +219,7 @@ function MyEventsPage() {
             setIsJoining(false);
         }
     };
-    
+
 
 
 
@@ -226,11 +262,28 @@ function MyEventsPage() {
         }
     };
 
+    useEffect(() => {
+        const fetchSeriesEvents = async () => {
+            try {
+                const response = await axios.get(`${key}/api/events/event-series`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+                setSeriesOfEvents(response.data);
+            } catch (error) {
+                console.error("Error fetching series events:", error);
+                toast.error("Failed to load series events");
+            }
+        };
+
+        fetchSeriesEvents();
+    }, []); // Empty dependency array ensures thi
+
     return (
         <>
             <div
-                className={`${style.myeventsContainerWithTabs} ${showCreateForm ? style.blurred : ""
-                    }`}
+                className={`${style.myeventsContainerWithTabs} ${showCreateForm ? style.blurred : ""}`}
             >
                 <h1 className={style.myeventsTitleH1}>Manage & Create Your Events</h1>
 
@@ -238,8 +291,7 @@ function MyEventsPage() {
                     <div className={style.tabsRoot}>
                         <div className={style.tabsList}>
                             <button
-                                className={`${style.tabTrigger} ${activeTab === "myEvents" ? style.activeTab : ""
-                                    }`}
+                                className={`${style.tabTrigger} ${activeTab === "myEvents" ? style.activeTab : ""}`}
                                 onClick={() => setActiveTab("myEvents")}
                                 type="button"
                             >
@@ -255,8 +307,7 @@ function MyEventsPage() {
                             </button>
 
                             <button
-                                className={`${style.tabTrigger} ${activeTab === "participating" ? style.activeTab : ""
-                                    }`}
+                                className={`${style.tabTrigger} ${activeTab === "participating" ? style.activeTab : ""}`}
                                 onClick={() => setActiveTab("participating")}
                                 type="button"
                             >
@@ -270,19 +321,17 @@ function MyEventsPage() {
                                     {isLoading ? (
                                         <CustomSpinner />
                                     ) : myEvents.length > 0 ? (
-                                        <div
-                                            style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}
-                                        >
+                                        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                                             {myEvents.map((event) => (
-                                                <div
-                                                    key={event._id || event.title}
-                                                    className={style.eventCard}
-                                                >
+                                                <div key={event._id || event.title} className={style.eventCard}>
                                                     <h2>{event.title}</h2>
                                                     <p>{event.description}</p>
-                                                    <p>
-                                                        {new Date(event.startDateTime).toLocaleString()}
+                                                    <p>{new Date(event.startDateTime).toLocaleString()}</p>
+
+                                                    <p className={style.eventType} style={{ color: event.type === "public" ? "green" : "red" }}>
+                                                    {event.type === "public" ? "Public" : "Private"}
                                                     </p>
+
 
                                                     <Link
                                                         to={`/eventdetailspage/${event._id}`}
@@ -311,9 +360,7 @@ function MyEventsPage() {
                                                             <button
                                                                 onClick={() =>
                                                                     setIsInviteVisible(
-                                                                        isInviteVisible === event._id
-                                                                            ? null
-                                                                            : event._id
+                                                                        isInviteVisible === event._id ? null : event._id
                                                                     )
                                                                 }
                                                                 className={style.inviteButton}
@@ -344,7 +391,9 @@ function MyEventsPage() {
                                                                         </option>
                                                                         {users
                                                                             .filter((u) =>
-                                                                                u.username.toLowerCase().includes(searchTerm.toLowerCase())
+                                                                                u.username
+                                                                                    .toLowerCase()
+                                                                                    .includes(searchTerm.toLowerCase())
                                                                             )
                                                                             .map((u) => (
                                                                                 <option key={u._id} value={u.username}>
@@ -364,7 +413,6 @@ function MyEventsPage() {
                                                                     {feedback && <p className={style.feedbackText}>{feedback}</p>}
                                                                 </div>
                                                             )}
-
                                                         </>
                                                     )}
                                                 </div>
@@ -381,19 +429,12 @@ function MyEventsPage() {
                                     {isLoading ? (
                                         <CustomSpinner />
                                     ) : participatingEvents.length > 0 ? (
-                                        <div
-                                            style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}
-                                        >
+                                        <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
                                             {participatingEvents.map((event) => (
-                                                <div
-                                                    key={event._id || event.title}
-                                                    className={style.eventCard}
-                                                >
+                                                <div key={event._id || event.title} className={style.eventCard}>
                                                     <h2>{event.title}</h2>
                                                     <p>{event.description}</p>
-                                                    <p>
-                                                        {new Date(event.startDateTime).toLocaleString()}
-                                                    </p>
+                                                    <p>{new Date(event.startDateTime).toLocaleString()}</p>
 
                                                     <Link
                                                         to={`/eventdetailspage/${event._id}`}
@@ -416,6 +457,45 @@ function MyEventsPage() {
                                     )}
                                 </>
                             )}
+
+                            {/* Displaying series events with split structure */}
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+                                {seriesOfEvents.length > 0 ? (
+                                    seriesOfEvents.map((series) => (
+                                        <div key={series._id} className={style.eventCard}>
+                                            <h2>{series.name} (Series)</h2>
+                                            <p>Type: {series.seriesType}</p>
+                                            <p>
+                                                Start: {new Date(series.startingEvent.startDateTime).toLocaleString()}
+                                            </p>
+                                            <p>
+                                                End: {series.isIndefinite
+                                                    ? 'Ongoing'
+                                                    : series.endingEvent?.startDateTime
+                                                        ? new Date(series.endingEvent.startDateTime).toLocaleString()
+                                                        : 'End date not available'}
+                                            </p>
+
+                                            <div className={style.eventDetails}>
+                                                <h3>Starting Event</h3>
+                                                <p>{series.startingEvent.title}</p>
+                                                <p>{series.startingEvent.description}</p>
+
+                                                <h3>Ending Event</h3>
+                                                <p>{series.endingEvent ? series.endingEvent.title : 'No ending event (Indefinite series)'}</p>
+                                                <p>{series.endingEvent ? series.endingEvent.description : 'This event is ongoing.'}</p>
+                                            </div>
+
+                                            {/* Recurrence Information */}
+                                            <p>
+                                                Recurrence: {series.recurrenceRule?.frequency} {series.recurrenceRule?.frequency === 'monthly' && '(Monthly)'}
+                                            </p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No series of events available</p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -448,6 +528,7 @@ function MyEventsPage() {
             />
         </>
     );
+
 }
 
 export default MyEventsPage;
