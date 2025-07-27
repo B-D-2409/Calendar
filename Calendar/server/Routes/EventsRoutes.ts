@@ -163,6 +163,8 @@ const getAllEvents: RequestHandler = async (req, res) => {
 
 router.get("/", getAllEvents);
 
+
+
 const createSeriesOfEvents: RequestHandler =  async (req: AuthenticatedRequest, res) => {
   try {
     const newSeries = new SeriesOfEventsModel({
@@ -185,6 +187,16 @@ const createSeriesOfEvents: RequestHandler =  async (req: AuthenticatedRequest, 
   }
 };
 router.post("/event-series", verifyToken, createSeriesOfEvents);
+
+const getSeriesEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+    const series = await EventSeries.find({ creatorId: req.user.id });
+    res.json(series);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+router.get("/event-series", verifyToken, getSeriesEvents);
 
 const getAllPublicEvents: RequestHandler = async (req, res) => {
   try {
@@ -542,15 +554,7 @@ const changeSeriesOfEvents: RequestHandler = async (req: AuthenticatedRequest, r
 
 router.put("/event-series/:id", verifyToken, changeSeriesOfEvents);
 
-const getSeriesEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
-  try {
-    const series = await EventSeries.find({ creatorId: req.user.id });
-    res.json(series);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-router.get("/event-series", verifyToken, getSeriesEvents);
+
 
 
 export default router;

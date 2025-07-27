@@ -440,19 +440,21 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
                         onChange={(e) =>
                             setSeries({
                                 ...series,
-                                recurrenceRule: { ...series.recurrenceRule, frequency: e.target.value },
+                                recurrenceRule: {
+                                    ...series.recurrenceRule,
+                                    frequency: e.target.value,
+                                },
                             })
                         }
                         className={styles.input}
                     >
-                        {/* <option value="daily">Daily</option> */}
                         <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
+                        <option value="daily">Daily</option> {/* Added daily option */}
+                        <option value="monthly">Monthly</option> {/* Added monthly option */}
+                        <option value="yearly">Yearly</option> {/* Added yearly option */}
                     </select>
                 </div>
             )}
-
             {/* Indefinite Checkbox */}
             <div className={styles.checkboxGroup}>
                 <label className={styles.checkboxLabel}>

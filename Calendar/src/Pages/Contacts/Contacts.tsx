@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import styles from "./Contacts.module.css";
 import { CreateContactsListForm } from "../../ContactListFrom/CreateContactListForm";
 import { AxiosError } from 'axios';
-import { useParams } from "react-router-dom";
+
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 const DEFAULT_AVATAR =
     "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg";
@@ -23,16 +23,7 @@ interface Event {
     startDateTime?: string;
     endDateTime?: string;
 }
-interface EventInvite {
-    _id: string;
-    title: string;
-    creator: { username: string };
-}
 
-interface User {
-    username: string;
-    _id: string;
-}
 interface ApiErrorResponse {
     message: string;
    
@@ -50,8 +41,7 @@ function Contacts() {
     const [currentEventId, setCurrentEventId] = useState<string>("");
     const [feedback, setFeedback] = useState<string>("");
     const [contactLists, setContactLists] = useState<any[]>([]);
-    const [invitations, setInvitations] = useState<EventInvite[]>([]);
-    const { eventId } = useParams();
+   
     
 
     useEffect(() => {
