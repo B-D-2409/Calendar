@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import styles from "./Notifications.module.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 interface EventInvite {
     _id: string;
     title: string;
@@ -20,9 +21,17 @@ function Notifications() {
                 const res = await axios.get("/api/events/invitations", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                setInvitations(res.data);
-            } catch {
+                
+                // Проверяваме дали отговорът е масив и ако не е, задаваме празен масив
+                if (Array.isArray(res.data)) {
+                    setInvitations(res.data);
+                } else {
+                    console.error("Expected an array but got:", res.data);
+                    setInvitations([]);  // Ако не е масив, задаваме празен масив
+                }
+            } catch (error) {
                 toast.error("Failed to fetch invitations.");
+                console.error(error);
             }
         };
 
@@ -58,7 +67,7 @@ function Notifications() {
     return (
         <div className={styles.container}>
             <h2 className={styles.heading}>Your Invitations</h2>
-    
+
             {invitations.length === 0 ? (
                 <p className={styles.emptyText}>No pending invitations.</p>
             ) : (
@@ -102,4 +111,5 @@ function Notifications() {
         </div>
     );
 }
-export default  Notifications;
+
+export default Notifications;
