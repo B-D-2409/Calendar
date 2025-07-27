@@ -10,7 +10,7 @@
     background: linear-gradient(to right, rgba(154, 238, 144, 0.9) 30%, rgba(255, 116, 66, 0.8) 80%);
     position: relative;
 
-    z-index: 10000;
+    z-index: 9998;
     box-shadow: 0 2px 4px rgba(174, 254, 24, 0.8);
     /* overflow: hidden; */
 }

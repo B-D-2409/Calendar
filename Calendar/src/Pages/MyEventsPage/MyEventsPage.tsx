@@ -83,7 +83,6 @@ function MyEventsPage() {
     const [isJoining, setIsJoining] = useState(false);
     const [isLeaving, setIsLeaving] = useState(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const [seriesOfEvents, setSeriesOfEvents] = useState<EventSeries[]>([]);
@@ -510,7 +509,9 @@ function MyEventsPage() {
                     >
                         ×
                     </button>
-                    <EventForm setShowCreateForm={setShowCreateForm} />
+                    <div className={style.eventFormContainer}> 
+        <EventForm setShowCreateForm={setShowCreateForm} />
+    </div>
                 </div>
             )}
 

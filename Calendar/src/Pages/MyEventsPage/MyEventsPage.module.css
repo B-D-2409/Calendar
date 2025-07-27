@@ -208,20 +208,38 @@
 .invitePopup li button:hover {
   background-color: #0056b3;
 }
-
-/* Backdrop that covers the entire screen */
 .eventFormBackdrop {
-  position: fixed; /* stay fixed on screen */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+  background: rgba(0, 0, 0, 0.2); 
   display: flex;
-  justify-content: center; /* center horizontally */
-  align-items: center;     /* center vertically */
-  z-index: 1000;           /* on top of everything */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  pointer-events: auto;
 }
+
+.eventFormContainer {
+  max-height: 100vh; 
+  overflow-y: auto; 
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  margin: 0 auto;
+}
+
+.formContainer {
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
 
 /* The form container */
 .event-form-container {
@@ -244,8 +262,8 @@
 
 .closeButton {
   position: absolute;
-  top: 75px;
-  left: 1000px;
+  top: 10px;
+  left: 1050px;
   background: transparent;
   border: none;
   font-size: 24px;

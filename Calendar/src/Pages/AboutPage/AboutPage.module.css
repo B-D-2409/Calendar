@@ -96,6 +96,12 @@
     border-radius: 8px;
     background: #faf5ff;
 }
+.yearly{
+    background: #80f18b;
+    color: #000000;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
 
 .calendarTypes {
     display: flex;

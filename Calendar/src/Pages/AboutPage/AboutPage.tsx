@@ -1,4 +1,4 @@
-import { SiTypescript } from 'react-icons/si';
+import { SiTypescript, SiVite } from 'react-icons/si';
 import React from "react";
 import styles from "./AboutPage.module.css";
 import { FaReact, FaNodeJs, FaDatabase } from "react-icons/fa";
@@ -15,9 +15,8 @@ function AboutPage() {
         <div className={styles.primaryContainer}>
             {/* Header Section */}
             <div className={styles.headerSection}>
-                <h1 className={styles.mainHeading}> Calendar</h1>
+                <h1 className={styles.mainHeading}> Organize Me </h1>
                 <p className={styles.subHeading}>
-                    (day) and Latin "Calendar" (calendar)
                 </p>
             </div>
 
@@ -45,13 +44,10 @@ function AboutPage() {
                                 <FaReact /> React
                             </li>
                             <li>
-                                <SiJavascript /> JavaScript
-                            </li>
-                            <li>
                                 <SiTypescript /> TypeScript
                             </li>
                             <li>
-                                <SiReact /> React Icons
+                                <SiVite /> Vite
                             </li>
                         </ul>
                     </div>
@@ -88,10 +84,11 @@ function AboutPage() {
                     <div className={styles.featureBox}>
                         <h3>Comprehensive Calendar</h3>
                         <p>
-                            View your events in multiple formats: Monthly, Weekly, Work Week,
+                            View your events in multiple formats: Yearly, Monthly, Weekly, Work Week,
                             and Daily views with hourly scheduling.
                         </p>
                         <div className={styles.calendarTypes}>
+                            <span className={styles.yearly}>Yearly</span>
                             <span className={styles.monthly}>Monthly</span>
                             <span className={styles.weekly}>Weekly</span>
                             <span className={styles.workweek}>Work Week</span>
@@ -114,15 +111,6 @@ function AboutPage() {
                             easily invite them to your events.
                         </p>
                     </div>
-
-                    <div className={styles.featureBox}>
-                        <h3>User Preferences</h3>
-                        <p>
-                            Customize your experience including invitation preferences and
-                            notification settings.
-                        </p>
-                    </div>
-
                     <div className={styles.featureBox}>
                         <h3>Search Functionality</h3>
                         <p>
