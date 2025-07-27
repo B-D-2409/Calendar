@@ -19,7 +19,7 @@ import { AuthContext, AuthContextType } from './Common/AuthContext';
 import EventSeriesForm from './Components/SeriesOfEvents/SeriesOfEvents';
 import Authenticated from './Common/AuthenticateUser';
 import { ToastContainer } from "react-toastify";
-
+import Notifications from './Pages/Notifications/Notifications';
 function App() {
   const { isLoggedIn } = useContext(AuthContext) as AuthContextType;
 
@@ -46,6 +46,7 @@ function App() {
             <Route path="/myeventpage" element={<Authenticated><MyEventsPage /></Authenticated>} />
             <Route path="/eventdetailspage/:id" element={<Authenticated><EventDetailsPage /></Authenticated>} />
             <Route path="/seriesofevents" element={<Authenticated><EventSeriesForm /></Authenticated>} />
+            <Route path='/notifications' element={<Authenticated><Notifications /></Authenticated>} />
 
             <Route path="/publicpage" element={<PublicPage />} />
             
@@ -53,7 +54,16 @@ function App() {
           </Routes>
         </Container>
       </main>
-          <ToastContainer position="bottom-right" autoClose={3000} />
+          <ToastContainer    position="bottom-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"/>
     </div>
   );
 }

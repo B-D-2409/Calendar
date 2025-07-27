@@ -92,7 +92,7 @@ function ProfileDetailsComponent(): JSX.Element {
         if (!confirmed) return;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/auth/delete-request`, {
+            const response = await fetch(`${API_BASE_URL}/api/auth/delete-requests`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -322,7 +322,16 @@ function ProfileDetailsComponent(): JSX.Element {
                     </form>
                 </ul>
             </div>
-            <ToastContainer />
+            <ToastContainer    position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark" />
         </div>
     );
 }

@@ -68,7 +68,7 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
       location: req.body.location || {},
       recurrenceRule: req.body.recurrenceRule || null,
       userId: userObjectId,
-      creator: userObjectId, 
+      creator: req.user?.id, 
       participants: participantIds,
     });
     
@@ -136,6 +136,21 @@ const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res)
 
 
 router.post("/invite/:id", verifyToken, inviteParticipant);
+
+const getInvitations: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id;
+
+    const events = await Event.find({ invitations: userId }).populate("creator", "username title");
+
+    res.json(events);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+router.get("/invitations", verifyToken, getInvitations);
+
+
 
 const getAllEvents: RequestHandler = async (req, res) => {
   try {
@@ -240,7 +255,7 @@ const joinPublicEvents: RequestHandler = async (req: AuthenticatedRequest, res) 
   try {
     const eventId = req.params.id;
     const userId = req.user.id;
-    const userIdObj = new Types.ObjectId(userId); // convert here
+    const userIdObj = new Types.ObjectId(userId); 
 
     const event = await Event.findById(eventId);
     if (!event) {
@@ -296,6 +311,50 @@ const getPublicEventById: RequestHandler = async (req, res) => {
 };
 
 router.get("/api/events/public/:id", getPublicEventById);
+
+
+const acceptInvitation: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id;
+    const eventId = req.params.id;
+
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    event.invitations = event.invitations.filter(id => id.toString() !== userId);
+    event.participants.push(new Types.ObjectId(userId));
+
+
+    await event.save();
+
+    res.json({ message: "Invitation accepted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+router.post("/invitations/:id/accept", verifyToken, acceptInvitation);
+
+
+// POST /api/events/invitations/:id/reject
+const rejectInvitation: RequestHandler = async (req: AuthenticatedRequest, res) => {
+  try {
+    const userId = req.user?.id;
+    const eventId = req.params.id;
+
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+
+    event.invitations = event.invitations.filter(id => id.toString() !== userId);
+
+    await event.save();
+
+    res.json({ message: "Invitation rejected" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+router.post("/invitations/:id/reject", verifyToken, rejectInvitation);
+
 
 
 

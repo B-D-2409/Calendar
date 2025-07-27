@@ -166,21 +166,29 @@ function Admin() {
             );
         }
     };
-
     const deleteUser = async (id: string) => {
-        const res = await fetch(`${key}/api/admin/delete/${id}`, {
+        try {
+          const res = await fetch(`${key}/api/admin/delete-requests/${id}`, {
             method: "DELETE",
             headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-        });
-        if (res.ok) {
+          });
+      
+          const data = await res.json(); // 👈 important: read response body before alert
+      
+          if (res.ok) {
+            alert(data.message); // ✅ Shows "User ... has been deleted"
             setAllUsers((users) => users.filter((u) => u._id !== id));
-        } else {
-            const error = await res.json();
-            alert("Failed to delete user: " + error.message);
+          } else {
+            alert(`❌ Failed: ${data.message}`);
+          }
+        } catch (error) {
+          alert("❌ Network error");
+          console.error("Delete error:", error);
         }
-    };
+      };
+      
 
     const deleteEvent = async (id: string) => {
         try {

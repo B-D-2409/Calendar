@@ -139,6 +139,31 @@ const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res)
 router.post("/login", loginHandler);
 
 
+const createDeleteRequest: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const { userId, username, reason } = req.body;
+
+        if (!userId || !username) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        const newRequest = new DeleteRequest({
+            userId,
+            username,
+            reason,
+        });
+
+        await newRequest.save();
+
+        res.status(201).json({ message: "Delete request submitted successfully" });
+    } catch (err) {
+        console.error("Failed to create delete request:", err);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+router.post("/delete-requests", verifyToken, createDeleteRequest);
+
+
 const postLogOut: RequestHandler = (req, res) => {
     res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -171,43 +196,6 @@ const getUsersMe: RequestHandler = async (req: AuthenticatedRequest, res) => {
     }
 };
 router.get("/me", verifyToken, getUsersMe);
-
-const getDeleteRequest: RequestHandler = async (req: AuthenticatedRequest, res) => {
-    try {
-        const requests = await DeleteRequest.find({ userId: req.user.id });
-        res.json(requests);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-router.get("/api/delete-requests", verifyToken, getDeleteRequest);
-
-const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) => {
-    try {
-        const deleteRequestId = req.params.id;
-        const deleteRequest = await DeleteRequest.findById(deleteRequestId);
-
-        if (!deleteRequest) {
-            return res.status(404).json({ message: "Delete request not found" });
-        }
-
-        if (deleteRequest.userId.toString() !== req.user.id) {
-            return res.status(403).json({
-                message: "You do not have permission to delete this request",
-            });
-        }
-
-        await DeleteRequest.findByIdAndDelete(deleteRequestId);
-
-        res.status(200).json({ message: "Delete request deleted" });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-
-router.delete("/api/delete-requests/:id", verifyToken, deleteRequestId);
-
-
 
 
 export default router;
