@@ -256,12 +256,33 @@ function Admin() {
     if (!isLoggedIn || user?.role !== "admin") {
         return <Navigate to="/" replace />;
     }
-
-    // Dummy placeholder for handleApprove - add your own implementation
-    const handleApprove = (userId: string) => {
-        alert(`Approve deletion for user ${userId} - implement this`);
+    const handleApprove = async (userId: string) => {
+        try {
+            const token = localStorage.getItem('token');  // Вземаш токена от localStorage или sessionStorage
+    
+            const response = await fetch(`/api/admin/delete-requests/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,  // Добавяш токена в хедъра
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to create delete request');
+            }
+    
+            alert(`Delete request for user ${userId} has been created.`);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                alert(`Error: ${error.message}`);
+            } else {
+                alert('An unknown error occurred');
+            }
+        }
     };
-
+    
+    
     return (
         <div className={style.adminContainer}>
             <h2 className={style.adminTitle}>Administration Hub</h2>

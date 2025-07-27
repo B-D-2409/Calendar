@@ -133,16 +133,8 @@ router.post("/unblock/:id", verifyAdmin, async (req: AuthenticatedRequest, res) 
  * DELETE /api/admin/delete/:id
  * Deletes a user by ID
  */
-router.delete("/delete/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
-    try {
-        const user = await User.findByIdAndDelete(req.params.id);
-        if (!user) return res.status(404).json({ message: "User not found" });
-        res.json({ message: "User deleted successfully" });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to delete user" });
-    }
-});
+
+
 
 /**
  * GET /api/admin/delete-requests
@@ -157,6 +149,36 @@ router.get("/delete-requests", verifyAdmin, async (req: AuthenticatedRequest, re
         res.status(500).json({ error: "Failed to load delete requests" });
     }
 });
+
+export const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const requestId = req.params.id;
+
+        const deleteRequest = await DeleteRequest.findById(requestId);
+
+        if (!deleteRequest) {
+            return res.status(404).json({ message: "Delete request not found" });
+        }
+
+        const deletedUser = await User.findByIdAndDelete(deleteRequest.userId);
+        if (!deletedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        await DeleteRequest.findByIdAndDelete(requestId);
+
+        
+        return res.status(200).json({
+            message: `✅ User ${deletedUser._id} has been deleted successfully.`
+        });
+
+    } catch (error: unknown) {
+        console.error("❌ Error deleting user:", error);
+        return res.status(500).json({ message: "Server error. Could not delete user." });
+    }
+};
+
+router.delete("/delete-requests/:id", verifyAdmin, deleteRequestId);
 
 /**
  * GET /api/events/admin
@@ -198,44 +220,4 @@ router.delete("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res)
     }
 });
 
-
-
-const getDeleteRequest: RequestHandler = async (req: AuthenticatedRequest, res) => {
-    try {
-        const requests = await DeleteRequest.find({ userId: req.user.id });
-        res.json(requests);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-};
-router.get("/delete-requests", verifyAdmin, getDeleteRequest);
-// controllers/adminController.ts
-export const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) => {
-    try {
-      const requestId = req.params.id;
-  
-      const deleteRequest = await DeleteRequest.findById(requestId);
-  
-      if (!deleteRequest) {
-        return res.status(404).json({ message: "Delete request not found" });
-      }
-  
-      const deletedUser = await User.findByIdAndDelete(deleteRequest.userId);
-      if (!deletedUser) {
-        return res.status(404).json({ message: "User not found" });
-      }
-  
-      await DeleteRequest.findByIdAndDelete(requestId);
-  
-      return res.status(200).json({
-        message: `✅ User ${deletedUser._id} has been deleted successfully.`,
-      });
-  
-    } catch (error: any) {
-      console.error("❌ Error deleting user:", error);
-      return res.status(500).json({ message: "Server error. Could not delete user." });
-    }
-  };
-  
-router.delete("/delete-requests/:id", verifyAdmin, deleteRequestId);
 export default router;
