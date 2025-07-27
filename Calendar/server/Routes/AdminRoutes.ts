@@ -150,7 +150,7 @@ router.get("/delete-requests", verifyAdmin, async (req: AuthenticatedRequest, re
     }
 });
 
-export const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) => {
+const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const requestId = req.params.id;
 
@@ -180,16 +180,7 @@ export const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest,
 
 router.delete("/delete-requests/:id", verifyAdmin, deleteRequestId);
 
-/**
- * GET /api/events/admin
- * Returns paginated list of events for admin
- */
-
-/**
- * PUT /api/events/admin/:id
- * Updates an event by ID
- */
-router.put("/events/admin/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
+router.put("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
     try {
         const { title, description } = req.body;
         const event = await Event.findByIdAndUpdate(
@@ -205,10 +196,7 @@ router.put("/events/admin/:id", verifyAdmin, async (req: AuthenticatedRequest, r
     }
 });
 
-/**
- * DELETE /api/admin/events/:id
- * Deletes an event by ID
- */
+
 router.delete("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
     try {
         const event = await Event.findByIdAndDelete(req.params.id);
@@ -219,5 +207,26 @@ router.delete("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res)
         res.status(500).json({ error: "Failed to delete event" });
     }
 });
+const deleteUserBtn: RequestHandler = async (req: AuthenticatedRequest, res) => {
+    try {
+        const userId = req.params.id; 
+
+        const deleteUser = await User.findByIdAndDelete(userId);
+
+        if (!deleteUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json({
+            message: `✅ User ${deleteUser._id} has been deleted successfully.`
+        });
+
+    } catch (error) {
+        console.error("❌ Error deleting user:", error);
+        return res.status(500).json({ message: "Server error. Could not delete user." });
+    }
+};
+router.delete("/delete/:id", verifyAdmin, deleteUserBtn);
+
 
 export default router;

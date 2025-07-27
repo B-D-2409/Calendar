@@ -168,27 +168,27 @@ function Admin() {
     };
     const deleteUser = async (id: string) => {
         try {
-          const res = await fetch(`${key}/api/admin/delete-requests/${id}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-      
-          const data = await res.json(); // 👈 important: read response body before alert
-      
-          if (res.ok) {
-            alert(data.message); // ✅ Shows "User ... has been deleted"
-            setAllUsers((users) => users.filter((u) => u._id !== id));
-          } else {
-            alert(`❌ Failed: ${data.message}`);
-          }
+            const res = await fetch(`${key}/api/admin/delete/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                alert(data.message); // ✅ Shows "User ... has been deleted"
+                setAllUsers((users) => users.filter((u) => u._id !== id));
+            } else {
+                alert(`❌ Failed: ${data.message}`);
+            }
         } catch (error) {
-          alert("❌ Network error");
-          console.error("Delete error:", error);
+            alert("❌ Network error");
+            console.error("Delete error:", error);
         }
-      };
-      
+    };
+
 
     const deleteEvent = async (id: string) => {
         try {
@@ -221,16 +221,17 @@ function Admin() {
 
     const saveEdit = async () => {
         if (!editingEventId) return;
-
+    
         try {
-            const res = await fetch(`${key}/api/events/admin/${editingEventId}`, {
+            const res = await fetch(`${key}/api/admin/events/${editingEventId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
-                body: JSON.stringify(eventData),
+                body: JSON.stringify(eventData), // Ensure eventData contains the necessary fields (title, description)
             });
+    
             if (res.ok) {
                 const updatedEvent: Event = await res.json();
                 setSearchEvents((events) =>
@@ -242,36 +243,35 @@ function Admin() {
                 alert("Failed to update event: " + error.message);
             }
         } catch (err) {
-            console.error(err);
+            console.error("Error updating event:", err);
+            alert("An error occurred while updating the event.");
         }
     };
-
+    
     const filteredEvents = searchEvents.filter((event) =>
         [event.title, event.description].some((field) =>
             field.toLowerCase().includes(findEvents.toLowerCase())
         )
     );
 
-    // Redirect if user is not logged in or not admin
     if (!isLoggedIn || user?.role !== "admin") {
         return <Navigate to="/" replace />;
     }
     const handleApprove = async (userId: string) => {
         try {
-            const token = localStorage.getItem('token');  // Вземаш токена от localStorage или sessionStorage
-    
+            const token = localStorage.getItem('token');
             const response = await fetch(`/api/admin/delete-requests/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,  // Добавяш токена в хедъра
+                    'Authorization': `Bearer ${token}`,
                 },
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to create delete request');
             }
-    
+
             alert(`Delete request for user ${userId} has been created.`);
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -281,8 +281,8 @@ function Admin() {
             }
         }
     };
-    
-    
+
+
     return (
         <div className={style.adminContainer}>
             <h2 className={style.adminTitle}>Administration Hub</h2>
