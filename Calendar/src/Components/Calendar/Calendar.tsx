@@ -134,7 +134,6 @@ function Calendar() {
                 }
             });
 
-            console.log('Events to render:', allEvents);
 
             setEvents(allEvents);
         } catch (error) {
