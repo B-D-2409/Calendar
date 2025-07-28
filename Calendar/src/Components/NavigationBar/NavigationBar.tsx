@@ -84,7 +84,7 @@ function NavigationBar() {
                 <button className={style.sidebarButton} onClick={toggleSideBar}>
                     ☰
                 </button>
-
+    
                 <div ref={searchRef} className={style.searchContainer}>
                     {showSearch ? (
                         <Searchbar />
@@ -94,6 +94,7 @@ function NavigationBar() {
                         </button>
                     )}
                 </div>
+    
                 <div className={style.navContainer}>
                     <nav className={style.nav}>
                         <NavLink
@@ -105,9 +106,9 @@ function NavigationBar() {
                             Home
                         </NavLink>
                     </nav>
-
+    
                     {isLoggedIn ? (
-                        <nav className={style.calendar}>
+                        <nav className={style.nav}>
                             <NavLink
                                 to="/calendar"
                                 className={({ isActive }) =>
@@ -117,37 +118,28 @@ function NavigationBar() {
                                 Calendar
                             </NavLink>
                         </nav>
-                    ) : (
-                        <nav className={style.nav}>
+                    ) : null}
+    
+                    {isLoggedIn && user?.role === "admin" && (
+                        <div className={style.admin}>
                             <NavLink
-                                to="/"
+                                to="/admin"
                                 className={({ isActive }) =>
                                     isActive ? `${style.navLink} ${style.active}` : style.navLink
                                 }
                             >
+                                Admin
                             </NavLink>
-                        </nav>
+                        </div>
                     )}
+    
                 </div>
-
-                {isLoggedIn && user?.role === "admin" && (
-                    <div className={style.admin}>
-                        <NavLink
-                            to="/admin"
-                            className={({ isActive }) =>
-                                isActive ? `${style.navLink} ${style.active}` : style.navLink
-                            }
-                        >
-                            Admin
-                        </NavLink>
-                    </div>
-                )}
-
+    
                 <header className={style.headerRight}>
                     <button className={style.mode} onClick={toggleTheme}>
                         {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
                     </button>
-
+    
                     {isLoggedIn ? (
                         <div className={style.dropdown} ref={dropdownRef}>
                             <button
@@ -156,7 +148,7 @@ function NavigationBar() {
                             >
                                 👤 Account
                             </button>
-
+    
                             {dropdownOpen && (
                                 <div className={style.dropdownMenu}>
                                     <div className={style.dropdownItem}>
@@ -178,11 +170,10 @@ function NavigationBar() {
                     )}
                 </header>
             </div>
-
+    
             {sideBarOpen && (
                 <aside className={style.sidebar}>
-                    <button className={style.closeSidebar} onClick={toggleSideBar}>
-                    </button>
+                    <button className={style.closeSidebar} onClick={toggleSideBar}></button>
                     <NavLink
                         to="/events"
                         className={({ isActive }) =>
@@ -191,9 +182,9 @@ function NavigationBar() {
                     >
                         +CREATE
                     </NavLink>
-
+    
                     <SidebarCalendar />
-
+    
                     <NavLink
                         to="/notifications"
                         className={({ isActive }) =>
@@ -202,7 +193,7 @@ function NavigationBar() {
                     >
                         Notifications
                     </NavLink>
-                    
+    
                     <NavLink
                         to="/myeventpage"
                         className={({ isActive }) =>
@@ -211,7 +202,7 @@ function NavigationBar() {
                     >
                         My Events
                     </NavLink>
-
+    
                     <NavLink
                         to="/seriesofevents"
                         className={({ isActive }) =>
@@ -220,6 +211,7 @@ function NavigationBar() {
                     >
                         Series Of Events
                     </NavLink>
+    
                     <NavLink
                         to="/contact"
                         className={({ isActive }) =>
@@ -228,6 +220,7 @@ function NavigationBar() {
                     >
                         Contact
                     </NavLink>
+    
                     <NavLink
                         to="/profilepage"
                         className={({ isActive }) =>
@@ -236,6 +229,7 @@ function NavigationBar() {
                     >
                         Profile
                     </NavLink>
+    
                     <NavLink
                         to="/about"
                         className={({ isActive }) =>
@@ -248,6 +242,7 @@ function NavigationBar() {
             )}
         </>
     );
+    
 }
 
 export default NavigationBar;
