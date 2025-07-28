@@ -174,23 +174,24 @@
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.9);
   color: #00ffdd;
 }
-
-.closeButton {
-  position: absolute;
-  top: 10px;
-  left: 1010px;
+.cancelButton {
+  position: relative; /* Let it stay below the Create button */
   background: transparent;
-  border: none;
+  border: 2px solid #ff0000; /* Red border */
   font-size: 24px;
-  font-weight: bold;
+  font-weight: bold; /* Bold text */
+  color: #ff0000; /* Red text color */
   cursor: pointer;
-  color: #333;
-  transition: color 0.2s ease;
-  line-height: 1;
-  padding: 0;
-  z-index: 10; 
+  padding: 5px 15px; /* Padding to make it more clickable */
+  transition: color 0.2s ease, border-color 0.2s ease;
+  z-index: 10;
 }
 
-.closeButton:hover {
-  color: #ff0000; /* red on hover */
+.cancelButton:hover {
+  color: #fc5a5a; /* Lighter red on hover */
+  border-color: #fc5a5a; /* Lighter red border on hover */
+}
+
+.cancelButton:focus {
+  outline: none; /* Remove focus outline */
 }

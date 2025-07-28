@@ -1,4 +1,4 @@
-import style from './Events.module.css';
+import style from './Events.module.css'
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../Common/AuthContext";
@@ -30,10 +30,6 @@ export interface EventState {
     recurrenceRule?: RecurrenceRule;
 }
 
-interface EventFormProps {
-    onEventCreated?: (event: EventState) => void;
-    user?: User | null;
-}
 interface LocationErrors {
     address?: string;
     city?: string;
@@ -55,6 +51,7 @@ interface EventFormErrors {
     location?: LocationErrors;
     recurrenceRule?: RecurrenceRuleErrors;
 }
+
 interface User {
     _id: string;
     username: string;
@@ -67,15 +64,14 @@ interface User {
     [key: string]: any;
 }
 
-// Define the type for the props
+// Props for the EventForm component
 interface EventFormProps {
     onEventCreated?: (event: EventState) => void;
     user?: User | null;
     setShowCreateForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
-const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
+const EventForm: React.FC<EventFormProps> = ({ onEventCreated, setShowCreateForm }) => {
     const [event, setEvent] = useState<EventState>({
         title: "",
         description: "",
@@ -97,14 +93,11 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
         },
     });
 
-
-
     const { user } = useContext(AuthContext) as AuthContextType;
     const [users, setUsers] = useState<User[]>([]);
     const [errors, setErrors] = useState<EventFormErrors>({});
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [participantName, setParticipantName] = useState<string>("");
-
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -123,7 +116,6 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
         fetchUsers();
     }, []);
 
-
     const addParticipant = () => {
         const trimmedName = participantName.trim();
         if (trimmedName) {
@@ -135,14 +127,12 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
         }
     };
 
-
     const removeParticipant = (index: number) => {
         setEvent((prev) => ({
             ...prev,
             participants: prev.participants.filter((_, i) => i !== index),
         }));
     };
-
 
     const handleParticipantChange = (index: number, value: string) => {
         const newParticipants = [...event.participants];
@@ -160,6 +150,9 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
         }
     };
 
+    const handleCancel = () => {
+        setShowCreateForm(false);  
+    };
 
     const handleChange = (prop: keyof EventState, value: any) => {
         setEvent({ ...event, [prop]: value });
@@ -188,19 +181,19 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
     };
 
 
-    const handleRecurrenceChange = (key: keyof RecurrenceRule, value: any) => {
-        setEvent({
-            ...event,
-            recurrenceRule: {
-                ...event.recurrenceRule,
-                [key]: value,
-            },
-        });
-        setErrors({
-            ...errors,
-            recurrenceRule: { ...errors.recurrenceRule, [key]: "" },
-        });
-    };
+    // const handleRecurrenceChange = (key: keyof RecurrenceRule, value: any) => {
+    //     setEvent({
+    //         ...event,
+    //         recurrenceRule: {
+    //             ...event.recurrenceRule,
+    //             [key]: value,
+    //         },
+    //     });
+    //     setErrors({
+    //         ...errors,
+    //         recurrenceRule: { ...errors.recurrenceRule, [key]: "" },
+    //     });
+    // };
 
 
     const validate = (): boolean => {
@@ -334,12 +327,11 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
             setSuccessMessage("❌ Failed to create event.");
         }
     };
-
     return (
         <form onSubmit={handleSubmit} className={style.formContainer}>
             <fieldset className={style.fieldset}>
                 <legend className={style.legend}>Create New Event</legend>
-
+    
                 {successMessage && (
                     <p
                         className={
@@ -351,7 +343,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                         {successMessage}
                     </p>
                 )}
-
+    
                 <div className={style.field}>
                     <label className={style.label}>Title</label>
                     <input
@@ -361,7 +353,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                     />
                     {errors.title && <p className={style.errorText}>{errors.title}</p>}
                 </div>
-
+    
                 <div className={style.field}>
                     <label className={style.label}>Description</label>
                     <textarea
@@ -371,7 +363,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                     />
                     {errors.description && <p className={style.errorText}>{errors.description}</p>}
                 </div>
-
+    
                 <div className={style.field}>
                     <label className={style.label}>Add Location</label>
                     <select
@@ -383,14 +375,13 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                         <option value="yes">Yes</option>
                     </select>
                 </div>
-
+    
                 {event.isLocation && (
                     <>
                         <div className={style.field}>
                             <label className={style.label}>Address</label>
                             <input
-                                className={`${style.input} ${errors.location?.address ? style.invalid : ''
-                                    }`}
+                                className={`${style.input} ${errors.location?.address ? style.invalid : ''}`}
                                 value={event.location.address}
                                 onChange={(e) => handleLocationChange('address', e.target.value)}
                             />
@@ -398,12 +389,11 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                                 <p className={style.errorText}>{errors.location.address}</p>
                             )}
                         </div>
-
+    
                         <div className={style.field}>
                             <label className={style.label}>City</label>
                             <input
-                                className={`${style.input} ${errors.location?.city ? style.invalid : ''
-                                    }`}
+                                className={`${style.input} ${errors.location?.city ? style.invalid : ''}`}
                                 value={event.location.city}
                                 onChange={(e) => handleLocationChange('city', e.target.value)}
                             />
@@ -411,12 +401,11 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                                 <p className={style.errorText}>{errors.location.city}</p>
                             )}
                         </div>
-
+    
                         <div className={style.field}>
                             <label className={style.label}>Country</label>
                             <input
-                                className={`${style.input} ${errors.location?.country ? style.invalid : ''
-                                    }`}
+                                className={`${style.input} ${errors.location?.country ? style.invalid : ''}`}
                                 value={event.location.country}
                                 onChange={(e) => handleLocationChange('country', e.target.value)}
                             />
@@ -426,10 +415,10 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                         </div>
                     </>
                 )}
-
+    
                 <div className={style.field}>
                     <label className={style.label}>Participants</label>
-
+    
                     <div className={style.participantAddRow}>
                         <select
                             className={style.select}
@@ -453,7 +442,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                             + Add
                         </button>
                     </div>
-
+    
                     {event.participants.map((participant, index) => (
                         <div key={index} className={style.participantRow}>
                             <input
@@ -470,12 +459,12 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                             </button>
                         </div>
                     ))}
-
+    
                     {errors.participants && (
                         <p className={style.errorText}>{errors.participants}</p>
                     )}
                 </div>
-
+    
                 <div className={style.field}>
                     <label className={style.label}>Type</label>
                     <select
@@ -489,7 +478,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                     </select>
                     {errors.type && <p className={style.errorText}>{errors.type}</p>}
                 </div>
-
+    
                 <div className={style.field}>
                     <label className={style.label}>Start Date & Time</label>
                     <input
@@ -502,7 +491,7 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                         <p className={style.errorText}>{errors.startDateTime}</p>
                     )}
                 </div>
-
+    
                 <div className={style.field}>
                     <label className={style.label}>End Date & Time</label>
                     <input
@@ -513,8 +502,8 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                     />
                     {errors.endDateTime && <p className={style.errorText}>{errors.endDateTime}</p>}
                 </div>
-
-                <div className={style.field}>
+    
+                {/* <div className={style.field}>
                     <label className={style.label}>Add Recurring</label>
                     <select
                         className={style.select}
@@ -524,8 +513,8 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                         <option value="no">No</option>
                         <option value="yes">Yes</option>
                     </select>
-                </div>
-
+                </div> */}
+    {/* 
                 {event.isRecurring && (
                     <>
                         <div className={style.field}>
@@ -533,7 +522,6 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                             <select
                                 className={style.select}
                                 value={event.recurrenceRule?.frequency ?? ''}
-
                                 onChange={(e) =>
                                     handleRecurrenceChange('frequency', e.target.value)
                                 }
@@ -547,14 +535,13 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                                 <p className={style.errorText}>{errors.recurrenceRule.frequency}</p>
                             )}
                         </div>
-
+    
                         <div className={style.field}>
                             <label className={style.label}>
                                 Interval (e.g. every X days/weeks/months)
                             </label>
                             <input
-                                className={`${style.input} ${errors.recurrenceRule?.interval ? style.invalid : ''
-                                    }`}
+                                className={`${style.input} ${errors.recurrenceRule?.interval ? style.invalid : ''}`}
                                 type="number"
                                 min={1}
                                 value={event.recurrenceRule?.interval}
@@ -567,14 +554,24 @@ const EventForm: React.FC<EventFormProps> = ({ onEventCreated }) => {
                             )}
                         </div>
                     </>
-                )}
-
+                )} */}
+    
                 <button type="submit" className={style.buttonSubmit}>
                     Create
+                </button>
+    
+                <button
+                    type="button"
+                    className={style.cancelButton}
+                    onClick={handleCancel}
+                    aria-label="Cancel form"
+                >
+                    Cancel
                 </button>
             </fieldset>
         </form>
     );
+    
 };
 
 export default EventForm;

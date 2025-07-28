@@ -1,5 +1,5 @@
 import EventForm from "../Events/EventForm";
-import style from './Event.module.css';
+import style from "./Events.module.css";
 import { AuthContext, AuthContextType } from "../../Common/AuthContext";
 import { useContext, useState } from "react";
 
@@ -24,6 +24,15 @@ function CreateEvent() {
                 user={user}
                 setShowCreateForm={setShowCreateForm}
             />
+
+<button
+                type="button"
+                className={style.cancelButton}
+                onClick={() => setShowCreateForm(false)}  // Close the form when Cancel is clicked
+                aria-label="Cancel form"
+            >
+                Cancel
+            </button>
         </div>
     );
 }

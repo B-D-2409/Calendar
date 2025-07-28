@@ -260,25 +260,7 @@
   user-select: none;
 }
 
-.closeButton {
-  position: absolute;
-  top: 10px;
-  left: 1050px;
-  background: transparent;
-  border: none;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #ff0000;
-  transition: color 0.2s ease;
-  line-height: 1;
-  padding: 0;
-  z-index: 10; 
-}
 
-.closeButton:hover {
-  color: #fc5a5a; /* red on hover */
-}
 
 .inviteContainer {
   margin-top: 10px;

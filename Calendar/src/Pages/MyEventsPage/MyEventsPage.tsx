@@ -328,7 +328,7 @@ function MyEventsPage() {
                                                     <p>{new Date(event.startDateTime).toLocaleString()}</p>
 
                                                     <p className={style.eventType} style={{ color: event.type === "public" ? "green" : "red" }}>
-                                                    {event.type === "public" ? "Public" : "Private"}
+                                                        {event.type === "public" ? "Public" : "Private"}
                                                     </p>
 
 
@@ -502,16 +502,9 @@ function MyEventsPage() {
 
             {showCreateForm && (
                 <div className={style.eventFormBackdrop}>
-                    <button
-                        className={style.closeButton}
-                        onClick={() => setShowCreateForm(false)}
-                        aria-label="Close form"
-                    >
-                        ×
-                    </button>
-                    <div className={style.eventFormContainer}> 
-        <EventForm setShowCreateForm={setShowCreateForm} />
-    </div>
+                    <div className={style.eventFormContainer}>
+                        <EventForm setShowCreateForm={setShowCreateForm} />
+                    </div>
                 </div>
             )}
 
