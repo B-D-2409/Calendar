@@ -137,15 +137,16 @@
 
 @media (max-width: 768px) {
     .navbar {
-      flex-direction: column; 
-      align-items: center;
-      background-color: #444; 
+        flex-direction: column;
+        align-items: center;
+        background-color: #444;
     }
-  
+
     .navbar a {
-      margin: 10px 0; 
+        margin: 10px 0;
     }
-  }
+}
+
 .mode {
     background-color: transparent;
     border: none;
