@@ -36,12 +36,88 @@ body {
 }
 
 /* Responsive media queries (optional starter) */
+/* Медийни заявки за мобилни устройства */
 @media (max-width: 768px) {
+  /* Намаляваме размера на шрифта */
   html {
     font-size: 90%;
   }
+
+  /* Респонсив навигация - например ако имаш навигационно меню */
+  .navbar {
+    display: flex;
+    flex-direction: column; /* навигацията става вертикална */
+    align-items: center;
+  }
+
+  /* Респонсив за основни контейнери */
+  .container {
+    padding: 10px;
+  }
+
+  /* Респонсив за секции */
+  .section {
+    margin-bottom: 20px;
+    padding: 15px;
+  }
+
+  /* Респонсив за картички (cards) */
+  .card {
+    width: 100%; /* да заема цялата ширина на екрана */
+    margin: 10px 0;
+  }
+
+  /* Респонсив за изображения */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Респонсив футър */
+  footer {
+    text-align: center;
+    padding: 20px;
+  }
 }
 
+/* Може да добавиш стилове и за други размери на екрани - например за таблети или големи екрани */
+@media (max-width: 1024px) {
+  .navbar {
+    flex-direction: row; /* на таблети може да си остане хоризонтална */
+  }
+}
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* Навигация за мобилни екрани */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column; /* навигацията става вертикална */
+    align-items: center;
+    background-color: #444; /* може да промениш фона за мобилни устройства */
+  }
+
+  .navbar a {
+    margin: 10px 0; /* повече място между линковете */
+  }
+}
 :root {
   --bg-color: #f9f9f9;
   --text-color: #222;
