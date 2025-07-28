@@ -209,7 +209,7 @@ function NavigationBar() {
                             isActive ? `${style.navLink} ${style.active}` : style.navLink
                         }
                     >
-                        Series Of Events
+                        My Event Series
                     </NavLink>
     
                     <NavLink
