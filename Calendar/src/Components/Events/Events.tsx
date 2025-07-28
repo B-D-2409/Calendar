@@ -24,15 +24,6 @@ function CreateEvent() {
                 user={user}
                 setShowCreateForm={setShowCreateForm}
             />
-
-<button
-                type="button"
-                className={style.cancelButton}
-                onClick={() => setShowCreateForm(false)}  // Close the form when Cancel is clicked
-                aria-label="Cancel form"
-            >
-                Cancel
-            </button>
         </div>
     );
 }
