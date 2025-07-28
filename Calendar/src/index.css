@@ -35,55 +35,50 @@ body {
   word-break: break-word;
 }
 
-/* Responsive media queries (optional starter) */
-/* Медийни заявки за мобилни устройства */
+
 @media (max-width: 768px) {
-  /* Намаляваме размера на шрифта */
+ 
   html {
     font-size: 90%;
   }
 
-  /* Респонсив навигация - например ако имаш навигационно меню */
+ 
   .navbar {
     display: flex;
-    flex-direction: column; /* навигацията става вертикална */
+    flex-direction: column; 
     align-items: center;
   }
 
-  /* Респонсив за основни контейнери */
+
   .container {
     padding: 10px;
   }
 
-  /* Респонсив за секции */
+
   .section {
     margin-bottom: 20px;
     padding: 15px;
   }
 
-  /* Респонсив за картички (cards) */
+ 
   .card {
-    width: 100%; /* да заема цялата ширина на екрана */
+    width: 100%; 
     margin: 10px 0;
   }
 
-  /* Респонсив за изображения */
+
   img {
     max-width: 100%;
     height: auto;
   }
 
-  /* Респонсив футър */
-  footer {
-    text-align: center;
-    padding: 20px;
-  }
+
 }
 
-/* Може да добавиш стилове и за други размери на екрани - например за таблети или големи екрани */
+
 @media (max-width: 1024px) {
   .navbar {
-    flex-direction: row; /* на таблети може да си остане хоризонтална */
+    flex-direction: row; 
   }
 }
 
@@ -106,16 +101,16 @@ body {
   text-decoration: underline;
 }
 
-/* Навигация за мобилни екрани */
+
 @media (max-width: 768px) {
   .navbar {
-    flex-direction: column; /* навигацията става вертикална */
+    flex-direction: column; 
     align-items: center;
-    background-color: #444; /* може да промениш фона за мобилни устройства */
+    background-color: #444; 
   }
 
   .navbar a {
-    margin: 10px 0; /* повече място между линковете */
+    margin: 10px 0; 
   }
 }
 :root {
