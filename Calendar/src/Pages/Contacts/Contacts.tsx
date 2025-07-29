@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext, AuthContextType } from "../../Common/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
@@ -22,6 +22,8 @@ interface Contact {
     _id: string;
     username: string;
     avatar?: string;
+    firstName?: string;
+    lastName?: string;
 }
 
 
@@ -326,17 +328,51 @@ function Contacts() {
 
 
             <ul className={styles.contactsList}>
-                {contacts.map((contact) => (
-                    <li key={contact._id}>
-                        <img
-                            src={contact.avatar || DEFAULT_AVATAR}
-                            alt={contact.username}
-                            className={styles.avatar}
-                        />
-                        <span>{contact.username}</span>
-                    </li>
-                ))}
-            </ul>
+            {contacts.map((contact) => {
+    const showAvatar = false; // Force avatar to false
+
+    return (
+        <li key={contact._id}>
+            {showAvatar && contact.avatar ? (
+                <img
+                    src={contact.avatar}
+                    alt={contact.username}
+                    className={styles.avatar}
+                    style={{
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        border: "2px solid #1976d2",
+                        boxShadow: "0 2px 8px rgba(25, 118, 210, 0.15)",
+                    }}
+                />
+            ) : (
+                <div
+                    style={{
+                        width: "60px",
+                        height: "60px",
+                        borderRadius: "50%",
+                        backgroundColor: "#1976d2",
+                        color: "#fff",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        border: "2px solid #1976d2",
+                        boxShadow: "0 2px 8px rgba(25, 118, 210, 0.15)",
+                        userSelect: "none",
+                    }}
+                >
+                    {`${contact.firstName?.charAt(0) || ""}${contact.lastName?.charAt(0) || ""}`}
+                </div>
+            )}
+            <span>{contact.username}</span>
+        </li>
+    );
+})}
+</ul>
 
             <ToastContainer position="bottom-right"
                 autoClose={5000}
