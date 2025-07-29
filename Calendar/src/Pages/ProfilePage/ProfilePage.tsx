@@ -1,10 +1,30 @@
-import React, { useContext, useState, ChangeEvent, FormEvent } from "react";
+/**
+ * @file ProfileDetailsComponent.tsx
+ * @description A React component that allows users to view and update their profile details,
+ * and send account deletion requests to the admin.
+ */
+
+import { useContext, useState, ChangeEvent, FormEvent } from "react";
 import { AuthContext, AuthContextType } from "../../Common/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 
 const API_BASE_URL =
     import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
+
+/**
+* Represents a user object in the system.
+* 
+* @interface User
+* @property {string} _id - The unique identifier of the user.
+* @property {string} username - The user's username.
+* @property {string} firstName - The user's first name.
+* @property {string} lastName - The user's last name.
+* @property {string} phoneNumber - The user's phone number.
+* @property {string} address - The user's address.
+* @property {string} [avatar] - Optional avatar URL.
+* @property {string} [role] - Optional user role.
+*/
 interface User {
     _id: string;
     username: string;
@@ -16,7 +36,19 @@ interface User {
     role?: string;
 }
 
+/**
+ * A type representing editable form fields from the User interface.
+ */
 type FormData = Partial<User>;
+
+/**
+ * ProfileDetailsComponent
+ *
+ * Allows a logged-in user to update profile details and optionally request account deletion.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ */
 
 function ProfileDetailsComponent(): JSX.Element {
     // Correctly cast useContext to AuthContextType
@@ -25,11 +57,22 @@ function ProfileDetailsComponent(): JSX.Element {
     const [message, setMessage] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [formData, setFormData] = useState<FormData>(user || {});
-
+    /**
+        * Handles changes to input fields by updating the form data state.
+        * 
+        * @param {keyof FormData} key - The form field to update.
+        * @param {string} value - The new value for the field.
+        */
     const handleChange = (key: keyof FormData, value: string) => {
         setFormData((prev) => ({ ...prev, [key]: value }));
     };
 
+    /**
+     * Submits updated profile data to the server via PUT request.
+     * Performs field validation before sending the request.
+     * 
+     * @param {FormEvent<HTMLFormElement>} e - The form submission event.
+     */
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -85,6 +128,11 @@ function ProfileDetailsComponent(): JSX.Element {
         }
     };
 
+
+    /**
+     * Sends a request to the admin to delete the user account.
+     * Asks for user confirmation before proceeding.
+     */
     const handleDeleteRequest = async () => {
         const confirmed = window.confirm(
             "Are you sure you want to delete your account? This action cannot be undone."
@@ -120,6 +168,9 @@ function ProfileDetailsComponent(): JSX.Element {
         }
     };
 
+    /**
+ * Array of form fields to render, each with a label and a key from FormData.
+ */
     const fieldsToShow: { key: keyof FormData; label: string }[] = [
         { key: "avatar", label: "Avatar" },
         { key: "firstName", label: "First Name" },
@@ -157,21 +208,26 @@ function ProfileDetailsComponent(): JSX.Element {
                         className="image-container"
                         style={{ margin: "0px auto", textAlign: "center" }}
                     >
-                        <img
-                            src={user!.avatar}
-                            alt="Avatar"
+                        <div
                             style={{
                                 width: "200px",
                                 height: "200px",
                                 borderRadius: "50%",
-                                objectFit: "cover",
+                                backgroundColor: "#1976d2",
+                                color: "#fff",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: "64px",
+                                fontWeight: "bold",
                                 border: "4px solid #1976d2",
                                 boxShadow: "0 2px 12px rgba(25, 118, 210, 0.15)",
-                                background: "#f0f0f0",
-                                display: "block",
                                 margin: "0 auto",
+                                userSelect: "none",
                             }}
-                        />
+                        >
+                            {`${user?.firstName?.charAt(0) || ""}${user?.lastName?.charAt(0) || ""}`}
+                        </div>
                         {user!.role === "admin" && (
                             <h1 style={{ fontWeight: "bold" }}>Admin</h1>
                         )}
@@ -322,7 +378,7 @@ function ProfileDetailsComponent(): JSX.Element {
                     </form>
                 </ul>
             </div>
-            <ToastContainer    position="bottom-right"
+            <ToastContainer position="bottom-right"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}

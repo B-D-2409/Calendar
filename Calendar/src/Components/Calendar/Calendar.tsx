@@ -1,3 +1,8 @@
+/**
+ * Calendar component that renders a dynamic calendar interface using `react-big-calendar`.
+ * It displays recurring and non-recurring events fetched from a backend server.
+ * It also supports switching to a custom yearly view.
+ */
 import { useState, useEffect } from 'react';
 import { Calendar as BigCalendar, dateFnsLocalizer, type View } from 'react-big-calendar';
 import { format, parseISO, startOfWeek, getDay } from 'date-fns';
@@ -8,11 +13,14 @@ import YearCalendar from './Year';
 
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
-// Localizer configuration for BigCalendar
+
 const locales = { 'en-US': enUS };
 const localizer = dateFnsLocalizer({ format, parse: parseISO, startOfWeek, getDay, locales });
 
-// Event interface
+
+/**
+ * Interface representing an individual calendar event.
+ */
 interface Event {
     _id: string;
     title: string;
@@ -25,6 +33,9 @@ interface Event {
     participants: { _id: string }[];
 }
 
+/**
+ * Interface representing a series of recurring events.
+ */
 interface EventSeries {
     _id: string;
     name: string;
@@ -56,7 +67,10 @@ interface EventSeries {
 }
 
 const allViews: View[] = ['month', 'week', 'work_week', 'day', 'agenda'];
-
+/**
+ * Main Calendar component
+ * @returns JSX element rendering a calendar with recurring and one-time events.
+ */
 function Calendar() {
     const [events, setEvents] = useState<Event[]>([]);
     const [seriesEvents, setSeriesEvents] = useState<Event[]>([]);
@@ -65,21 +79,26 @@ function Calendar() {
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
+    /**
+ * Generates repeated versions of a recurring event based on its recurrence rule.
+ * @param event The base event to generate repetitions from
+ * @returns Array of repeated events
+ */
     const generateRepeatedEvents = (event: Event) => {
-        const repeatDays = event.recurrenceRule?.interval || 1; // Default to 1 if interval is undefined
+        const repeatDays = event.recurrenceRule?.interval || 1;
         const repeatType = event.repeatType || 'daily';
         const baseDate = event.startDateTime ? parseISO(event.startDateTime) : null;
-    
+
         if (!baseDate) {
             console.error('Invalid start date:', event.startDateTime);
             return [];
         }
-    
+
         const repeatedEvents: Event[] = [];
-    
+
         for (let i = 0; i < repeatDays; i++) {
             const newDate = new Date(baseDate);
-    
+
             if (repeatType === 'daily') {
                 newDate.setDate(baseDate.getDate() + i);
             } else if (repeatType === 'weekly') {
@@ -87,7 +106,7 @@ function Calendar() {
             } else if (repeatType === 'monthly') {
                 newDate.setMonth(baseDate.getMonth() + i);
             }
-    
+
             repeatedEvents.push({
                 ...event,
                 startDateTime: newDate.toISOString(),
@@ -95,10 +114,14 @@ function Calendar() {
                 isRecurring: i > 0,
             });
         }
-    
+
         return repeatedEvents;
     };
 
+    /**
+ * Fetches regular (non-series) events for the current user.
+ * Filters them based on the user's ID or if they are a participant.
+ */
     const fetchEvents = async () => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const currentUserId = user?._id;
@@ -114,7 +137,7 @@ function Calendar() {
             if (!response.ok) throw new Error('Failed to fetch events');
 
             const data: Event[] = await response.json();
-    
+
 
             const filteredEvents = data.filter(
                 (event) =>
@@ -172,10 +195,10 @@ function Calendar() {
                     return;
                 }
 
-                const recurrenceRule = series.recurrenceRule 
-                ? { interval: series.recurrenceRule.interval ?? 1 } 
-                : undefined;
-        
+                const recurrenceRule = series.recurrenceRule
+                    ? { interval: series.recurrenceRule.interval ?? 1 }
+                    : undefined;
+
 
                 const repeatedSeries = generateRepeatedEvents({
                     _id: series._id,
@@ -185,9 +208,9 @@ function Calendar() {
                     participants: [],
                     startDateTime: startDate.toISOString(),
                     endDateTime: endDate.toISOString(),
-                    recurrenceRule: recurrenceRule, 
+                    recurrenceRule: recurrenceRule,
                 });
-            
+
                 seriesEventInstances.push(...repeatedSeries);
             });
 
@@ -197,15 +220,21 @@ function Calendar() {
             console.error("Error fetching event series:", error);
         }
     };
-
+    // Fetch events and event series when view or date changes
     useEffect(() => {
         fetchEvents();
         fetchEventSeries();
-    }, [currentDate, calendarView]); // Added calendarView and currentDate dependencies
+    }, [currentDate, calendarView]); 
 
+    /** Navigate to the previous year (year view only) */
     const handlePrevYear = () => setCurrentYear((y) => y - 1);
+    /** Navigate to the next year (year view only) */
     const handleNextYear = () => setCurrentYear((y) => y + 1);
 
+    /**
+    * Changes calendar view (month, week, day, or custom 'year').
+    * @param view The selected view to switch to
+    */
     const changeView = (view: View | 'year') => {
         if (view === 'year') {
             setIsYearView(true);
@@ -216,6 +245,11 @@ function Calendar() {
         }
     };
 
+    /**
+    * Handles navigation and view updates in the calendar.
+    * @param date The new selected date
+    * @param view The calendar view being changed to
+    */
     const handleNavigate = (date: Date, view: View) => {
         setCurrentDate(date);
         setCalendarView(view);

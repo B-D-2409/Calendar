@@ -1,15 +1,20 @@
 import { SiTypescript, SiVite } from 'react-icons/si';
-import React from "react";
 import styles from "./AboutPage.module.css";
-import { FaReact, FaNodeJs, FaDatabase } from "react-icons/fa";
+import { FaReact, FaNodeJs, } from "react-icons/fa";
 import {
-    SiJavascript,
-    SiChakraui,
     SiExpress,
     SiMongodb,
-    SiReact,
-} from "react-icons/si";
 
+} from "react-icons/si";
+/**
+ * @component AboutPage
+ * @description
+ * A React functional component that displays information about the platform,
+ * including an overview, technology stack, key features, and team members.
+ * Utilizes icons from react-icons to visually represent the tech stack.
+ * 
+ * returns {JSX.Element} The rendered About page content.
+ */
 function AboutPage() {
     return (
         <div className={styles.primaryContainer}>

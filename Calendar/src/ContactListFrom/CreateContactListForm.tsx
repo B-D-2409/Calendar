@@ -1,6 +1,7 @@
 /**
  * @file CreateContactsListForm.tsx
- * @description A React component for creating a new contacts list. Users can add/remove contacts and submit the list to the backend.
+ * @description A React component for creating a new contacts list.
+ *              Users can add/remove contacts from the list and submit it to the backend.
  */
 
 import React, { useState, useContext, useEffect, FormEvent } from "react";
@@ -23,9 +24,18 @@ interface CurrentUser {
 }
 
 interface CreateContactsListFormProps {
+      /**
+     * Callback fired when a new contacts list is successfully created.
+     */
     onListCreated: () => void;
 }
-
+/**
+ * React component that renders a form to create a contacts list.
+ * Allows users to select multiple contacts from all users and submit the list.
+ * 
+ * @param {CreateContactsListFormProps} props - Component props.
+ * @returns {JSX.Element} The contacts list creation form.
+ */
 export const CreateContactsListForm: React.FC<CreateContactsListFormProps> = ({ onListCreated }) => {
     const { user, token } = useContext(AuthContext) as AuthContextType;
     const [title, setTitle] = useState<string>("");

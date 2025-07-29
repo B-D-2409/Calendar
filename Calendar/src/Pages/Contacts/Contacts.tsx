@@ -10,12 +10,30 @@ const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 const DEFAULT_AVATAR =
     "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg";
 
+
+/**
+* Represents a single contact.
+* @typedef {Object} Contact
+* @property {string} _id - Unique identifier for the contact.
+* @property {string} username - Username of the contact.
+* @property {string} [avatar] - Optional avatar image URL for the contact.
+*/
 interface Contact {
     _id: string;
     username: string;
     avatar?: string;
 }
 
+
+/**
+ * Represents an event owned or accessible by the user.
+ * @typedef {Object} Event
+ * @property {string} _id - Unique identifier for the event.
+ * @property {string} name - Event name.
+ * @property {string} [description] - Optional description of the event.
+ * @property {string} [startDateTime] - Optional ISO string of start date/time.
+ * @property {string} [endDateTime] - Optional ISO string of end date/time.
+ */
 interface Event {
     _id: string;
     name: string;
@@ -24,12 +42,27 @@ interface Event {
     endDateTime?: string;
 }
 
+/**
+ * Represents the structure of an error response from the API.
+ * @typedef {Object} ApiErrorResponse
+ * @property {string} message - The error message returned by the API.
+ */
 interface ApiErrorResponse {
     message: string;
-   
+
 }
 
 
+/**
+ * Contacts Component
+ *
+ * Displays the user's contacts and events.
+ * Allows inviting contacts to events, managing contact lists,
+ * and provides feedback on operations via toast notifications.
+ *
+ * @component
+ * returns {JSX.Element} The Contacts page UI.
+ */
 function Contacts() {
     const { user, token } = useContext(AuthContext) as AuthContextType;
 
@@ -41,8 +74,8 @@ function Contacts() {
     const [currentEventId, setCurrentEventId] = useState<string>("");
     const [feedback, setFeedback] = useState<string>("");
     const [contactLists, setContactLists] = useState<any[]>([]);
-   
-    
+
+
 
     useEffect(() => {
         fetchAllUsers();
@@ -50,6 +83,11 @@ function Contacts() {
         fetchContactLists();
     }, []);
 
+
+    /**
+     * Fetch all users (contacts) from the API.
+     * Updates contacts state or logs error on failure.
+     */
     const fetchAllUsers = async () => {
         try {
             const response = await axios.get(`${key}/api/auth/users`, {
@@ -63,6 +101,11 @@ function Contacts() {
         }
     };
 
+
+    /**
+     * Fetch events that belong to the logged-in user.
+     * Shows toast notification on failure.
+     */
     const fetchEvents = async () => {
         try {
             const response = await axios.get(`${key}/api/events/mine`, {
@@ -75,21 +118,24 @@ function Contacts() {
         }
     };
 
-    
+    /**
+        * Send an invite to a user for the selected event.
+        * Validates input and shows success/error feedback.
+        */
     const handleSendInvite = async () => {
         if (!selectedUsername.trim()) {
             setFeedback("Please enter a username");
             return;
         }
-    
+
         if (!currentEventId) {
             setFeedback("Please select an event");
             return;
         }
-    
+
         setLoading(true);
         setIsInviting(true);
-    
+
         try {
             const response = await axios.post(
                 `${key}/api/events/invite/${currentEventId}`,
@@ -100,30 +146,33 @@ function Contacts() {
                     },
                 }
             );
-    
+
             setFeedback(`Invite sent to ${selectedUsername}`);
             toast.success("Invite sent!");
             setSelectedUsername("");
             setIsInviting(false);
             setLoading(false);
-    
+
         } catch (error) {
-            const axiosError = error as AxiosError<ApiErrorResponse>; 
-    
+            const axiosError = error as AxiosError<ApiErrorResponse>;
+
             console.error("Error from API:", axiosError.response?.data);
-    
+
             if (axiosError.response?.data?.message === "Event creator is missing, cannot invite participants") {
                 setFeedback("Cannot send invite: The event has no creator.");
             } else {
                 setFeedback("Failed to send invite");
             }
-    
+
             setIsInviting(false);
             setLoading(false);
         }
     };
-    
-    
+
+    /**
+        * Fetch the user's contact lists.
+        * Shows toast notification on failure.
+        */
     const fetchContactLists = async () => {
         try {
             const response = await axios.get(`${key}/api/contacts/lists`, {
@@ -135,6 +184,11 @@ function Contacts() {
             toast.error("Failed to load your contact lists");
         }
     };
+    /**
+  * Delete a contact from a list or delete the entire list.
+  * @param {string} listId - The ID of the contact list.
+  * @param {string} [contactId] - The ID of the contact to remove (optional).
+  */
     const handleDeleteContactFromList = async (listId: string, contactId?: string) => {
         try {
             if (contactId) {
@@ -158,6 +212,11 @@ function Contacts() {
     };
 
 
+    /**
+     * Format ISO date string to DD/MM/YYYY format.
+     * @param {string | undefined | null} dateString - ISO date string.
+     * @returns {string} Formatted date or original string if invalid.
+     */
     const formatDate = (dateString: string | undefined | null): string => {
         if (!dateString) return "";
         const date = new Date(dateString);
@@ -279,7 +338,7 @@ function Contacts() {
                 ))}
             </ul>
 
-            <ToastContainer    position="bottom-right"
+            <ToastContainer position="bottom-right"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}

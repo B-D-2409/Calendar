@@ -1,9 +1,17 @@
+/**
+ * Authentication component handles both login and registration logic for users.
+ * It provides form validation, error handling, and conditional rendering between login/register views.
+ * Uses AuthContext for login/register functions and navigation control based on auth state.
+ */
 import { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../../Common/AuthContext";
 import style from "./Authentication.module.css";
 import axios from "axios";
 
+/**
+ * Interface representing a user object used for registration and login.
+ */
 interface User {
     username: string;
     phoneNumber: string;
@@ -14,6 +22,9 @@ interface User {
     isBlocked?: boolean;
 }
 
+/**
+ * Interface for capturing validation error messages for user input fields.
+ */
 interface ErrorType {
     username?: string;
     phoneNumber?: string;
@@ -24,6 +35,11 @@ interface ErrorType {
     isBlocked?: string;
     general?: string;
 }
+
+/**
+ * Main Authentication component.
+ * @component
+ */
 
 function Authentication() {
     const auth = useContext(AuthContext);
@@ -68,10 +84,17 @@ function Authentication() {
 
     const location = useLocation();
 
+    /**
+     * Updates the user state based on form input.
+     * @param {keyof User} prop - The property of the user to update.
+     */
     const updateUser = (prop: keyof User) => (e: React.ChangeEvent<HTMLInputElement>) =>
         setUser({ ...user, [prop]: e.target.value });
 
 
+    /**
+ * Handles user login. Calls the login function from context, stores success message or error.
+ */
     const handleLogin = async () => {
         if (!user.email || !user.password) {
             setSuccessMessage("");
@@ -98,6 +121,10 @@ function Authentication() {
     };
 
 
+    /**
+     * Validates the user input before registration.
+     * @returns {boolean} - Returns true if the input is valid, false otherwise.
+     */
     const validate = () => {
         const newErrors: ErrorType = {};
 
@@ -144,6 +171,9 @@ function Authentication() {
     };
 
 
+    /**
+     * Handles user registration. Calls the register function from context.
+     */
     const handleRegister = async () => {
         if (!validate()) return;
         const { username, phoneNumber, email, password, firstName, lastName } =
@@ -186,7 +216,10 @@ function Authentication() {
 
     };
 
-
+    /**
+        * Handles form submission for either login or registration mode.
+        * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
+        */
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (mode === "register" && !validate()) return;

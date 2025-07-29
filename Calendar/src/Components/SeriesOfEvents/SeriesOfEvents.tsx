@@ -6,16 +6,40 @@ const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
 // --- Types ---
 
+/**
+ * Represents a time with hour and minute.
+ * @typedef {Object} Time
+ * @property {number} hour - Hour part of the time (0-23).
+ * @property {number} minute - Minute part of the time (0-59).
+ */
 interface Time {
     hour: number;
     minute: number;
 }
 
+/**
+ * Represents a location with address, city, and country.
+ * @typedef {Object} Location
+ * @property {string} address - Street address.
+ * @property {string} city - City name.
+ * @property {string} country - Country name.
+ */
 interface Location {
     address: string;
     city: string;
     country: string;
 }
+
+/**
+ * Represents event details.
+ * @typedef {Object} EventData
+ * @property {string} title - Title of the event.
+ * @property {string} description - Description of the event.
+ * @property {string} startDateTime - Starting date and time as ISO string.
+ * @property {Time} startTime - Start time object with hour and minute.
+ * @property {Time} endTime - End time object with hour and minute.
+ * @property {Location} location - Location object.
+ */
 
 interface EventData {
     title: string;
@@ -26,10 +50,29 @@ interface EventData {
     location: Location;
 }
 
+/**
+ * Represents recurrence rules for a series.
+ * @typedef {Object} RecurrenceRule
+ * @property {string} frequency - Recurrence frequency (e.g. 'weekly').
+ * @property {string} endDate - Recurrence end date as ISO string.
+ */
+
 interface RecurrenceRule {
     frequency: string;
     endDate: string;
 }
+
+/**
+ * Represents a series of events.
+ * @typedef {Object} Series
+ * @property {string} name - Name of the series.
+ * @property {"recurring" | string} seriesType - Type of the series.
+ * @property {RecurrenceRule} recurrenceRule - Recurrence rules.
+ * @property {string[]} eventsId - Array of event IDs.
+ * @property {boolean} isIndefinite - Whether the series has an indefinite end.
+ * @property {EventData} startingEvent - Starting event data.
+ * @property {EventData} endingEvent - Ending event data.
+ */
 
 interface Series {
     name: string;
@@ -41,19 +84,48 @@ interface Series {
     endingEvent: EventData;
 }
 
+/**
+ * Represents a dictionary of error messages keyed by field names.
+ * @typedef {Object.<string, string>} ErrorState
+ */
 interface ErrorState {
     [key: string]: string;
 }
 
+/**
+ * Props for EventSeriesForm component.
+ * @typedef {Object} EventSeriesFormProps
+ * @property {(data: any) => void} [onSeriesCreated] - Optional callback triggered when a series is successfully created.
+ */
 interface EventSeriesFormProps {
     onSeriesCreated?: (data: any) => void;
 }
 
-// --- Component ---
-
+/**
+ * React component for creating a series of recurring events.
+ *
+ * @param {EventSeriesFormProps} props - Component props.
+ * @returns {JSX.Element}
+ *
+ * The component manages:
+ * - Local state for series, events list, errors, and success message.
+ * - Fetching existing events on mount.
+ * - Handlers for updating form fields with proper typing.
+ * - Validation logic for required fields.
+ * - Submission logic that sends the series data to backend and resets form on success.
+ */
 const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) => {
+
+    /**
+     * Retrieves the current user from the authentication context.
+     * type {{ user: { _id: string } }}
+     */
     const { user } = useContext(AuthContext) as { user: { _id: string } };
 
+    /**
+ * React state holding the event series data.
+ * type {[Series, React.Dispatch<React.SetStateAction<Series>>]}
+ */
     const [series, setSeries] = useState<Series>({
         name: "",
         seriesType: "recurring",
@@ -81,10 +153,29 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         },
     });
 
+    /**
+ * React state holding the list of events fetched from the API.
+ * type {[any[], React.Dispatch<React.SetStateAction<any[]>>]}
+ */
     const [events, setEvents] = useState<any[]>([]);
+
+    /**
+ * React state holding error messages for validation.
+ * type {[ErrorState, React.Dispatch<React.SetStateAction<ErrorState>>]}
+ */
     const [errors, setErrors] = useState<ErrorState>({});
+
+    /**
+ * React state holding success message string.
+ * type {[string, React.Dispatch<React.SetStateAction<string>>]}
+ */
     const [successMessage, setSuccessMessage] = useState<string>("");
 
+
+    /**
+ * Fetch events from API and update events state.
+ * Runs once on component mount.
+ */
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -101,7 +192,12 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         fetchEvents();
     }, []);
 
-    // Handlers with typed params
+
+    /**
+     * Handler for changes to the starting event's string fields.
+     * @param {keyof EventData} field - The field name in startingEvent to update
+     * @param {string} value - The new value to set
+     */
 
     const handleStartingEventChange = (field: keyof EventData, value: string) => {
         setSeries((prev) => ({
@@ -113,6 +209,12 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }));
     };
 
+    /**
+ * Handler for changing starting event time fields (hour/minute).
+ * @param {"startTime" | "endTime"} timeType - Whether to update startTime or endTime
+ * @param {keyof Time} field - The time field ("hour" or "minute") to update
+ * @param {number | string} value - The new value, number or string (converted to number)
+ */
     const handleStartingEventTimeChange = (
         timeType: "startTime" | "endTime",
         field: keyof Time,
@@ -130,6 +232,11 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }));
     };
 
+    /**
+ * Handler for changing location fields of the starting event.
+ * @param {keyof Location} field - The location field to update (address, city, country)
+ * @param {string} value - The new string value
+ */
     const handleStartingEventLocationChange = (field: keyof Location, value: string) => {
         setSeries((prev) => ({
             ...prev,
@@ -143,6 +250,12 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }));
     };
 
+
+    /**
+ * Handler for changes to the ending event's string fields.
+ * @param {keyof EventData} field - The field name in endingEvent to update
+ * @param {string} value - The new value to set
+ */
     const handleEndingEventChange = (field: keyof EventData, value: string) => {
         setSeries((prev) => ({
             ...prev,
@@ -153,6 +266,12 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }));
     };
 
+    /**
+ * Handler for changing ending event time fields (hour/minute).
+ * @param {"startTime" | "endTime"} timeType - Whether to update startTime or endTime
+ * @param {keyof Time} field - The time field ("hour" or "minute") to update
+ * @param {number | string} value - The new value, number or string (converted to number)
+ */
     const handleEndingEventTimeChange = (
         timeType: "startTime" | "endTime",
         field: keyof Time,
@@ -170,6 +289,11 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }));
     };
 
+    /**
+ * Handler for changing location fields of the ending event.
+ * @param {keyof Location} field - The location field to update (address, city, country)
+ * @param {string} value - The new string value
+ */
     const handleEndingEventLocationChange = (field: keyof Location, value: string) => {
         setSeries((prev) => ({
             ...prev,
@@ -183,6 +307,11 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }));
     };
 
+
+    /**
+     * Validates the current series form data.
+     * @returns {boolean} True if valid, false otherwise
+     */
     const validate = (): boolean => {
         const newErrors: ErrorState = {};
 
@@ -214,6 +343,11 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         return Object.keys(newErrors).length === 0;
     };
 
+    /**
+ * Handles the form submission event.
+ * Validates, then posts the series data to the backend.
+ * @param {React.FormEvent} e - The form submit event
+ */
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
@@ -269,6 +403,12 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }
     };
 
+
+    /**
+     * Generates JSX <option> elements for time selection dropdowns.
+     * @param {"hour" | "minute"} type - Whether to generate options for hours or minutes
+     * @returns {JSX.Element[]} Array of option elements for the select input
+     */
     const generateTimeOptions = (type: "hour" | "minute") => {
         if (type === "hour") {
             return Array.from({ length: 24 }, (_, i) => (
@@ -285,8 +425,6 @@ const EventSeriesForm: React.FC<EventSeriesFormProps> = ({ onSeriesCreated }) =>
         }
     };
 
-    // The JSX rendering part is not provided in your snippet,
-    // but you can now use all typed handlers and state here.
 
 
     return (

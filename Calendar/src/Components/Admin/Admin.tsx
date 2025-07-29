@@ -2,12 +2,22 @@ import { useContext, useEffect, useState, ChangeEvent } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../Common/AuthContext";
 import style from './Admin.module.css';
-
 import { io, Socket } from "socket.io-client";
 import { AuthContextType } from "../../Common/AuthContext";
 import axios from 'axios';
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
+/**
+ * Represents a user in the system.
+ * @typedef {Object} User
+ * @property {string} _id - Unique identifier.
+ * @property {string} firstName - User's first name.
+ * @property {string} lastName - User's last name.
+ * @property {string} email - User's email address.
+ * @property {string} username - User's username.
+ * @property {boolean} isBlocked - Indicates if the user is blocked.
+ * @property {string} [role] - User's role (optional).
+ */
 interface User {
     _id: string;
     firstName: string;
@@ -18,12 +28,31 @@ interface User {
     role?: string;
 }
 
+
+
+/**
+ * Represents an event in the system.
+ * @typedef {Object} Event
+ * @property {string} _id - Unique identifier.
+ * @property {string} title - Event title.
+ * @property {string} description - Event description.
+ */
 interface Event {
     _id: string;
     title: string;
     description: string;
 }
 
+
+/**
+ * Represents a request to delete a user.
+ * @typedef {Object} DeleteRequest
+ * @property {string} _id - Request ID.
+ * @property {Object} [userId] - User data for deletion (optional).
+ * @property {string} userId._id - User ID.
+ * @property {string} userId.username - Username.
+ * @property {string} userId.email - Email.
+ */
 interface DeleteRequest {
     _id: string;
     userId?: {
@@ -32,6 +61,19 @@ interface DeleteRequest {
         email: string;
     };
 }
+
+
+/**
+ * Admin dashboard component that manages users, events, and delete requests.
+ *
+ * - Allows blocking/unblocking and deleting users.
+ * - Displays paginated users and events with search.
+ * - Allows editing and deleting events.
+ * - Handles delete requests submitted by users.
+ *
+ * @component
+ * @returns {JSX.Element} Admin panel page or redirect if unauthorized.
+ */
 
 function Admin() {
     const { isLoggedIn, user } = useContext(AuthContext) as AuthContextType;
@@ -61,6 +103,10 @@ function Admin() {
 
     const [totalPagesEvents, setTotalPagesEvents] = useState<number>(1);
 
+
+
+
+    // Setup WebSocket connection for real-time communication
     useEffect(() => {
         const socket: Socket = io(key, {
             withCredentials: true,
@@ -82,6 +128,7 @@ function Admin() {
         };
     }, []);
 
+    // Fetch delete requests
     useEffect(() => {
         fetch(`${key}/api/admin/delete-requests`, {
             headers: {
@@ -93,6 +140,7 @@ function Admin() {
             .catch((err) => console.error(err));
     }, []);
 
+    // Fetch events with pagination and search
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -117,6 +165,8 @@ function Admin() {
     }, [currentPageEvents, findEvents]);
 
 
+
+    // Fetch users with pagination
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -146,12 +196,19 @@ function Admin() {
         fetchUsers();
     }, [currentPageUsers]);
 
+
+    /** Filters users based on search text */
     const filteredUsers = allUsers.filter((u) =>
         [u.firstName, u.email, u.username, u.lastName].some((field) =>
             field?.toLowerCase().includes(search.toLowerCase())
         )
     );
 
+    /**
+  * Block or unblock a user by ID.
+  * @param {string} id - User ID.
+  * @param {boolean} block - True to block, false to unblock.
+  */
     const toggleBlock = async (id: string, block: boolean) => {
         const endpoint = `${key}/api/admin/${block ? "block" : "unblock"}/${id}`;
         const res = await fetch(endpoint, {
@@ -190,6 +247,10 @@ function Admin() {
     };
 
 
+    /**
+     * Delete a user by ID.
+     * @param {string} id - User ID.
+     */
     const deleteEvent = async (id: string) => {
         try {
             const res = await fetch(`${key}/api/admin/events/${id}`, {
@@ -209,19 +270,26 @@ function Admin() {
         }
     };
 
+        /**
+     * Start editing an event.
+     * @param {Event} event - Event to edit.
+     */
     const startEditingEvent = (event: Event) => {
         setEditingEventId(event._id);
         setEventData({ title: event.title, description: event.description });
     };
 
+        /** Cancel editing an event. */
     const cancelEditing = () => {
         setEditingEventId(null);
         setEventData({ title: "", description: "" });
     };
 
+
+       /** Save edited event. Sends PUT request. */
     const saveEdit = async () => {
         if (!editingEventId) return;
-    
+
         try {
             const res = await fetch(`${key}/api/admin/events/${editingEventId}`, {
                 method: "PUT",
@@ -231,7 +299,7 @@ function Admin() {
                 },
                 body: JSON.stringify(eventData), // Ensure eventData contains the necessary fields (title, description)
             });
-    
+
             if (res.ok) {
                 const updatedEvent: Event = await res.json();
                 setSearchEvents((events) =>
@@ -247,16 +315,23 @@ function Admin() {
             alert("An error occurred while updating the event.");
         }
     };
-    
+
+
+    /** Filters events based on search term */
     const filteredEvents = searchEvents.filter((event) =>
         [event.title, event.description].some((field) =>
             field.toLowerCase().includes(findEvents.toLowerCase())
         )
     );
-
+    // Redirect if not an admin
     if (!isLoggedIn || user?.role !== "admin") {
         return <Navigate to="/" replace />;
     }
+
+    /**
+     * Approve and process a user delete request.
+     * @param {string} userId - ID of the user to delete.
+     */
     const handleApprove = async (userId: string) => {
         try {
             const token = localStorage.getItem('token');

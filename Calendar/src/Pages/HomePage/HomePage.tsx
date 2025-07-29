@@ -1,12 +1,30 @@
 import { useState, useEffect, useMemo, useContext } from "react";
 import styles from './Home.module.css';
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 import { AuthContext, AuthContextType } from "../../Common/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { Link } from "react-router-dom";
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
-
+/**
+ * Interface representing an event.
+ * @typedef {Object} Event
+ * @property {string} _id - Unique event ID.
+ * @property {string} title - Event title.
+ * @property {string} [coverPhoto] - Optional URL of event cover photo.
+ * @property {string} [startDateTime] - Optional ISO start datetime.
+ * @property {string} [startDate] - Optional start date.
+ * @property {string} [endDateTime] - Optional ISO end datetime.
+ * @property {string} [endDate] - Optional end date.
+ * @property {string} [start] - Computed start date/time string.
+ * @property {string} [end] - Computed end date/time string.
+ * @property {any} [location] - Optional event location details.
+ * @property {string} [description] - Optional event description.
+ * @property {string[]} participants - Array of participant user IDs.
+ * @property {string|Object} [userId] - Owner user ID (string or object with toString method).
+ * @property {string} [date] - Optional event date.
+ * @property {string} [time] - Optional event time.
+ * @property {any} [key] - Additional dynamic properties.
+ */
 interface Event {
     _id: string;
     title: string;
@@ -26,11 +44,23 @@ interface Event {
     [key: string]: any;
 }
 
+/**
+ * Interface representing a user.
+ * @typedef {Object} User
+ * @property {string} username - User's username.
+ * @property {string} _id - User's unique ID.
+ */
 interface User {
     username: string;
     _id: string;
 }
-
+/**
+ * HomePage component shows public events, user's events, and events user participates in.
+ * Supports searching, pagination, joining/leaving events, inviting users, and deleting events.
+ *
+ * @component
+ * returns {JSX.Element} The rendered HomePage component.
+ */
 function HomePage() {
     const [publicEvents, setPublicEvents] = useState<Event[]>([]);
     const [myEvents, setMyEvents] = useState<Event[]>([]);
@@ -48,16 +78,30 @@ function HomePage() {
 
     const eventsPerPage = 6;
 
-    const location = useLocation();
+
     const token = localStorage.getItem("token");
+
+    /**
+     * Moves to previous page if not on first page.
+     */
     const handlePrevPage = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
-
+    /**
+     * Moves to next page if not on last page.
+     */
     const handleNextPage = () => {
         if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
+
+    /**
+     * Attempts to join the specified event for the current logged-in user.
+     * Shows toast notifications on success or failure.
+     *
+     * @param {Event} event - The event to join.
+     * returns {Promise<void>}
+     */
     const handleJoinEvent = async (event: Event) => {
         if (!user || !user._id) {
             toast.error("Please log in to join this event.");
@@ -95,6 +139,11 @@ function HomePage() {
         }
     };
 
+    /**
+ * Fetches all users from backend API to allow sending invitations.
+ *
+ * returns {Promise<void>}
+ */
     const fetchAllUsers = async () => {
         try {
             const response = await axios.get(`${key}/api/auth/users`, {
@@ -106,9 +155,17 @@ function HomePage() {
         }
     };
 
+    // Load all users once on component mount
     useEffect(() => {
         fetchAllUsers();
     }, []);
+
+    /**
+ * Sends an invite to a user to join an event.
+ *
+ * @param {string} eventId - ID of the event to invite user to.
+ * @returns {Promise<void>}
+ */
     const handleSendInvite = async (eventId: string) => {
         try {
             if (!selectedUsername) return;
@@ -130,7 +187,12 @@ function HomePage() {
     };
 
 
-
+    /**
+     * Allows current user to leave a participating event.
+     *
+     * @param {Event} event - The event to leave.
+     * @returns {Promise<void>}
+     */
     const handleLeaveEvent = async (event: Event) => {
         if (!user || !user._id) {
             toast.error("Please log in to leave this event.");
@@ -153,6 +215,10 @@ function HomePage() {
         }
     };
 
+    /**
+ * Listens for global custom events for search and clear search,
+ * updating search results and term accordingly.
+ */
     useEffect(() => {
         const handleGlobalSearch = (event: any) => {
             const { results, term } = event.detail;
@@ -176,6 +242,12 @@ function HomePage() {
         };
     }, []);
 
+    /**
+ * Deletes an event created by the logged-in user.
+ *
+ * @param {Event} event - The event to delete.
+ * @returns {Promise<void>}
+ */
     const handleDeleteEvent = async (event: Event) => {
         if (!event._id) return;
         try {
@@ -193,6 +265,11 @@ function HomePage() {
 
 
 
+
+    /**
+     * Fetches all events: public, user's own, and participating events on mount.
+     * Sets state accordingly. Handles errors gracefully.
+     */
     useEffect(() => {
         // Fetch all public events
         fetch(`${key}/api/events/public`)
@@ -377,8 +454,8 @@ function HomePage() {
                                                     Leave
                                                 </button>
                                                 <span style={{
-                                                    color: typeColor, fontWeight: "bold", position: "absolute",    
-                                                    top: "15px",           
+                                                    color: typeColor, fontWeight: "bold", position: "absolute",
+                                                    top: "15px",
                                                     left: "270px"
                                                 }}>
                                                     {event.type.toUpperCase()}
@@ -413,7 +490,7 @@ function HomePage() {
                 </div>
             </div>
 
-            <ToastContainer     position="bottom-right"
+            <ToastContainer position="bottom-right"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
@@ -422,7 +499,7 @@ function HomePage() {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                theme="dark"/>
+                theme="dark" />
         </div>
     );
 

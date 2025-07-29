@@ -2,9 +2,19 @@
 import style from './Year.module.css';
 
 type Props = {
+     /** The year to render in the calendar. Defaults to current year if not provided. */
     year?: number;
 };
 
+
+/**
+ * Displays a grid of 12 months for the specified year.
+ *
+ * @component
+ * @param {Props} props - Component props
+ * @param {number} [props.year] - Optional year to render; defaults to current year
+ * @returns {JSX.Element} A grid of month calendars
+ */
 const YearCalendar: React.FC<Props> = ({ year = new Date().getFullYear() }) => {
     const months = Array.from({ length: 12 }, (_, i) => new Date(year, i, 1));
 
@@ -18,9 +28,19 @@ const YearCalendar: React.FC<Props> = ({ year = new Date().getFullYear() }) => {
 };
 
 type MonthProps = {
+      /** Date object representing the month and year to render */
     monthDate: Date;
 };
 
+
+/**
+ * Displays a single month calendar including padding for the first day of the month.
+ *
+ * @component
+ * @param {MonthProps} props - Component props
+ * @param {Date} props.monthDate - Date object representing the month to render
+ * @returns {JSX.Element} A rendered month grid
+ */
 const MonthCalendar: React.FC<MonthProps> = ({ monthDate }) => {
     const today = new Date();
     const month = monthDate.getMonth();
@@ -28,12 +48,14 @@ const MonthCalendar: React.FC<MonthProps> = ({ monthDate }) => {
     const monthName = monthDate.toLocaleString('default', { month: 'long' });
 
 
+  /** Number of days in the month */
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    
+     /** Index of the first day in the week (0 = Sunday, 6 = Saturday) */
     const firstDay = new Date(year, month, 1).getDay();
 
 
+  /** Array representing day slots to render in the calendar */
     const daysArray = Array.from({ length: firstDay + daysInMonth }, (_, i) =>
         i < firstDay ? null : i - firstDay + 1
     );

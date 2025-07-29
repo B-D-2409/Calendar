@@ -28,7 +28,23 @@ interface Event {
     [key: string]: any;
 }
 
+
+/**
+ * Searchbar component for searching events across different pages.
+ *
+ * Features:
+ * - Supports searching on the homepage and public page.
+ * - Filters events by title and event type (public/private).
+ * - Handles event dispatching for search results and clearing search.
+ * - Fetches events from backend API using axios.
+ * - Handles user authentication to fetch user-specific events.
+ *
+ * @component
+ *
+ * Return The Searchbar input element with associated behavior.
+ */
 const Searchbar = () => {
+
     const [query, setQuery] = useState("");
     const [expanded, setExpanded] = useState(false);
     const location = useLocation();
@@ -36,6 +52,13 @@ const Searchbar = () => {
     const isOnHomepage = location.pathname === "/homepage";
     const isOnPublicPage = location.pathname === "/public";
 
+
+    /**
+ * Sets up a global event listener for the "clearNavSearch" custom event.
+ * When the event is triggered anywhere in the app, it clears the search input query state.
+ *
+ * Cleans up the event listener on component unmount.
+ */
     useEffect(() => {
         const handleClearFromPage = () => {
             setQuery("");
@@ -47,6 +70,17 @@ const Searchbar = () => {
         };
     }, []);
 
+    /**
+  * Filters a list of events by a search query against the event title.
+  * Also filters events based on their type and user participation.
+  *
+  * @param {Event[]} events - The array of events to filter.
+  * @param {string} searchQuery - The search string to match in event titles.
+  * @param {Event[]} [myEventsArray=[]] - User's own events for filtering private events.
+  * @param {Event[]} [participatingEventsArray=[]] - Events the user participates in.
+  *
+  * @returns {Event[]} Filtered array of events matching the search criteria.
+  */
     const filterEventsByTitle = (
         events: Event[],
         searchQuery: string,
@@ -78,6 +112,16 @@ const Searchbar = () => {
         });
     };
 
+
+    /**
+     * Handler for key press events on the search input.
+     * Triggers search on pressing Enter key.
+     * Fetches and filters events from the backend API depending on the current page.
+     * Dispatches custom events or navigates to homepage with search results.
+     *
+     * @param {KeyboardEvent<HTMLInputElement>} e - Keyboard event object.
+     * @returns {Promise<void>} Async function, returns a Promise.
+     */
     const handleKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && query.trim() !== "") {
             const token = localStorage.getItem("token");
@@ -161,6 +205,14 @@ const Searchbar = () => {
         }
     };
 
+    /**
+ * Handler for change events on the search input.
+ * Updates the search query state and clears search results if input is empty.
+ *
+ * @param {ChangeEvent<HTMLInputElement>} e - Change event object from input.
+ * Return void
+ */
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
         if (e.target.value.trim() === "") {
@@ -169,7 +221,12 @@ const Searchbar = () => {
             }
         }
     };
-
+    /**
+        * Handler for input blur event.
+        * Closes the expanded search UI and clears the query with a small delay.
+        *
+        * Return void
+        */
     const handleBlur = () => {
         setTimeout(() => {
             setExpanded(false);

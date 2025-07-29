@@ -8,12 +8,36 @@ import { Link } from "react-router-dom";
 
 const key = import.meta.env.VITE_BACK_END_URL || "http://localhost:5000";
 
-// Combined RecurrenceRule interface
+/**
+ * @typedef {Object} RecurrenceRule
+ * @property {'daily'|'weekly'|'monthly'|'yearly'} [frequency] - Frequency of recurrence
+ * @property {number} [interval] - Interval between recurrences
+ * @property {Date|string} [endDate] - End date for recurrence
+ */
+
 interface RecurrenceRule {
     frequency?: 'daily' | 'weekly' | 'monthly' | 'yearly'; // Allow `undefined`
     interval?: number;
     endDate?: Date | string;
 }
+
+
+/**
+ * @typedef {Object} Event
+ * @property {string} title - Event title
+ * @property {string} description - Event description
+ * @property {'public'|'private'} type - Event type
+ * @property {string[]} participants - Array of participant user IDs
+ * @property {string} [creatorName] - Name of the event creator (optional)
+ * @property {string} startDateTime - ISO string of start date and time
+ * @property {string} endDateTime - ISO string of end date and time
+ * @property {boolean} isRecurring - Flag if event recurs
+ * @property {boolean} isLocation - Flag if event has location info
+ * @property {Location} location - Location object
+ * @property {RecurrenceRule} [recurrenceRule] - Recurrence rule (optional)
+ * @property {string} _id - Unique event ID
+ * @property {boolean} [isSeries] - Flag if event is part of a series (optional)
+ */
 
 interface Event {
     title: string;
@@ -30,18 +54,32 @@ interface Event {
     _id: string;
     isSeries?: boolean;
 }
-
+/**
+ * Represents a specific time of day with hour and minute components.
+ * @interface EventTime
+ */
 interface EventTime {
     hour: number;
     minute: number;
 }
 
+/**
+ * @typedef {Object} Location
+ * @property {string} address - Address of the event location
+ * @property {string} city - City of the event location
+ * @property {string} country - Country of the event location
+ */
 interface Location {
     address: string;
     city: string;
     country: string;
 }
 
+/**
+ * Represents a template for an event, including its basic details and timing.
+ * 
+ * @interface EventTemplate
+ */
 interface EventTemplate {
     title: string;
     description: string;
@@ -64,12 +102,24 @@ interface EventSeries {
     createdAt?: string; // Timestamp for when the series was created (optional)
     updatedAt?: string; // Timestamp for when the series was last updated (optional)
 }
-
+/**
+ * @typedef {Object} User
+ * @property {string} username - Username of the user
+ * @property {string} _id - Unique user ID
+ */
 interface User {
     username: string;
     _id: string;
 }
 
+/**
+ * React component rendering the "My Events" page with functionality to
+ * view user's own events, participating events, invite users, join/leave events,
+ * delete events, and view series of events.
+ *
+ * @component
+ * returns {JSX.Element}
+ */
 function MyEventsPage() {
     const [myEvents, setMyEvents] = useState<Event[]>([]);
     const [participatingEvents, setParticipatingEvents] = useState<Event[]>([]);
@@ -86,7 +136,15 @@ function MyEventsPage() {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const [seriesOfEvents, setSeriesOfEvents] = useState<EventSeries[]>([]);
-
+    /**
+     * Fetch the user's own events and events they participate in from backend API.
+     * Updates the `myEvents` and `participatingEvents` state arrays.
+     * Handles loading and error states with toast notifications.
+     *
+     * @async
+     * @function
+     * @returns {Promise<void>}
+     */
     useEffect(() => {
         const fetchEvents = async () => {
             setIsLoading(true);
@@ -137,6 +195,15 @@ function MyEventsPage() {
 
         fetchEvents();
     }, []);
+
+    /**
+ * Fetch all users from the backend to enable inviting.
+ * Stores result in `users` state.
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>}
+ */
     const fetchAllUsers = async () => {
         try {
             const response = await axios.get(`${key}/api/auth/users`, {
@@ -148,9 +215,18 @@ function MyEventsPage() {
         }
     };
 
+
     useEffect(() => {
         fetchAllUsers();
     }, []);
+    /**
+ * Send an invite to a selected username for a given event.
+ *
+ * @async
+ * @function
+ * @param {string} eventId - ID of the event to send invite for
+ * @returns {Promise<void>}
+ */
     const handleSendInvite = async (eventId: string) => {
         try {
             if (!selectedUsername) return;
@@ -172,6 +248,14 @@ function MyEventsPage() {
     };
 
 
+    /**
+     * Join a specified event if not already participant.
+     *
+     * @async
+     * @function
+     * @param {Event} event - Event object to join
+     * @returns {Promise<void>}
+     */
     const handleJoinEvent = async (event: Event) => {
         const token = localStorage.getItem("token");
         if (!user || !user._id) {
@@ -221,7 +305,14 @@ function MyEventsPage() {
 
 
 
-
+    /**
+     * Leave a specified event if user is a participant.
+     *
+     * @async
+     * @function
+     * @param {Event} event - Event object to leave
+     * @returns {Promise<void>}
+     */
     const handleLeaveEvent = async (event: Event) => {
         const token = localStorage.getItem("token");
         if (!user || !user._id) {
@@ -245,7 +336,14 @@ function MyEventsPage() {
             setIsLeaving(false);
         }
     };
-
+    /**
+     * Delete a specified event created by the user.
+     *
+     * @async
+     * @function
+     * @param {Event} event - Event object to delete
+     * @returns {Promise<void>}
+     */
     const handleDeleteEvent = async (event: Event) => {
         if (!event._id) return;
         try {

@@ -30,7 +30,13 @@ interface Event {
     participants: Participant[];
     userId?: string | { toString(): string };
 }
-
+/**
+ * Component to display details about a specific event including
+ * title, cover photo, description, dates, location, participants,
+ * and buttons for owner to remove participants or for user to leave event.
+ * 
+ * @returns {JSX.Element} Event details UI component
+ */
 function EventDetails(): JSX.Element {
     const { id } = useParams<{ id: string }>();
     const { user } = useContext(AuthContext) as AuthContextType;
@@ -42,6 +48,13 @@ function EventDetails(): JSX.Element {
     const backendUrl = import.meta.env.VITE_BACK_END_URL || 'http://localhost:5000';
 
     useEffect(() => {
+        /**
+   * Fetches event details from backend API.
+   * Determines URL based on presence of auth token.
+   * Sets loading state while fetching.
+   * @async
+   * @returns {Promise<void>}
+   */
       async function fetchEvent() {
         try {
           setLoading(true);
@@ -85,6 +98,13 @@ function EventDetails(): JSX.Element {
         }
     }, [event, user?._id]);
 
+      /**
+   * Handles removing a participant from the event.
+   * Sends DELETE request to backend and updates local state.
+   * @async
+   * @param {string} participantId - ID of participant to remove
+   * @returns {Promise<void>}
+   */
     const handleRemoveParticipant = async (participantId: string) => {
         try {
             const response = await fetch(`${backendUrl}/api/events/${id}/participants/${participantId}`, {
@@ -104,6 +124,12 @@ function EventDetails(): JSX.Element {
         }
     };
 
+      /**
+   * Handles the current logged-in user leaving the event.
+   * Sends DELETE request to backend and updates local state.
+   * @async
+   * @returns {Promise<void>}
+   */
     const handleLeaveEvent = async () => {
         try {
             setIsLeaving(true);
