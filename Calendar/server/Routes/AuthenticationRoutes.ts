@@ -23,7 +23,11 @@ interface LoginRequestBody {
 }
 
 
-
+/**
+ * Handler for user registration.
+ * Validates input, checks if user exists,
+ * hashes password, creates user, and returns JWT token.
+ */
 const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req, res) => {
     try {
         const { username, phoneNumber, email, password, firstName, lastName } = req.body;
@@ -92,6 +96,12 @@ const registerHandler: RequestHandler<{}, any, RegisterRequestBody> = async (req
 
 router.post("/register", registerHandler);
 
+
+/**
+ * Handler for user login.
+ * Validates credentials, checks if user is blocked,
+ * compares password hash, and returns JWT token.
+ */
 const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -138,7 +148,10 @@ const loginHandler: RequestHandler<{}, any, LoginRequestBody> = async (req, res)
 
 router.post("/login", loginHandler);
 
-
+/**
+ * Handler to create a user account delete request.
+ * Requires authenticated user and request body with userId, username, and reason.
+ */
 const createDeleteRequest: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const { userId, username, reason } = req.body;
@@ -164,6 +177,10 @@ const createDeleteRequest: RequestHandler = async (req: AuthenticatedRequest, re
 router.post("/delete-requests", verifyToken, createDeleteRequest);
 
 
+/**
+ * Handler for logging out a user.
+ * Clears the refresh token cookie.
+ */
 const postLogOut: RequestHandler = (req, res) => {
     res.clearCookie("refreshToken", {
         httpOnly: true,
@@ -174,7 +191,10 @@ const postLogOut: RequestHandler = (req, res) => {
 };
 router.post("/logout", verifyToken, postLogOut);
 
-
+/**
+ * Route to get all users without their passwords.
+ * Requires valid token.
+ */
 router.get("/users", verifyToken, async (req, res) => {
     try {
         const users = await User.find({}, "-password");
@@ -183,7 +203,9 @@ router.get("/users", verifyToken, async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
+/**
+ * Route to get current authenticated user's data.
+ */
 const getUsersMe: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const user = await User.findById(req.user.id);

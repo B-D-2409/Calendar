@@ -15,8 +15,8 @@ interface CreateEventRequestBody {
   endDateTime: Date;
   isRecurring: boolean;
   isLocation: boolean;
-  creator: string; // Creator's user ID
-  userId: string; // User ID of the creator
+  creator: string; 
+  userId: string; 
   location?: {
     address?: string;
     city?: string;
@@ -27,7 +27,13 @@ interface CreateEventRequestBody {
 }
 
 const router = express.Router();
-
+/**
+ * Creates a new event.
+ * @route POST /
+ * @access Protected
+ * @param {AuthenticatedRequest} req - The request object with user info
+ * @param {Response} res - The response object
+ */
 const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
   req: AuthenticatedRequest,
   res
@@ -82,7 +88,13 @@ const createEvent: RequestHandler<{}, any, CreateEventRequestBody> = async (
 
 router.post("/", verifyToken, createEvent);
 
-
+/**
+ * Invite a user to an event.
+ * @route POST /invite/:id
+ * @access Protected
+ * @param {AuthenticatedRequest} req - Request with user info and body containing username
+ * @param {Response} res - Response object
+ */
 const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const { username } = req.body;
@@ -136,7 +148,11 @@ const inviteParticipant: RequestHandler = async (req: AuthenticatedRequest, res)
 
 
 router.post("/invite/:id", verifyToken, inviteParticipant);
-
+/**
+ * Get all invitations for the logged-in user.
+ * @route GET /invitations
+ * @access Protected
+ */
 const getInvitations: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const userId = req.user?.id;
@@ -151,7 +167,11 @@ const getInvitations: RequestHandler = async (req: AuthenticatedRequest, res) =>
 router.get("/invitations", verifyToken, getInvitations);
 
 
-
+/**
+ * Get all events (admin/global).
+ * @route GET /
+ * @access Public
+ */
 const getAllEvents: RequestHandler = async (req, res) => {
   try {
     const events = await Event.find().populate("participants", "username");
@@ -165,6 +185,11 @@ router.get("/", getAllEvents);
 
 
 
+/**
+ * Create a new series of events.
+ * @route POST /event-series
+ * @access Protected
+ */
 const createSeriesOfEvents: RequestHandler =  async (req: AuthenticatedRequest, res) => {
   try {
     const newSeries = new SeriesOfEventsModel({
@@ -187,7 +212,11 @@ const createSeriesOfEvents: RequestHandler =  async (req: AuthenticatedRequest, 
   }
 };
 router.post("/event-series", verifyToken, createSeriesOfEvents);
-
+/**
+ * Get all event series created by the logged-in user.
+ * @route GET /event-series
+ * @access Protected
+ */
 const getSeriesEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const series = await EventSeries.find({ creatorId: req.user.id });
@@ -197,7 +226,11 @@ const getSeriesEvents: RequestHandler = async (req: AuthenticatedRequest, res) =
   }
 };
 router.get("/event-series", verifyToken, getSeriesEvents);
-
+/**
+ * Get all public events.
+ * @route GET /public
+ * @access Public
+ */
 const getAllPublicEvents: RequestHandler = async (req, res) => {
   try {
     const events = await Event.find({ type: "public" });
@@ -209,7 +242,11 @@ const getAllPublicEvents: RequestHandler = async (req, res) => {
 
 router.get("/public", getAllPublicEvents);
 
-
+/**
+ * Get all events created by the logged-in user.
+ * @route GET /mine
+ * @access Protected
+ */
 const getMyEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const events = await Event.find({
@@ -223,6 +260,15 @@ const getMyEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
 
 };
 router.get("/mine", verifyToken, getMyEvents);
+
+
+/**
+ * Get events where the authenticated user is a participant.
+ * Populates participant usernames.
+ * 
+ * @route GET /participants
+ * @access Private
+ */
 const getMyEventsParticipants: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const events = await Event.find({ participants: req.user.id }).populate(
@@ -237,6 +283,13 @@ const getMyEventsParticipants: RequestHandler = async (req: AuthenticatedRequest
 };
 router.get("/participants", verifyToken, getMyEventsParticipants);
 
+/**
+ * Get all public events and events related to the authenticated user (created or joined).
+ * Combines all events uniquely.
+ * 
+ * @route GET /all
+ * @access Private
+ */
 const getAllEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const publicEvents = await Event.find({ type: "public" });
@@ -262,7 +315,12 @@ const getAllEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   }
 };
 router.get("/all", verifyToken, getAllEvent);
-
+/**
+ * Join a public event if the user is not the owner or already a participant.
+ * 
+ * @route POST /:id/join
+ * @access Private
+ */
 const joinPublicEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const eventId = req.params.id;
@@ -308,7 +366,12 @@ const joinPublicEvents: RequestHandler = async (req: AuthenticatedRequest, res) 
 };
 router.post("/:id/join", verifyToken,  joinPublicEvents);
 
-// public event by id
+/**
+ * Get a single public event by ID.
+ * 
+ * @route GET /api/events/public/:id
+ * @access Public
+ */
 const getPublicEventById: RequestHandler = async (req, res) => {
   const { id } = req.params;
   try {
@@ -324,6 +387,13 @@ const getPublicEventById: RequestHandler = async (req, res) => {
 
 router.get("/api/events/public/:id", getPublicEventById);
 
+/**
+ * Accept an invitation to an event by ID.
+ * Adds the user as a participant and removes the invitation.
+ *
+ * @route POST /invitations/:id/accept
+ * @access Private
+ */
 
 const acceptInvitation: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -346,8 +416,13 @@ const acceptInvitation: RequestHandler = async (req: AuthenticatedRequest, res) 
 };
 router.post("/invitations/:id/accept", verifyToken, acceptInvitation);
 
-
-// POST /api/events/invitations/:id/reject
+/**
+ * Reject an invitation to an event by ID.
+ * Removes the invitation without joining the event.
+ *
+ * @route POST /invitations/:id/reject
+ * @access Private
+ */
 const rejectInvitation: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const userId = req.user?.id;
@@ -369,7 +444,12 @@ router.post("/invitations/:id/reject", verifyToken, rejectInvitation);
 
 
 
-
+/**
+ * Delete an event if the authenticated user is the owner.
+ *
+ * @route DELETE /:id
+ * @access Private
+ */
 const deleteEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
     const eventId = req.params.id;
@@ -395,6 +475,13 @@ const deleteEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
 
 router.delete("/:id", verifyToken, deleteEvent);
 
+/**
+ * Remove a participant from an event by ID.
+ * Only the owner should be allowed to do this.
+ *
+ * @route DELETE /:id/participants/:participantId
+ * @access Private
+ */
 const removeParticipant: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
       const { id, participantId } = req.params;
@@ -419,6 +506,16 @@ const removeParticipant: RequestHandler = async (req: AuthenticatedRequest, res)
 router.delete("/:id/participants/:participantId", verifyToken, removeParticipant);
 
 
+/**
+ * Get a single event by ID if it is public or owned by the authenticated user.
+ *
+ * @route GET /details/:id
+ * @access Private
+ * @param {string} req.params.id - ID of the event to retrieve
+ * @returns {object} 200 - Event object
+ * @returns {object} 404 - Event not found
+ * @returns {object} 500 - Server error
+ */
 
 const getEventById: RequestHandler = async (req: AuthenticatedRequest, res) => {
   const { id } = req.params;
@@ -438,6 +535,17 @@ const getEventById: RequestHandler = async (req: AuthenticatedRequest, res) => {
 };  
 
 router.get("/details/:id", verifyToken, getEventById);
+/**
+ * Allows the authenticated user to leave a specific event if they are a participant.
+ *
+ * @route DELETE /:id/leave
+ * @access Private
+ * @param {string} req.params.id - ID of the event to leave
+ * @returns {object} 200 - Confirmation message
+ * @returns {object} 400 - User is not a participant
+ * @returns {object} 404 - Event not found
+ * @returns {object} 500 - Server error
+ */
 
 const leaveEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -472,6 +580,17 @@ router.delete("/:id/leave", verifyToken, leaveEvent);
 
 
 
+/**
+ * Deletes an event series if the authenticated user is the creator.
+ *
+ * @route DELETE /api/event-series/:id
+ * @access Private
+ * @param {string} req.params.id - ID of the event series to delete
+ * @returns {object} 200 - Success message
+ * @returns {object} 403 - Unauthorized to delete
+ * @returns {object} 404 - Series not found
+ * @returns {object} 500 - Server error
+ */
 
 const seriesOfEventsDelete: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -499,6 +618,18 @@ const seriesOfEventsDelete: RequestHandler = async (req: AuthenticatedRequest, r
 router.delete("/api/event-series/:id", verifyToken, seriesOfEventsDelete);
 
 
+/**
+ * Updates an existing event if the authenticated user is the owner.
+ *
+ * @route PUT /:id
+ * @access Private
+ * @param {string} req.params.id - ID of the event to update
+ * @param {object} req.body - Event update data
+ * @returns {object} 200 - Updated event object
+ * @returns {object} 403 - Unauthorized to update
+ * @returns {object} 404 - Event not found
+ * @returns {object} 500 - Server error
+ */
 
 const changeEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {
@@ -526,6 +657,19 @@ const changeEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
 };
 
 router.put("/:id", verifyToken, changeEvent);
+
+/**
+ * Updates an event series if the authenticated user is the creator.
+ *
+ * @route PUT /event-series/:id
+ * @access Private
+ * @param {string} req.params.id - ID of the event series to update
+ * @param {object} req.body - Event series update data
+ * @returns {object} 200 - Updated series object
+ * @returns {object} 403 - Unauthorized to update
+ * @returns {object} 404 - Series not found
+ * @returns {object} 500 - Server error
+ */
 
 const changeSeriesOfEvents: RequestHandler = async (req: AuthenticatedRequest, res) => {
   try {

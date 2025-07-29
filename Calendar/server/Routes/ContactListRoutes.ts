@@ -6,14 +6,16 @@ import verifyToken from "../views/middlewares";
 import EventModel from "../Models/Event.model";
 import UserModel from "../Models/User.model";
 const router = express.Router();
-
-interface IContactList {
-    title: string;
-    creator: string;
-    contacts: string[];
-}
-
-// CREATE a new contact list
+/**
+ * Create a new contact list.
+ * 
+ * @param {AuthenticatedRequest} req - Express request object, extended with authenticated user info.
+ * @param {express.Response} res - Express response object.
+ * 
+ * @returns {Promise<void>} Sends created contact list JSON on success.
+ * 
+ * @throws {Error} 500 Internal Server Error if creation fails.
+ */
 const createContactList: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const { title, contacts } = req.body;
@@ -30,8 +32,12 @@ const createContactList: RequestHandler = async (req: AuthenticatedRequest, res)
 };
 
 router.post("/", verifyToken, createContactList);
-
-// GET all contact lists for the authenticated user
+/**
+ * Get all contact lists belonging to the authenticated user.
+ * @param {AuthenticatedRequest} req - Request with authenticated user info.
+ * @param {express.Response} res - Response object.
+ * @returns {Promise<void>}
+ */
 const getContactLists: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const creator = req.user.id;
@@ -49,7 +55,13 @@ const getContactLists: RequestHandler = async (req: AuthenticatedRequest, res) =
 };
 
 router.get("/lists", verifyToken, getContactLists);
-
+/**
+ * Add a participant to an event by IDs.
+ * Prevents duplicate participants.
+ * @param {AuthenticatedRequest} req - Request with authenticated user info.
+ * @param {express.Response} res - Response object.
+ * @returns {Promise<void>}
+ */
 const addParticipantToEvent: RequestHandler = async (req: AuthenticatedRequest, res) => {
     const { eventId, userId } = req.params;
     try {
@@ -75,8 +87,13 @@ const addParticipantToEvent: RequestHandler = async (req: AuthenticatedRequest, 
     }
 };
 
-
 router.post("/:eventId/participants/:userId", verifyToken, addParticipantToEvent);
+/**
+ * Get a user by username.
+ * @param {express.Request} req - Express request object.
+ * @param {express.Response} res - Express response object.
+ * @returns {Promise<void>}
+ */
 const getUserByUsername: RequestHandler = async (req, res) => {
     const { username } = req.params;
     try {
@@ -93,8 +110,12 @@ const getUserByUsername: RequestHandler = async (req, res) => {
 
 router.get("/username/:username", verifyToken, getUserByUsername);
 
-// DELETE a contact list by ID
-// Delete entire contact list by listId
+/**
+ * Delete a contact list by ID.
+ * @param {AuthenticatedRequest} req - Request with authenticated user info.
+ * @param {express.Response} res - Response object.
+ * @returns {Promise<void>}
+ */
 const deleteContactList: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const { listId } = req.params;
@@ -111,7 +132,12 @@ const deleteContactList: RequestHandler = async (req: AuthenticatedRequest, res)
     }
 };
 router.delete("/lists/:listId", verifyToken, deleteContactList);
-// Delete a contact inside a contact list
+/**
+ * Delete a contact from a specific contact list.
+ * @param {AuthenticatedRequest} req - Request with authenticated user info.
+ * @param {express.Response} res - Response object.
+ * @returns {Promise<void>}
+ */
 const deleteContactFromList: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const { listId, contactId } = req.params;

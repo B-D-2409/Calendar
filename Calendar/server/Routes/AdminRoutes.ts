@@ -8,6 +8,12 @@ import Event from "../Models/Event.model";
 
 const router = express.Router();
 
+/**
+ * Extracts a query parameter as a string with a fallback default.
+ * @param param - The query parameter value which may be a string, array, or undefined.
+ * @param defaultValue - The default string to return if param is not valid.
+ * @returns The extracted string or defaultValue.
+ */
 function getQueryParamAsString(
     param: string | ParsedQs | (string | ParsedQs)[] | undefined,
     defaultValue: string
@@ -21,7 +27,11 @@ function getQueryParamAsString(
     }
     return defaultValue;
 }
-
+/**
+ * GET /api/admin/users
+ * Retrieves a paginated list of users for the admin panel.
+ * Query params: page (default: 1), limit (default: 10)
+ */
 const getUsersAdmin: RequestHandler = async (req, res) => {
     try {
         console.log("Fetching users for admin panel...", req);
@@ -50,7 +60,11 @@ const getUsersAdmin: RequestHandler = async (req, res) => {
 };
 
 router.get("/users", verifyAdmin, getUsersAdmin);
-
+/**
+ * GET /api/admin/events
+ * Retrieves a paginated list of events with optional search filter.
+ * Query params: page (default: 1), limit (default: 5), search (optional)
+ */
 const getEventsAdmin: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         if (!req.user) {
@@ -99,9 +113,10 @@ const getEventsAdmin: RequestHandler = async (req: AuthenticatedRequest, res) =>
 };
 router.get("/events", verifyAdmin, getEventsAdmin);
 
+
 /**
  * POST /api/admin/block/:id
- * Blocks a user by ID
+ * Blocks a user by their ID.
  */
 router.post("/block/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
     try {
@@ -116,7 +131,7 @@ router.post("/block/:id", verifyAdmin, async (req: AuthenticatedRequest, res) =>
 
 /**
  * POST /api/admin/unblock/:id
- * Unblocks a user by ID
+ * Unblocks a user by their ID.
  */
 router.post("/unblock/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
     try {
@@ -130,15 +145,8 @@ router.post("/unblock/:id", verifyAdmin, async (req: AuthenticatedRequest, res) 
 });
 
 /**
- * DELETE /api/admin/delete/:id
- * Deletes a user by ID
- */
-
-
-
-/**
  * GET /api/admin/delete-requests
- * Returns all delete requests (for admin approval)
+ * Returns all delete requests awaiting admin approval.
  */
 router.get("/delete-requests", verifyAdmin, async (req: AuthenticatedRequest, res) => {
     try {
@@ -150,6 +158,10 @@ router.get("/delete-requests", verifyAdmin, async (req: AuthenticatedRequest, re
     }
 });
 
+/**
+ * DELETE /api/admin/delete-requests/:id
+ * Approves and deletes the user associated with the delete request.
+ */
 const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const requestId = req.params.id;
@@ -179,7 +191,10 @@ const deleteRequestId: RequestHandler = async (req: AuthenticatedRequest, res) =
 };
 
 router.delete("/delete-requests/:id", verifyAdmin, deleteRequestId);
-
+/**
+ * PUT /api/admin/events/:id
+ * Updates an event's title and description.
+ */
 router.put("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
     try {
         const { title, description } = req.body;
@@ -197,6 +212,10 @@ router.put("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res) =>
 });
 
 
+/**
+ * DELETE /api/admin/events/:id
+ * Deletes an event by ID.
+ */
 router.delete("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res) => {
     try {
         const event = await Event.findByIdAndDelete(req.params.id);
@@ -207,6 +226,13 @@ router.delete("/events/:id", verifyAdmin, async (req: AuthenticatedRequest, res)
         res.status(500).json({ error: "Failed to delete event" });
     }
 });
+
+
+
+/**
+ * DELETE /api/admin/delete/:id
+ * Deletes a user directly by ID.
+ */
 const deleteUserBtn: RequestHandler = async (req: AuthenticatedRequest, res) => {
     try {
         const userId = req.params.id; 

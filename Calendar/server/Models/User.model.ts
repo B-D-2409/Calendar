@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-
+/**
+ * Interface representing a User document in MongoDB.
+ */
 export interface UserDocument extends Document {
     username: string;
     phoneNumber: string;
@@ -13,7 +15,22 @@ export interface UserDocument extends Document {
     address?: string;
     isBlocked: boolean;
     id: string;
-  }
+}
+
+
+/**
+* Mongoose schema for User collection.
+* @property {string} username - Unique username of the user.
+* @property {string} phoneNumber - Unique phone number of the user.
+* @property {string} email - Unique email address of the user.
+* @property {string} password - Hashed password.
+* @property {string} firstName - User's first name.
+* @property {string} lastName - User's last name.
+* @property {("user" | "admin")} role - Role of the user, either "user" or "admin". Defaults to "user".
+* @property {string} avatar - URL to user's avatar image.
+* @property {string} [address] - Optional address of the user.
+* @property {boolean} isBlocked - Flag indicating if the user is blocked. Defaults to false.
+*/
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     phoneNumber: { type: String, required: true, unique: true },
@@ -30,7 +47,9 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-
+/**
+ * Pre-save hook to hash the password if it has been modified.
+ */
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     this.password = await bcrypt.hash(this.password, 10);

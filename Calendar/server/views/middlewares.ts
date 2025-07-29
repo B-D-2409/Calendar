@@ -3,7 +3,16 @@ import jwt from "jsonwebtoken";
 import { AuthenticatedRequest, CustomJwtPayload } from "../types"; 
 
 const JWT_SECRET = process.env.JWT_SECRET || "defaultSecret";
-
+/**
+ * Middleware to verify a JWT token from the Authorization header.
+ * If valid, attaches the decoded token payload to `req.user`.
+ * Responds with 401 if no token provided or 403 if token is invalid.
+ * 
+ * @param {AuthenticatedRequest} req - Express request object with optional user property
+ * @param {Response} res - Express response object
+ * @param {NextFunction} next - Express next middleware function
+ * @returns {void}
+ */
 export default function verifyToken(
   req: AuthenticatedRequest,
   res: Response,
@@ -27,6 +36,17 @@ export default function verifyToken(
     next();
   });
 }
+
+/**
+ * Middleware to verify a JWT token and check if the user has an admin role.
+ * Attaches the decoded token payload to `req.user` if valid and authorized.
+ * Responds with 401 if no token, 403 if user is not admin, and 400 if token is invalid.
+ * 
+ * @param {AuthenticatedRequest} req - Express request object with optional user property
+ * @param {Response} res - Express response object
+ * @param {NextFunction} next - Express next middleware function
+ * @returns {void}
+ */
 export function verifyAdmin(
   req: AuthenticatedRequest,
   res: Response,
