@@ -1,3 +1,9 @@
+/**
+ * @file App.tsx
+ * @description Main application entry point that sets up routing, global layout, and authentication handling.
+ * @module App
+ */
+
 import './App.css';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Container from './Components/ControlContainer/ControlContainer';
@@ -20,6 +26,17 @@ import EventSeriesForm from './Components/SeriesOfEvents/SeriesOfEvents';
 import Authenticated from './Common/AuthenticateUser';
 import { ToastContainer } from "react-toastify";
 import Notifications from './Pages/Notifications/Notifications';
+
+/**
+ * Main App component that handles:
+ * - Routing via React Router
+ * - Authentication-aware route guarding
+ * - Layout composition using Sidebar and Container
+ * - Toast notifications
+ *
+ * @function App
+ * returns {JSX.Element} The rendered App component.
+ */
 function App() {
   const { isLoggedIn } = useContext(AuthContext) as AuthContextType;
 
