@@ -270,23 +270,23 @@ function Admin() {
         }
     };
 
-        /**
-     * Start editing an event.
-     * @param {Event} event - Event to edit.
-     */
+    /**
+ * Start editing an event.
+ * @param {Event} event - Event to edit.
+ */
     const startEditingEvent = (event: Event) => {
         setEditingEventId(event._id);
         setEventData({ title: event.title, description: event.description });
     };
 
-        /** Cancel editing an event. */
+    /** Cancel editing an event. */
     const cancelEditing = () => {
         setEditingEventId(null);
         setEventData({ title: "", description: "" });
     };
 
 
-       /** Save edited event. Sends PUT request. */
+    /** Save edited event. Sends PUT request. */
     const saveEdit = async () => {
         if (!editingEventId) return;
 
@@ -427,55 +427,60 @@ function Admin() {
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setFindEvents(e.target.value)}
                         className={style.searchInput}
                     />
-
-                    <ul className={style.eventList}>
-                        {filteredEvents.map((event) => (
-                            <li key={event._id} className={style.eventListItem}>
-                                {editingEventId === event._id ? (
-                                    <>
-                                        <input
-                                            type="text"
-                                            value={eventData.title}
-                                            onChange={(e) =>
-                                                setEventData((prev) => ({ ...prev, title: e.target.value }))
-                                            }
-                                            className={style.editInput}
-                                        />
-                                        <textarea
-                                            value={eventData.description}
-                                            onChange={(e) =>
-                                                setEventData((prev) => ({ ...prev, description: e.target.value }))
-                                            }
-                                            className={style.editTextarea}
-                                        />
-                                        <button onClick={saveEdit} className={style.saveButton}>
-                                            Save
-                                        </button>
-                                        <button onClick={cancelEditing} className={style.cancelButton}>
-                                            Cancel
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <h4 className={style.eventTitle}>{event.title}</h4>
-                                        <p className={style.eventDescription}>{event.description}</p>
-                                        <button
-                                            onClick={() => startEditingEvent(event)}
-                                            className={style.editButton}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() => deleteEvent(event._id)}
-                                            className={style.deleteButton}
-                                        >
-                                            Delete
-                                        </button>
-                                    </>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
+<ul className={style.eventList}>
+            {filteredEvents.map((event) => (
+                <li key={event._id} className={style.eventListItem}>
+                    {editingEventId === event._id ? (
+                        <>
+                            <input
+                                type="text"
+                                value={eventData.title}
+                                onChange={(e) =>
+                                    setEventData((prev) => ({ ...prev, title: e.target.value }))
+                                }
+                                className={style.editInput}
+                            />
+                            <textarea
+                                value={eventData.description}
+                                onChange={(e) =>
+                                    setEventData((prev) => ({ ...prev, description: e.target.value }))
+                                }
+                                className={style.editTextarea}
+                            />
+                            <div className={style.buttonGroup}>
+                                <button onClick={saveEdit} className={style.saveButton}>
+                                    Save
+                                </button>
+                                <button onClick={cancelEditing} className={style.cancelButton}>
+                                    Cancel
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className={style.eventInfo}>
+                                <h4 className={style.eventTitle}>{event.title}</h4>
+                                <p className={style.eventDescription}>{event.description}</p>
+                            </div>
+                            <div className={style.eventActions}>
+                                <button
+                                    onClick={() => startEditingEvent(event)}
+                                    className={style.editButton}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => deleteEvent(event._id)}
+                                    className={style.deleteButton}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </li>
+            ))}
+        </ul>
 
                     <div className={style.paginationControls}>
                         <button

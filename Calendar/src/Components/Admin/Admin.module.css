@@ -1,6 +1,8 @@
 .adminContainer {
-    background-color: #121212; /* dark background */
-    color: #e0e0e0; /* light text */
+    background-color: #121212;
+    /* dark background */
+    color: #e0e0e0;
+    /* light text */
     min-height: 100vh;
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,9 +20,12 @@
 
 .sectionsContainer {
     display: flex;
-    flex-direction: column; /* Stack the sections vertically */
-    gap: 20px; /* Add space between each section */
-    justify-content: flex-start; /* Align items at the top */
+    flex-direction: column;
+    /* Stack the sections vertically */
+    gap: 20px;
+    /* Add space between each section */
+    justify-content: flex-start;
+    /* Align items at the top */
 }
 
 .panel {
@@ -28,9 +33,11 @@
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 10px #00000099;
-    width: 100%; /* Ensure panels take full width in their container */
+    width: 100%;
+    /* Ensure panels take full width in their container */
     display: flex;
-    flex-direction: column; /* Stack elements vertically */
+    flex-direction: column;
+    /* Stack elements vertically */
 }
 
 .panelTitle {
@@ -89,7 +96,7 @@
 
 .userName {
     font-weight: 600;
-    color: #bb86fc;
+    color: #2d91f6;
 }
 
 .userEmail {
@@ -112,7 +119,7 @@
     font-size: 1rem;
     transition: background-color 0.3s ease;
     margin: 10px 0;
-    display: inline-block; 
+    display: inline-block;
     text-align: center;
     width: 100%;
 }
@@ -120,49 +127,136 @@
 
 .userAction {
     display: flex;
-    flex-direction: column; 
-    gap: 10px; 
-    align-items: flex-start; 
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
 }
 
 .editButton,
 .deleteButton {
-    padding: 5px 12px; 
-    font-size: 0.875rem; 
+    padding: 5px 12px;
+    font-size: 0.875rem;
     height: auto;
-    width: 100%;  
+    width: 100%;
     text-align: center;
-    line-height: 1.5; 
-    display: inline-block; 
+    line-height: 1.5;
+    display: inline-block;
 }
 
 .editButton:hover,
 .deleteButton:hover {
-    background-color: #555555; 
-    color: #fff; 
+    background-color: #555555;
+    color: #fff;
 }
 
 
 .userAction {
     display: flex;
     justify-content: flex-start;
-    gap: 15px; 
+    gap: 15px;
+}
+
+.eventList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.eventListItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    flex-wrap: wrap;
+}
+
+.eventInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 200px;
+}
+
+.eventTitle {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #1976d2;
+}
+
+.eventDescription {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
+}
+
+.eventActions,
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    min-width: 170px;
 }
 
 .editButton,
-.deleteButton {
-    padding: 5px 12px; 
-    font-size: 0.875rem; 
-    height: auto;
-    width: auto;
+.deleteButton,
+.saveButton,
+.cancelButton {
+    padding: 6px 14px;
+    font-size: 0.875rem;
     min-width: 80px;
     max-width: 100px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     text-align: center;
-    line-height: 1.5;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.editButton {
+    background-color: #1976d2;
+    color: #fff;
+}
+
+.deleteButton {
+    background-color: #d32f2f;
+    color: #fff;
 }
 
 .saveButton {
-    background-color: #4CAF50; /* Green */
+    background-color: #388e3c;
+    color: #fff;
+}
+
+.cancelButton {
+    background-color: #9e9e9e;
+    color: #fff;
+}
+
+.editInput,
+.editTextarea {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.editTextarea {
+    min-height: 60px;
+    resize: vertical;
+}
+
+.saveButton {
+    background-color: #4CAF50;
+    /* Green */
     color: white;
 }
 
@@ -171,7 +265,8 @@
 }
 
 .cancelButton {
-    background-color: #f44336; /* Red */
+    background-color: #f44336;
+    /* Red */
     color: white;
 }
 
@@ -180,7 +275,8 @@
 }
 
 .btnBlock {
-    background-color: #cf6679; /* red-ish */
+    background-color: #cf6679;
+    /* red-ish */
     color: #fff;
 }
 
@@ -189,7 +285,8 @@
 }
 
 .btnUnblock {
-    background-color: #03dac6; /* teal-ish */
+    background-color: #03dac6;
+    /* teal-ish */
     color: #000;
 }
 
@@ -292,7 +389,8 @@
 .panel .saveButton,
 .panel .cancelButton {
     width: auto;
-    min-width: 120px; /* Ensure buttons have a minimum width */
+    min-width: 120px;
+    /* Ensure buttons have a minimum width */
 }
 
 .lightMode {
@@ -354,58 +452,67 @@
     color: #000;
     border-bottom: 1px solid #ddd;
 }
+
 /* LIGHT MODE BUTTONS */
 [data-theme='light'] .btnBlock {
-    background-color: #f44336; /* Red for Block */
+    background-color: #f44336;
+    /* Red for Block */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
 [data-theme='light'] .btnUnblock {
-    background-color: #f44336; /* Red for Unblock */
+    background-color: #f44336;
+    /* Red for Unblock */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
 [data-theme='light'] .deleteButton {
-    background-color: #9c27b0; /* Purple for Delete */
+    background-color: #9c27b0;
+    /* Purple for Delete */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
 [data-theme='light'] .editButton {
-    background-color: #2196f3; /* Blue for Edit */
+    background-color: #2196f3;
+    /* Blue for Edit */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
 [data-theme='light'] .approveButton {
-    background-color: #4caf50; /* Green for Save */
+    background-color: #4caf50;
+    /* Green for Save */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
 [data-theme='light'] .saveButton {
-    background-color: #4caf50; /* Green for Save */
+    background-color: #4caf50;
+    /* Green for Save */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
 [data-theme='light'] .cancelButton {
-    background-color: #f44336; /* Red for Cancel */
+    background-color: #f44336;
+    /* Red for Cancel */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
 }
 
 [data-theme='light'] .pageButton {
-    background-color: #ac66e9; /* Default color for Page Button */
+    background-color: #ac66e9;
+    /* Default color for Page Button */
     color: white;
     border: 1px solid #ccc;
     cursor: pointer;
